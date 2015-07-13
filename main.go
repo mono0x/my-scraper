@@ -49,7 +49,7 @@ func getPurolandNews() (*feeds.Feed, error) {
 func handlePurolandNews(w http.ResponseWriter, r *http.Request) {
   feed, err := getPurolandNews()
   if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
+    w.WriteHeader(http.StatusServiceUnavailable)
     return
   }
   handleFeed(w, feed)
@@ -86,7 +86,7 @@ func getPurolandInfo() (*feeds.Feed, error) {
 func handlePurolandInfo(w http.ResponseWriter, r *http.Request) {
   feed, err := getPurolandInfo()
   if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
+    w.WriteHeader(http.StatusServiceUnavailable)
     return
   }
   handleFeed(w, feed)
