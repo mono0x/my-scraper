@@ -34,8 +34,18 @@ func HandlePurolandInfo(w http.ResponseWriter, r *http.Request) {
   RenderFeed(w, feed)
 }
 
+func HandleCharacterShow(w http.ResponseWriter, r *http.Request) {
+  feed, err := GetCharacterShow()
+  if err != nil {
+    w.WriteHeader(http.StatusServiceUnavailable)
+    return
+  }
+  RenderFeed(w, feed)
+}
+
 func main() {
   http.HandleFunc("/puroland-info", HandlePurolandInfo)
   http.HandleFunc("/puroland-news", HandlePurolandNews)
+  http.HandleFunc("/character-show", HandleCharacterShow)
   http.ListenAndServe(":13000", nil)
 }
