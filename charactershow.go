@@ -13,7 +13,10 @@ func GetCharacterShow() (*feeds.Feed, error) {
 	if err != nil {
 		return nil, err
 	}
+	return GetCharacterShowFromDocument(doc)
+}
 
+func GetCharacterShowFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "キャラクターショーファンサイト",
 		Link:  &feeds.Link{Href: "http://charactershow.jp/"},
