@@ -11,7 +11,10 @@ func GetPurolandNews() (*feeds.Feed, error) {
   if err != nil {
     return nil, err
   }
+  return GetPurolandNewsFromDocument(doc)
+}
 
+func GetPurolandNewsFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
   feed := &feeds.Feed{
     Title: "最新情報 | サンリオピューロランド",
     Link: &feeds.Link{Href: "http://www.puroland.jp/"},
@@ -35,6 +38,14 @@ func GetPurolandNews() (*feeds.Feed, error) {
 }
 
 func GetPurolandInfo() (*feeds.Feed, error) {
+  doc, err := goquery.NewDocument("http://www.puroland.jp/")
+  if err != nil {
+    return nil, err
+  }
+  return GetPurolandInfoFromDocument(doc)
+}
+
+func GetPurolandInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
   doc, err := goquery.NewDocument("http://www.puroland.jp/")
   if err != nil {
     return nil, err
