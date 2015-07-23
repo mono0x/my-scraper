@@ -28,9 +28,14 @@ func GetCharacterShowFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 
 	var items []*feeds.Item
 	pref := ""
-	doc.Find(".pref-title-jump, .event-row").Each(func(_ int, s *goquery.Selection) {
+	prefTitle := ""
+	doc.Find(".pref-title-jump, .pref-title, .event-row").Each(func(_ int, s *goquery.Selection) {
 		if s.HasClass("pref-title-jump") {
 			pref, _ = s.Attr("id")
+			return
+		}
+		if s.HasClass("pref-title") {
+			prefTitle = strings.TrimSpace(s.Find("div:first-child").Text())
 			return
 		}
 		date := dateReplacer.Replace(s.Find(".event-date").Text())
@@ -39,7 +44,7 @@ func GetCharacterShowFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 		link := "http://charactershow.jp/#" + pref
 		hash := fmt.Sprintf("%x", sha256.Sum256([]byte(date+title+spot)))
 		items = append(items, &feeds.Item{
-			Title:       title,
+			Title:       fmt.Sprintf("%s: %s", prefTitle, title),
 			Link:        &feeds.Link{Href: link},
 			Id:          hash,
 			Description: fmt.Sprintf("%s: %s", date, spot),
