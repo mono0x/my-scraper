@@ -56,5 +56,5 @@ func main() {
 	if port == "" {
 		port = "13000"
 	}
-	http.ListenAndServe(":" + port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
