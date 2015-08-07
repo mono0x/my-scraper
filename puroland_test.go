@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetPurolandNewsFromDocument(t *testing.T) {
-	f, err := os.Open("data/puroland.html")
+	f, err := os.Open("data/puroland.jp/index.html")
 	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
@@ -26,7 +26,7 @@ func TestGetPurolandNewsFromDocument(t *testing.T) {
 }
 
 func TestGetPurolandInfoFromDocument(t *testing.T) {
-	f, err := os.Open("data/puroland.html")
+	f, err := os.Open("data/puroland.jp/index.html")
 	defer f.Close()
 	if err != nil {
 		t.Fatal(err)

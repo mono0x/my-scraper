@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetCharacterShowFromDocument(t *testing.T) {
-	f, err := os.Open("data/charactershow.html")
+	f, err := os.Open("data/charactershow.jp/index.html")
 	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
