@@ -45,12 +45,22 @@ func HandleCharacterShow(w http.ResponseWriter, r *http.Request) {
 	RenderFeed(w, feed)
 }
 
+func HandleSanrioEvent(w http.ResponseWriter, r *http.Request) {
+	feed, err := GetSanrioEvent()
+	if err != nil {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		return
+	}
+	RenderFeed(w, feed)
+}
+
 func main() {
 	_ = godotenv.Load()
 
 	http.HandleFunc("/puroland-info", HandlePurolandInfo)
 	http.HandleFunc("/puroland-news", HandlePurolandNews)
 	http.HandleFunc("/character-show", HandleCharacterShow)
+	http.HandleFunc("/sanrio-event", HandleSanrioEvent)
 
 	port := os.Getenv("PORT")
 	if port == "" {
