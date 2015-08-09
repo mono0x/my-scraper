@@ -39,5 +39,5 @@ func TestGetPurolandInfoFromDocument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, len(feed.Items), 48)
+	assert.Equal(t, 50, len(feed.Items))
 }

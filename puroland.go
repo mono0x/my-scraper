@@ -46,11 +46,6 @@ func GetPurolandInfo() (*feeds.Feed, error) {
 }
 
 func GetPurolandInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument("http://www.puroland.jp/")
-	if err != nil {
-		return nil, err
-	}
-
 	feed := &feeds.Feed{
 		Title: "お知らせ | サンリオピューロランド",
 		Link:  &feeds.Link{Href: "http://www.puroland.jp/"},
