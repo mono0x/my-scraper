@@ -22,6 +22,6 @@ func TestGetSanrioEventFromDocument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, len(feed.Items), 20)
+	assert.Equal(t, 20, len(feed.Items))
 }
 

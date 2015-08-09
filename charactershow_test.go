@@ -22,5 +22,5 @@ func TestGetCharacterShowFromDocument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, len(feed.Items), 115)
+	assert.Equal(t, 115, len(feed.Items))
 }

@@ -22,7 +22,7 @@ func TestGetPurolandNewsFromDocument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, len(feed.Items), 10)
+	assert.Equal(t, 10, len(feed.Items))
 }
 
 func TestGetPurolandInfoFromDocument(t *testing.T) {
