@@ -2,3 +2,10 @@ language: go
 sudo: false
 go:
   - 1.5
+
+notifications:
+  email:
+    recipients:
+      - mono@monoweb.info
+  on_success: change
+  on_failure: always
