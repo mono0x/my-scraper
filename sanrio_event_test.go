@@ -24,4 +24,3 @@ func TestGetSanrioEventFromDocument(t *testing.T) {
 	}
 	assert.Equal(t, 20, len(feed.Items))
 }
-
