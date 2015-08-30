@@ -54,6 +54,15 @@ func HandleSanrioEvent(w http.ResponseWriter, r *http.Request) {
 	RenderFeed(w, feed)
 }
 
+func HandleKittychanInfo(w http.ResponseWriter, r *http.Request) {
+	feed, err := GetKittychanInfo()
+	if err != nil {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		return
+	}
+	RenderFeed(w, feed)
+}
+
 func main() {
 	_ = godotenv.Load()
 
@@ -61,6 +70,7 @@ func main() {
 	http.HandleFunc("/puroland-news", HandlePurolandNews)
 	http.HandleFunc("/character-show", HandleCharacterShow)
 	http.HandleFunc("/sanrio-event", HandleSanrioEvent)
+	http.HandleFunc("/kittychan-info", HandleKittychanInfo)
 
 	port := os.Getenv("PORT")
 	if port == "" {
