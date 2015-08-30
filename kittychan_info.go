@@ -59,7 +59,7 @@ func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 			if color == "#0000ff" {
 				title = strings.TrimSpace(s.Text())
 			} else if color == "#000000" {
-				description = s.Text()
+				description, _ = s.Html()
 				s.Find("a").Each(func(_ int, s *goquery.Selection) {
 					if link != "" {
 						return
