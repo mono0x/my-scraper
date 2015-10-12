@@ -8,3 +8,4 @@
 - Sanrio Event Information <http://www.sanrio.co.jp/event/search/>
 - Character Show Fansite <http://charactershow.jp/>
 - Kittychan Info <http://www.kittychan.info/information.html>
+- Sanrio Events Calendar <http://ameblo.jp/ohtaket/entry-12059393801.html>
