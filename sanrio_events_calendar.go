@@ -14,8 +14,8 @@ import (
 )
 
 func dropCR(data []byte) []byte {
-	if len(data) > 0 && data[len(data) - 1] == '\r' {
-		return data[0:len(data)-1]
+	if len(data) > 0 && data[len(data)-1] == '\r' {
+		return data[0 : len(data)-1]
 	}
 	return data
 }
@@ -31,7 +31,7 @@ func scanContentLines(data []byte, atEOF bool) (int, []byte, error) {
 
 	var (
 		advance = 0
-		buffer bytes.Buffer
+		buffer  bytes.Buffer
 	)
 	for {
 		if i := bytes.IndexByte(data, '\n'); i >= 0 {
@@ -65,13 +65,13 @@ func scanContentLines(data []byte, atEOF bool) (int, []byte, error) {
 }
 
 type Event struct {
-	Summary string
-	Description string
-	Location string
-	Uid string
-	Start time.Time
-	End time.Time
-	Created time.Time
+	Summary      string
+	Description  string
+	Location     string
+	Uid          string
+	Start        time.Time
+	End          time.Time
+	Created      time.Time
 	LastModified time.Time
 }
 
@@ -112,20 +112,20 @@ func parse(scanner *bufio.Scanner) ([]Event, error) {
 	inEvent := false
 
 	var (
-		summary string
-		description string
-		location string
-		uid string
-		start time.Time
-		end time.Time
-		created time.Time
+		summary      string
+		description  string
+		location     string
+		uid          string
+		start        time.Time
+		end          time.Time
+		created      time.Time
 		lastModified time.Time
 	)
 	for scanner.Scan() {
 		var (
-			key string
-			value string
-			err error
+			key        string
+			value      string
+			err        error
 			properties = map[string]string{}
 		)
 
@@ -167,13 +167,13 @@ func parse(scanner *bufio.Scanner) ([]Event, error) {
 			inEvent = false
 
 			events = append(events, Event{
-				Summary: summary,
-				Description: description,
-				Location: location,
-				Uid: uid,
-				Start: start,
-				End: end,
-				Created: created,
+				Summary:      summary,
+				Description:  description,
+				Location:     location,
+				Uid:          uid,
+				Start:        start,
+				End:          end,
+				Created:      created,
 				LastModified: lastModified,
 			})
 
@@ -273,18 +273,18 @@ func GetSanrioEventsCalendarFromReader(reader io.Reader) (*feeds.Feed, error) {
 	items = make([]*feeds.Item, len(events))
 	for i, event := range events {
 		items[i] = &feeds.Item{
-			Title: event.Summary,
+			Title:       event.Summary,
 			Description: fmt.Sprintf("%s\nStart: %s\nEnd: %s\n\n%s", event.Location, event.Start, event.End, event.Description),
-			Link: &feeds.Link{Href: xurls.Strict.FindString(event.Description)},
-			Id: event.Uid,
-			Created: event.Created,
-			Updated: event.LastModified,
+			Link:        &feeds.Link{Href: xurls.Strict.FindString(event.Description)},
+			Id:          event.Uid,
+			Created:     event.Created,
+			Updated:     event.LastModified,
 		}
 	}
 
 	feed := &feeds.Feed{
 		Title: "Sanrio Events",
-		Link: &feeds.Link{Href: "http://ameblo.jp/ohtaket/entry-12059393801.html"},
+		Link:  &feeds.Link{Href: "http://ameblo.jp/ohtaket/entry-12059393801.html"},
 		Items: items,
 	}
 	return feed, nil
