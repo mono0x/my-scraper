@@ -272,9 +272,17 @@ func GetSanrioEventsCalendarFromReader(reader io.Reader) (*feeds.Feed, error) {
 	var items []*feeds.Item
 	items = make([]*feeds.Item, len(events))
 	for i, event := range events {
+		start := event.Start.Local()
+		end := event.End.Local()
+		var duration string
+		if start.Format("20060102") == end.Format("20060102") {
+			duration = start.Format("2006-01-02 (Mon) 15:04") + " - " + end.Format("15:04")
+		} else {
+			duration = start.Format("2006-01-02 (Mon) 15:04") + " - " + end.Format("2006-01-02 (Mon) 15:04")
+		}
 		items[i] = &feeds.Item{
 			Title:       event.Summary,
-			Description: fmt.Sprintf("%s\nStart: %s\nEnd: %s\n\n%s", event.Location, event.Start, event.End, event.Description),
+			Description: fmt.Sprintf("Location: %s<br />Duration: %s<br /><br />Description: %s", event.Location, duration, event.Description),
 			Link:        &feeds.Link{Href: xurls.Strict.FindString(event.Description)},
 			Id:          event.Uid,
 			Created:     event.Created,
