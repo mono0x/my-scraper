@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func RenderFeed(w http.ResponseWriter, feed *feeds.Feed) {
+func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	atom, err := feed.ToAtom()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -18,69 +18,26 @@ func RenderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	fmt.Fprintln(w, atom)
 }
 
-func HandlePurolandNews(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetPurolandNews()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
+func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		feed, err := fetcher()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
 	}
-	RenderFeed(w, feed)
-}
-
-func HandlePurolandInfo(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetPurolandInfo()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
-	}
-	RenderFeed(w, feed)
-}
-
-func HandleCharacterShow(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetCharacterShow()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
-	}
-	RenderFeed(w, feed)
-}
-
-func HandleSanrioEvent(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetSanrioEvent()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
-	}
-	RenderFeed(w, feed)
-}
-
-func HandleKittychanInfo(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetKittychanInfo()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
-	}
-	RenderFeed(w, feed)
-}
-
-func HandleSanrioEventsCalendar(w http.ResponseWriter, r *http.Request) {
-	feed, err := GetSanrioEventsCalendar()
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		return
-	}
-	RenderFeed(w, feed)
 }
 
 func main() {
 	_ = godotenv.Load()
 
-	http.HandleFunc("/puroland-info", HandlePurolandInfo)
-	http.HandleFunc("/puroland-news", HandlePurolandNews)
-	http.HandleFunc("/character-show", HandleCharacterShow)
-	http.HandleFunc("/sanrio-event", HandleSanrioEvent)
-	http.HandleFunc("/kittychan-info", HandleKittychanInfo)
-	http.HandleFunc("/sanrio-events-calendar", HandleSanrioEventsCalendar)
+	http.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
+	http.HandleFunc("/puroland-news", feedHandler(GetPurolandNews))
+	http.HandleFunc("/character-show", feedHandler(GetCharacterShow))
+	http.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
+	http.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
+	http.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
 
 	port := os.Getenv("PORT")
 	if port == "" {
