@@ -60,11 +60,19 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 
 		switch {
 		case event.Start.Date != "" && event.End.Date != "":
-			start, err := time.Parse("2006-01-02", event.Start.Date)
+			startLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
 				return nil, err
 			}
-			end, err := time.Parse("2006-01-02", event.End.Date)
+			start, err := time.ParseInLocation("2006-01-02", event.Start.Date, startLoc)
+			if err != nil {
+				return nil, err
+			}
+			endLoc, err := time.LoadLocation(event.Start.TimeZone)
+			if err != nil {
+				return nil, err
+			}
+			end, err := time.ParseInLocation("2006-01-02", event.End.Date, endLoc)
 			if err != nil {
 				return nil, err
 			}
@@ -76,11 +84,19 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 			}
 
 		case event.Start.DateTime != "" && event.End.DateTime != "":
-			start, err := time.Parse(time.RFC3339, event.Start.DateTime)
+			startLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
 				return nil, err
 			}
-			end, err := time.Parse(time.RFC3339, event.End.DateTime)
+			start, err := time.ParseInLocation(time.RFC3339, event.Start.DateTime, startLoc)
+			if err != nil {
+				return nil, err
+			}
+			endLoc, err := time.LoadLocation(event.Start.TimeZone)
+			if err != nil {
+				return nil, err
+			}
+			end, err := time.ParseInLocation(time.RFC3339, event.End.DateTime, endLoc)
 			if err != nil {
 				return nil, err
 			}
@@ -95,8 +111,7 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 			return nil, errors.New("must not happen")
 		}
 
-		description := fmt.Sprintf("Location: %s<br />Duration: %s<br />Description: %s",
-			html.EscapeString(event.Location), html.EscapeString(duration), html.EscapeString(event.Description))
+		description := fmt.Sprintf("Location: %s<br />Duration: %s<br />Description: %s", html.EscapeString(event.Location), html.EscapeString(duration), html.EscapeString(event.Description))
 
 		items[i] = &feeds.Item{
 			Id:          event.Etag,
