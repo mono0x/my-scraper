@@ -1,17 +1,29 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
-	"os"
+	"google.golang.org/api/calendar/v3"
+	"io/ioutil"
 	"testing"
 )
 
 func TestGetSanrioEventsCalendarFromReader(t *testing.T) {
-	f, err := os.Open("data/sanrio_events_calendar.ics")
-	defer f.Close()
-	feed, err := GetSanrioEventsCalendarFromReader(f)
+	jsonData, err := ioutil.ReadFile("data/sanrio_events_calendar.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, 181, len(feed.Items))
+
+	var events calendar.Events
+	err = json.Unmarshal(jsonData, &events)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	feed, err := GetSanrioEventsCalendarFromEvents(&events)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 199, len(feed.Items))
 }
