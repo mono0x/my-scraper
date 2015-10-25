@@ -9,6 +9,7 @@ import (
 	"google.golang.org/api/calendar/v3"
 	"html"
 	"io/ioutil"
+	"strings"
 	"time"
 )
 
@@ -44,6 +45,8 @@ func GetSanrioEventsCalendar() (*feeds.Feed, error) {
 }
 
 func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, error) {
+	descriptionReplacer := strings.NewReplacer("\n", "<br />")
+
 	var items []*feeds.Item
 	items = make([]*feeds.Item, len(events.Items))
 	for i, event := range events.Items {
@@ -111,7 +114,7 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 			return nil, errors.New("must not happen")
 		}
 
-		description := fmt.Sprintf("Location: %s<br />Duration: %s<br />Description: %s", html.EscapeString(event.Location), html.EscapeString(duration), html.EscapeString(event.Description))
+		description := fmt.Sprintf("Location: %s<br />Duration: %s<br /><br />%s", html.EscapeString(event.Location), html.EscapeString(duration), descriptionReplacer.Replace(html.EscapeString(event.Description)))
 
 		items[i] = &feeds.Item{
 			Id:          event.Etag,
