@@ -38,6 +38,7 @@ func main() {
 	http.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
 	http.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
 	http.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
+	http.HandleFunc("/seibuen-event", feedHandler(GetSeibuenEvent))
 
 	port := os.Getenv("PORT")
 	if port == "" {
