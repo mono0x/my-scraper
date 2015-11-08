@@ -2,10 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/braintree/manners"
 	"github.com/gorilla/feeds"
 	"github.com/joho/godotenv"
+	"github.com/lestrrat/go-server-starter/listener"
+	"log"
+	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
@@ -32,17 +38,40 @@ func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, 
 func main() {
 	_ = godotenv.Load()
 
-	http.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
-	http.HandleFunc("/puroland-news", feedHandler(GetPurolandNews))
-	http.HandleFunc("/character-show", feedHandler(GetCharacterShow))
-	http.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
-	http.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
-	http.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
-	http.HandleFunc("/seibuen-event", feedHandler(GetSeibuenEvent))
+	signalChan := make(chan os.Signal)
+	signal.Notify(signalChan, syscall.SIGTERM)
+	go func() {
+		for {
+			s := <-signalChan
+			if s == syscall.SIGTERM {
+				manners.Close()
+			}
+		}
+	}()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "13000"
+	listeners, err := listener.ListenAll()
+	if err != nil {
+		log.Fatal(err)
 	}
-	http.ListenAndServe(":"+port, nil)
+
+	var l net.Listener
+	if len(listeners) > 0 {
+		l = listeners[0]
+	} else {
+		l, err = net.Listen("tcp", ":13000")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
+	mux.HandleFunc("/puroland-news", feedHandler(GetPurolandNews))
+	mux.HandleFunc("/character-show", feedHandler(GetCharacterShow))
+	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
+	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
+	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
+	mux.HandleFunc("/seibuen-event", feedHandler(GetSeibuenEvent))
+
+	manners.Serve(l, mux)
 }
