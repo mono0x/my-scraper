@@ -121,7 +121,7 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 			Title:       event.Summary,
 			Description: description,
 			Link:        &feeds.Link{Href: event.HtmlLink},
-			Author:      &feeds.Author{event.Creator.DisplayName, event.Creator.Email},
+			Author:      &feeds.Author{Name: event.Creator.DisplayName, Email: event.Creator.Email},
 			Created:     created,
 			Updated:     updated,
 		}
