@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	Url = "http://www.sanrio.co.jp/event/search/"
+	SanrioEventUrl = "http://www.sanrio.co.jp/event/search/"
 )
 
 func GetSanrioEvent() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(Url)
+	doc, err := goquery.NewDocument(SanrioEventUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func GetSanrioEvent() (*feeds.Feed, error) {
 func GetSanrioEventFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "イベント情報 | サンリオ",
-		Link:  &feeds.Link{Href: Url},
+		Link:  &feeds.Link{Href: SanrioEventUrl},
 	}
 
 	spotReplacer := strings.NewReplacer("会場：", "")

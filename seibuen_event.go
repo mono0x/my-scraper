@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	PageUrl = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
+	SeibuenEventUrl = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
 )
 
 func GetSeibuenEvent() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(PageUrl)
+	doc, err := goquery.NewDocument(SeibuenEventUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func GetSeibuenEventFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Description: description,
-				Link:        &feeds.Link{Href: PageUrl},
+				Link:        &feeds.Link{Href: SeibuenEventUrl},
 				Id:          hash,
 			})
 		}
@@ -57,7 +57,7 @@ func GetSeibuenEventFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 
 	feed := &feeds.Feed{
 		Title: "西武園ゆうえんち メルヘンタウン",
-		Link:  &feeds.Link{Href: PageUrl},
+		Link:  &feeds.Link{Href: SeibuenEventUrl},
 		Items: items,
 	}
 

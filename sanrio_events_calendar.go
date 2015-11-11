@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	CalendarId = "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com"
-	LinkUrl    = "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com"
+	CalendarId              = "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com"
+	SanrioEventsCalendarUrl = "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com"
 )
 
 func GetSanrioEventsCalendar() (*feeds.Feed, error) {
@@ -136,7 +136,7 @@ func GetSanrioEventsCalendarFromEvents(events *calendar.Events) (*feeds.Feed, er
 		Id:          events.Etag,
 		Title:       events.Summary,
 		Description: events.Description,
-		Link:        &feeds.Link{Href: LinkUrl},
+		Link:        &feeds.Link{Href: SanrioEventsCalendarUrl},
 		Updated:     updated,
 		Items:       items,
 	}
