@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/braintree/manners"
 	"github.com/gorilla/feeds"
-	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
 	"log"
 	"net"
@@ -36,8 +35,6 @@ func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, 
 }
 
 func main() {
-	_ = godotenv.Load()
-
 	signalChan := make(chan os.Signal)
 	signal.Notify(signalChan, syscall.SIGTERM)
 	go func() {
