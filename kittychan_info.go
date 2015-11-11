@@ -10,8 +10,12 @@ import (
 	"strings"
 )
 
+const (
+	Url = "http://www.kittychan.info/information.html"
+)
+
 func GetKittychanInfo() (*feeds.Feed, error) {
-	res, err := http.Get("http://www.kittychan.info/information.html")
+	res, err := http.Get(Url)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +43,7 @@ func GetKittychanInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
-		Link:  &feeds.Link{Href: "http://www.kittychan.info/information.html"},
+		Link:  &feeds.Link{Href: Url},
 	}
 
 	var items []*feeds.Item

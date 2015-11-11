@@ -6,8 +6,13 @@ import (
 	"strings"
 )
 
+const (
+	NewsUrl = "http://www.puroland.jp/"
+	InfoUrl = "http://www.puroland.jp/"
+)
+
 func GetPurolandNews() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument("http://www.puroland.jp/")
+	doc, err := goquery.NewDocument(NewsUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +22,7 @@ func GetPurolandNews() (*feeds.Feed, error) {
 func GetPurolandNewsFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "最新情報 | サンリオピューロランド",
-		Link:  &feeds.Link{Href: "http://www.puroland.jp/"},
+		Link:  &feeds.Link{Href: NewsUrl},
 	}
 
 	var items []*feeds.Item
@@ -38,7 +43,7 @@ func GetPurolandNewsFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 }
 
 func GetPurolandInfo() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument("http://www.puroland.jp/")
+	doc, err := goquery.NewDocument(InfoUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +53,7 @@ func GetPurolandInfo() (*feeds.Feed, error) {
 func GetPurolandInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "お知らせ | サンリオピューロランド",
-		Link:  &feeds.Link{Href: "http://www.puroland.jp/"},
+		Link:  &feeds.Link{Href: InfoUrl},
 	}
 
 	var items []*feeds.Item
