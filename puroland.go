@@ -1,74 +1,87 @@
 package main
 
 import (
-	"github.com/PuerkitoBio/goquery"
+	"encoding/json"
+	"fmt"
 	"github.com/gorilla/feeds"
-	"strings"
+	"html"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"time"
 )
 
 const (
-	PurolandNewsUrl = "http://www.puroland.jp/"
-	PurolandInfoUrl = "http://www.puroland.jp/"
+	PurolandInfoUrl    = "http://www.puroland.jp/"
+	PurolandInfoApiUrl = "http://www.puroland.jp/api/live/get_information/?page=1&count=20"
 )
 
-func GetPurolandNews() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(PurolandNewsUrl)
+type information struct {
+	Status  string            `json:"status"`
+	Count   int               `json:"count"`
+	Total   int               `json:"total"`
+	Page    int               `json:"page"`
+	MaxPage int               `json:"maxpage"`
+	Data    []informationItem `json:"data"`
+}
+
+type informationItem struct {
+	Url             string `json:"url"`
+	Title           string `json:"title"`
+	PublicDate      string `json:"public_date"`
+	ThumbnailMiddle string `json:"thumbnail_m"`
+}
+
+func GetPurolandInfo() (*feeds.Feed, error) {
+	res, err := http.Get(PurolandInfoApiUrl)
 	if err != nil {
 		return nil, err
 	}
-	return GetPurolandNewsFromDocument(doc)
-}
+	defer res.Body.Close()
 
-func GetPurolandNewsFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	feed := &feeds.Feed{
-		Title: "最新情報 | サンリオピューロランド",
-		Link:  &feeds.Link{Href: PurolandNewsUrl},
+	feed, err := GetPurolandInfoFromReader(res.Body)
+	if err != nil {
+		return nil, err
 	}
-
-	var items []*feeds.Item
-	doc.Find("#newsArea ul li a").Each(func(_ int, s *goquery.Selection) {
-		title := strings.TrimSpace(s.Text())
-		link, ok := s.Attr("href")
-		if ok {
-			items = append(items, &feeds.Item{
-				Title: title,
-				Link:  &feeds.Link{Href: link},
-				Id:    link,
-			})
-		}
-	})
-	feed.Items = items
 
 	return feed, nil
 }
 
-func GetPurolandInfo() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(PurolandInfoUrl)
+func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
+	jsonData, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
-	return GetPurolandInfoFromDocument(doc)
-}
 
-func GetPurolandInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+	var info information
+	err = json.Unmarshal(jsonData, &info)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]*feeds.Item, info.Count)
+	for i, infoItem := range info.Data {
+		created, err := time.Parse("2006/01/02", infoItem.PublicDate)
+		if err != nil {
+			return nil, err
+		}
+
+		description := fmt.Sprintf("<img src=\"%s\" />", infoItem.ThumbnailMiddle)
+
+		items[i] = &feeds.Item{
+			Title:       html.UnescapeString(infoItem.Title),
+			Link:        &feeds.Link{Href: infoItem.Url},
+			Id:          infoItem.Url,
+			Created:     created,
+			Description: description,
+		}
+	}
+
 	feed := &feeds.Feed{
 		Title: "お知らせ | サンリオピューロランド",
 		Link:  &feeds.Link{Href: PurolandInfoUrl},
+		Items: items,
 	}
-
-	var items []*feeds.Item
-	doc.Find("#infoSectionArea ul li a").Each(func(_ int, s *goquery.Selection) {
-		title := strings.TrimSpace(s.Text())
-		link, ok := s.Attr("href")
-		if ok {
-			items = append(items, &feeds.Item{
-				Title: title,
-				Link:  &feeds.Link{Href: link},
-				Id:    link,
-			})
-		}
-	})
-	feed.Items = items
 
 	return feed, nil
 }

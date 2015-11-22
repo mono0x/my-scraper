@@ -63,7 +63,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
-	mux.HandleFunc("/puroland-news", feedHandler(GetPurolandNews))
 	mux.HandleFunc("/character-show", feedHandler(GetCharacterShow))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
 	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
