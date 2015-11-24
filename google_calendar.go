@@ -31,11 +31,21 @@ func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
 		return nil, err
 	}
 
-	events, err := service.Events.List(calendarId).OrderBy("updated").Do()
+	events, err := service.Events.List(calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).Do()
 	if err != nil {
 		return nil, err
 	}
 
+	items := events.Items
+	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
+		events, err := service.Events.List(calendarId).PageToken(pageToken).Do()
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, events.Items...)
+		pageToken = events.NextPageToken
+	}
+	events.Items = items
 	return events, nil
 }
 
