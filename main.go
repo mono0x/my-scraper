@@ -62,12 +62,12 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
 	mux.HandleFunc("/character-show", feedHandler(GetCharacterShow))
-	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
-	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
-	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
 	mux.HandleFunc("/gotouchi-chara-calendar", feedHandler(GetGotouchiCharaCalendar))
+	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
+	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
+	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
+	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
 	mux.HandleFunc("/seibuen-event", feedHandler(GetSeibuenEvent))
 
 	manners.Serve(l, mux)
