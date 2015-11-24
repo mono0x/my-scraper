@@ -9,4 +9,5 @@
 - Character Show Fansite <http://charactershow.jp/>
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Sanrio Events Calendar <http://ameblo.jp/ohtaket/entry-12059393801.html>
+- Gotouchi Chara Calendar <http://gotouchi-chara.jp/calendar_.html>
 - Seibuen Event <http://www.seibuen-yuuenchi.jp/event/index.html?category=e1>
