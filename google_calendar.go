@@ -31,7 +31,9 @@ func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
 		return nil, err
 	}
 
-	events, err := service.Events.List(calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).Do()
+	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
+
+	events, err := service.Events.List(calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
 		return nil, err
 	}
