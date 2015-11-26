@@ -148,7 +148,7 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 			urls[urlString] = true
 
 			for _, host := range hosts {
-				if u.Host.HasSuffix(host) {
+				if strings.HasSuffix(u.Host, host) {
 					continue entryLoop
 				}
 			}
