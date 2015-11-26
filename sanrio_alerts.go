@@ -100,6 +100,8 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 
 	keywords := []string{
 		"あす楽",
+		"きせかえ",
+		"サマンサ",
 		"ポイント",
 		"三輪車",
 		"価格",
