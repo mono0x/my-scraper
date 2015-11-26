@@ -37,7 +37,7 @@ func GetSanrioAlerts() (*feeds.Feed, error) {
 		var wg sync.WaitGroup
 		for _, url := range urls {
 			wg.Add(1)
-			go func() {
+			go func(url string) {
 				defer wg.Done()
 
 				resp, err := http.Get(url)
@@ -61,7 +61,7 @@ func GetSanrioAlerts() (*feeds.Feed, error) {
 				}
 
 				atomChan <- &atom
-			}()
+			}(url)
 		}
 		wg.Wait()
 
