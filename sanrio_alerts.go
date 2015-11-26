@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"regexp"
+	"strings"
 	"sync"
 	"time"
 )
@@ -90,9 +92,37 @@ loop:
 func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 	var items []*feeds.Item
 
+	hosts := []string{
+		"auction.rakuten.co.jp",
+		"item.mercali.com",
+		"fril.jp",
+	}
+
+	keywords := []string{
+		"あす楽",
+		"ポイント",
+		"三輪車",
+		"価格",
+		"即納",
+		"在庫",
+		"安い",
+		"定価",
+		"新品",
+		"楽天",
+		"激安",
+		"自転車",
+		"販売",
+		"送料",
+		"通販",
+		"限定",
+	}
+
+	keywordsRe := regexp.MustCompile(strings.Join(keywords, "|"))
+
 	urls := map[string]bool{}
 
 	for _, atom := range atoms {
+	entryLoop:
 		for _, entry := range atom.Entry {
 			if len(entry.Link) == 0 {
 				continue
@@ -103,18 +133,32 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 				return nil, err
 			}
 
-			url := href.Query().Get("url")
-			if url == "" {
+			u, err := url.Parse(href.Query().Get("url"))
+			if err != nil {
 				return nil, err
 			}
 
-			if _, ok := urls[url]; ok {
+			urlString := u.String()
+			if _, ok := urls[urlString]; ok {
 				continue
 			}
-			urls[url] = true
+			urls[urlString] = true
+
+			for _, host := range hosts {
+				if u.Host == host {
+					continue entryLoop
+				}
+			}
 
 			title := sanitize.HTML(entry.Title)
+			if keywordsRe.MatchString(title) {
+				continue
+			}
+
 			content := sanitize.HTML(entry.Content.Body)
+			if keywordsRe.MatchString(content) {
+				continue
+			}
 
 			published, err := time.Parse(time.RFC3339, string(entry.Published))
 			if err != nil {
@@ -128,8 +172,8 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Description: content,
-				Id:          url,
-				Link:        &feeds.Link{Href: url},
+				Id:          urlString,
+				Link:        &feeds.Link{Href: urlString},
 				Created:     published,
 				Updated:     updated,
 			})
