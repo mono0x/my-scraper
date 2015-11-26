@@ -88,8 +88,9 @@ loop:
 }
 
 func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
-
 	var items []*feeds.Item
+
+	urls := map[string]bool{}
 
 	for _, atom := range atoms {
 		for _, entry := range atom.Entry {
@@ -106,6 +107,11 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 			if url == "" {
 				return nil, err
 			}
+
+			if _, ok := urls[url]; ok {
+				continue
+			}
+			urls[url] = true
 
 			title := sanitize.HTML(entry.Title)
 			content := sanitize.HTML(entry.Content.Body)
