@@ -121,7 +121,12 @@ func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed
 			return nil, errors.New("must not happen")
 		}
 
-		description := fmt.Sprintf("Location: %s<br />Duration: %s<br /><br />%s", html.EscapeString(event.Location), html.EscapeString(duration), descriptionReplacer.Replace(html.EscapeString(event.Description)))
+		var description string
+		if event.Location != "" {
+			description += fmt.Sprintf("Location: %s<br />", html.EscapeString(event.Location))
+		}
+		description += fmt.Sprintf("Duration: %s<br /><br />", html.EscapeString(duration))
+		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
 
 		items[i] = &feeds.Item{
 			Id:          event.Etag,
