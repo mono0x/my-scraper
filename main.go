@@ -16,6 +16,7 @@ import (
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	atom, err := feed.ToAtom()
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -27,6 +28,7 @@ func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, 
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := fetcher()
 		if err != nil {
+			log.Println(err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
