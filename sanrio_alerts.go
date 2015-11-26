@@ -94,9 +94,13 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 
 	hosts := []string{
 		"auction.rakuten.co.jp",
+		"pecolly.jp",
+		"shoppies.jp",
 		"auctions.yahoo.co.jp",
+		"cookpad.com",
 		"fril.jp",
 		"item.mercali.com",
+		"rakuma.rakuten.co.jp",
 	}
 
 	keywords := []string{
