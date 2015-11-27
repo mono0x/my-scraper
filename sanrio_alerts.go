@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -17,6 +18,20 @@ import (
 const (
 	SanrioAlertsUrl = "http://scraper.mono0x.net/sanrio-alerts"
 )
+
+type feedItemArray []*feeds.Item
+
+func (a feedItemArray) Len() int {
+	return len(a)
+}
+
+func (a feedItemArray) Less(i, j int) bool {
+	return a[i].Updated.After(a[j].Updated)
+}
+
+func (a feedItemArray) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
 
 func GetSanrioAlerts() (*feeds.Feed, error) {
 
@@ -193,6 +208,8 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 			})
 		}
 	}
+
+	sort.Sort(feedItemArray(items))
 
 	feed := &feeds.Feed{
 		Title: "Sanrio Alerts",
