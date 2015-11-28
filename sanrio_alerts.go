@@ -47,7 +47,7 @@ func GetSanrioAlerts() (*feeds.Feed, error) {
 	}
 
 	atomChan := make(chan *atom.Feed)
-	doneChan := make(chan struct{})
+	quitChan := make(chan bool)
 	errChan := make(chan error)
 
 	go func() {
@@ -82,29 +82,23 @@ func GetSanrioAlerts() (*feeds.Feed, error) {
 		}
 		wg.Wait()
 
-		doneChan <- struct{}{}
+		quitChan <- true
 	}()
 
 	var atoms []*atom.Feed
 
+loop:
 	for {
 		select {
 		case atom := <-atomChan:
 			atoms = append(atoms, atom)
-			continue
+
+		case <-quitChan:
+			break loop
+
 		case err := <-errChan:
 			return nil, err
-		default:
 		}
-		select {
-		case atom := <-atomChan:
-			atoms = append(atoms, atom)
-			continue
-		case err := <-errChan:
-			return nil, err
-		case <-doneChan:
-		}
-		break
 	}
 
 	return GetSanrioAlertsFromAtom(atoms)
