@@ -2,9 +2,6 @@ package main
 
 import (
 	"encoding/xml"
-	"github.com/gorilla/feeds"
-	"github.com/kennygrant/sanitize"
-	"golang.org/x/tools/blog/atom"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -13,6 +10,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gorilla/feeds"
+	"github.com/kennygrant/sanitize"
+	"golang.org/x/tools/blog/atom"
 )
 
 const (

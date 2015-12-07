@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/feeds"
 	"html"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/feeds"
 )
 
 const (

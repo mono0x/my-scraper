@@ -2,9 +2,10 @@ package main
 
 import (
 	"bufio"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetKittychanInfoFromDocument(t *testing.T) {

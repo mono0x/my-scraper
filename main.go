@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/braintree/manners"
-	"github.com/gorilla/feeds"
-	"github.com/lestrrat/go-server-starter/listener"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/braintree/manners"
+	"github.com/gorilla/feeds"
+	"github.com/lestrrat/go-server-starter/listener"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {

@@ -2,10 +2,11 @@ package main
 
 import (
 	"bufio"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetSeibuenEventFromDocument(t *testing.T) {

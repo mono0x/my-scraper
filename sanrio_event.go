@@ -3,9 +3,10 @@ package main
 import (
 	//"crypto/sha256"
 	"fmt"
+	"strings"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
-	"strings"
 )
 
 const (

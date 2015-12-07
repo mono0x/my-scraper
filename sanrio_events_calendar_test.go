@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/api/calendar/v3"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/api/calendar/v3"
 )
 
 func TestGetSanrioEventsCalendarFromReader(t *testing.T) {

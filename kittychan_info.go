@@ -2,12 +2,13 @@ package main
 
 import (
 	"bytes"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/gorilla/feeds"
 	"io"
 	"net/http"
 	"os/exec"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/gorilla/feeds"
 )
 
 const (

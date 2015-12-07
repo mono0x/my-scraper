@@ -3,14 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/gorilla/feeds"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"google.golang.org/api/calendar/v3"
 	"html"
 	"io/ioutil"
 	"strings"
 	"time"
+
+	"github.com/gorilla/feeds"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/api/calendar/v3"
 )
 
 func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
