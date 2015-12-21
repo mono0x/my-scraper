@@ -111,7 +111,7 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 		"auctions.yahoo.co.jp",
 		"cookpad.com",
 		"fril.jp",
-		"item.mercali.com",
+		"item.mercari.com",
 		"milnetravel.com",
 		"pecolly.jp",
 		"rakuma.rakuten.co.jp",
