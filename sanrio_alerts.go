@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	SanrioAlertsUrl = "http://scraper.mono0x.net/sanrio-alerts"
+	SanrioAlertsUrl = "https://scraper.mono0x.net/sanrio-alerts"
 )
 
 type feedItemArray []*feeds.Item
