@@ -5,7 +5,10 @@ import (
 	"io"
 	"net/http"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
@@ -13,6 +16,10 @@ import (
 
 const (
 	KittychanInfoUrl = "http://www.kittychan.info/information.html"
+)
+
+var (
+	titleDateRe = regexp.MustCompile(`\A★?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
 )
 
 func GetKittychanInfo() (*feeds.Feed, error) {
@@ -76,9 +83,37 @@ func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 			}
 		})
 
+		matches := titleDateRe.FindStringSubmatch(title)
+		if len(matches) < 2 || matches[1] == "" {
+			return
+		}
+		title = matches[1]
+
+		var updated time.Time
+		if len(matches) >= 5 && matches[2] != "" && matches[3] != "" && matches[4] != "" {
+			year, err := strconv.Atoi(matches[2])
+			if err != nil {
+				return
+			}
+			month, err := strconv.Atoi(matches[3])
+			if err != nil {
+				return
+			}
+			day, err := strconv.Atoi(matches[4])
+			if err != nil {
+				return
+			}
+			loc, err := time.LoadLocation("Asia/Tokyo")
+			if err != nil {
+				return
+			}
+			updated = time.Date(year, time.Month(month), day, 0, 0, 0, 0, loc)
+		}
+
 		if title != "" && description != "" && link != "" {
 			items = append(items, &feeds.Item{
 				Title:       title,
+				Updated:     updated,
 				Description: description,
 				Link:        &feeds.Link{Href: link},
 				Id:          link,
