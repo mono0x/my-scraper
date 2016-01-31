@@ -18,10 +18,6 @@ const (
 	KittychanInfoUrl = "http://www.kittychan.info/information.html"
 )
 
-var (
-	titleDateRe = regexp.MustCompile(`\A★?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
-)
-
 func GetKittychanInfo() (*feeds.Feed, error) {
 	res, err := http.Get(KittychanInfoUrl)
 	if err != nil {
@@ -52,6 +48,13 @@ func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
 		Link:  &feeds.Link{Href: KittychanInfoUrl},
+	}
+
+	titleDateRe := regexp.MustCompile(`\A★?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
+
+	loc, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		return nil, err
 	}
 
 	var items []*feeds.Item
@@ -100,10 +103,6 @@ func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 				return
 			}
 			day, err := strconv.Atoi(matches[4])
-			if err != nil {
-				return
-			}
-			loc, err := time.LoadLocation("Asia/Tokyo")
 			if err != nil {
 				return
 			}
