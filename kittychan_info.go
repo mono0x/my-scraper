@@ -1,14 +1,15 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"net/http"
-	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/transform"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
@@ -29,14 +30,7 @@ func GetKittychanInfo() (*feeds.Feed, error) {
 }
 
 func GetKittychanInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
-	cmd := exec.Command("iconv", "-c", "-f", "cp932", "-t", "utf-8")
-	cmd.Stdin = reader
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	if err := cmd.Run(); err != nil {
-		return nil, err
-	}
-	decodedReader := bytes.NewReader(out.Bytes())
+	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
 		return nil, err
