@@ -143,7 +143,11 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 		"限定",
 	}
 
-	keywordsRe := regexp.MustCompile(strings.Join(keywords, "|"))
+	quotedKeywords := make([]string, len(keywords))
+	for _, keyword := range keywords {
+		quotedKeywords = append(quotedKeywords, regexp.QuoteMeta(keyword))
+	}
+	keywordsRe := regexp.MustCompile(strings.Join(quotedKeywords, "|"))
 
 	urls := map[string]bool{}
 
