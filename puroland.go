@@ -67,7 +67,7 @@ func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 			return nil, err
 		}
 
-		description := fmt.Sprintf("<img src=\"%s\" />", infoItem.ThumbnailMiddle)
+		description := fmt.Sprintf(`<img src="%s" />`, infoItem.ThumbnailMiddle)
 
 		items[i] = &feeds.Item{
 			Title:       html.UnescapeString(infoItem.Title),
