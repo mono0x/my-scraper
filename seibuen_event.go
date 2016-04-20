@@ -40,6 +40,9 @@ func GetSeibuenEventFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 				value := textReplacer.Replace((strings.TrimSpace(s.Find("td").Text())))
 				properties[key] = value
 			})
+			if len(properties) == 0 {
+				return
+			}
 
 			summary := textReplacer.Replace(s.Find(".txt-box > div > .txt-body > div > .elem-paragraph").Text())
 
