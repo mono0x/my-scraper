@@ -68,7 +68,7 @@ func main() {
 	mux.HandleFunc("/character-show", feedHandler(GetCharacterShow))
 	mux.HandleFunc("/gotouchi-chara-calendar", feedHandler(GetGotouchiCharaCalendar))
 	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
-	mux.HandleFunc("/memoirs-of-shibasaki-saki", feedHandler(GetShibasakisaki))
+	mux.HandleFunc("/memoirs-of-shibasaki-saki", feedHandler(GetMemoirsOfShibasakiSaki))
 	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
 	mux.HandleFunc("/sanrio-alerts", feedHandler(GetSanrioAlerts))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))

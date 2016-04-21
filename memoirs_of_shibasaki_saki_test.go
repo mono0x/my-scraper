@@ -8,13 +8,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestShibasakisakiFromReader(t *testing.T) {
+func TestMemoirsOfShibasakiSakiFromReader(t *testing.T) {
 	f, err := os.Open("data/shibasakisaki.web.fc2.com/index.html")
 	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
-	feed, err := GetShibasakisakiFromReader(bufio.NewReader(f))
+	feed, err := GetMemoirsOfShibasakiSakiFromReader(bufio.NewReader(f))
 	if err != nil {
 		t.Fatal(err)
 	}

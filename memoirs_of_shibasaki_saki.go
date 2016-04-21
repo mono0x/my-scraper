@@ -14,29 +14,29 @@ import (
 )
 
 const (
-	ShibasakisakiUrl = "http://shibasakisaki.web.fc2.com/"
+	MemoirsOfShibasakiSakiUrl = "http://shibasakisaki.web.fc2.com/"
 )
 
-func GetShibasakisaki() (*feeds.Feed, error) {
-	res, err := http.Get(ShibasakisakiUrl)
+func GetMemoirsOfShibasakiSaki() (*feeds.Feed, error) {
+	res, err := http.Get(MemoirsOfShibasakiSakiUrl)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	return GetShibasakisakiFromReader(res.Body)
+	return GetMemoirsOfShibasakiSakiFromReader(res.Body)
 }
 
-func GetShibasakisakiFromReader(reader io.Reader) (*feeds.Feed, error) {
+func GetMemoirsOfShibasakiSakiFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
 		return nil, err
 	}
-	return GetShibasakisakiFromDocument(doc)
+	return GetMemoirsOfShibasakiSakiFromDocument(doc)
 }
 
-func GetShibasakisakiFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func GetMemoirsOfShibasakiSakiFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 
 	var items []*feeds.Item
 	doc.Find(`td[bgcolor="#330066"] font[size="+1"] > *`).Each(func(_ int, s *goquery.Selection) {
@@ -65,7 +65,7 @@ func GetShibasakisakiFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 
 	feed := &feeds.Feed{
 		Title: "柴崎さきの見聞録",
-		Link:  &feeds.Link{Href: ShibasakisakiUrl},
+		Link:  &feeds.Link{Href: MemoirsOfShibasakiSakiUrl},
 		Items: items,
 	}
 	return feed, nil
