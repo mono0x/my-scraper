@@ -7,6 +7,7 @@
 - Character Show Fansite <http://charactershow.jp/>
 - Gotouchi Chara Calendar <http://gotouchi-chara.jp/calendar_.html>
 - Kittychan Info <http://www.kittychan.info/information.html>
+- Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
 - Sanrio Alerts (combined feed of multiple Google Alerts feeds)
 - Sanrio Event Information <http://www.sanrio.co.jp/event/search/>
 - Sanrio Events Calendar <http://ameblo.jp/ohtaket/entry-12059393801.html>
