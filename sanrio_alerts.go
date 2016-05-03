@@ -20,17 +20,17 @@ const (
 	SanrioAlertsUrl = "https://scraper.mono0x.net/sanrio-alerts"
 )
 
-type feedItemArray []*feeds.Item
+type feedItemSlice []*feeds.Item
 
-func (a feedItemArray) Len() int {
+func (a feedItemSlice) Len() int {
 	return len(a)
 }
 
-func (a feedItemArray) Less(i, j int) bool {
+func (a feedItemSlice) Less(i, j int) bool {
 	return a[i].Updated.After(a[j].Updated)
 }
 
-func (a feedItemArray) Swap(i, j int) {
+func (a feedItemSlice) Swap(i, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
@@ -149,7 +149,7 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 	}
 	keywordsRe := regexp.MustCompile(strings.Join(quotedKeywords, "|"))
 
-	urls := map[string]bool{}
+	urls := make(map[string]struct{})
 
 	for _, atom := range atoms {
 	entryLoop:
@@ -172,7 +172,7 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 			if _, ok := urls[urlString]; ok {
 				continue
 			}
-			urls[urlString] = true
+			urls[urlString] = struct{}{}
 
 			for _, host := range hosts {
 				if strings.HasSuffix(u.Host, host) {
@@ -210,7 +210,7 @@ func GetSanrioAlertsFromAtom(atoms []*atom.Feed) (*feeds.Feed, error) {
 		}
 	}
 
-	sort.Sort(feedItemArray(items))
+	sort.Sort(feedItemSlice(items))
 
 	feed := &feeds.Feed{
 		Title: "Sanrio Alerts",
