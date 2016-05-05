@@ -11,6 +11,7 @@ import (
 
 	"github.com/braintree/manners"
 	"github.com/gorilla/feeds"
+	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
 )
 
@@ -38,6 +39,8 @@ func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, 
 }
 
 func main() {
+	_ = godotenv.Load()
+
 	signalChan := make(chan os.Signal)
 	signal.Notify(signalChan, syscall.SIGTERM)
 	go func() {
@@ -69,6 +72,7 @@ func main() {
 	mux.HandleFunc("/gotouchi-chara-calendar", feedHandler(GetGotouchiCharaCalendar))
 	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
 	mux.HandleFunc("/memoirs-of-shibasaki-saki", feedHandler(GetMemoirsOfShibasakiSaki))
+	mux.HandleFunc("/mucchan-musao", feedHandler(GetMucchanMusao))
 	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
 	mux.HandleFunc("/sanrio-alerts", feedHandler(GetSanrioAlerts))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
