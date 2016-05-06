@@ -21,17 +21,23 @@ type FacebookPosts struct {
 
 // https://developers.facebook.com/docs/graph-api/reference/v2.6/post
 type FacebookPost struct {
-	Id          string `json:"id"`
-	CreatedTime string `json:"created_time"`
-	Link        string `json:"link"`
-	Message     string `json:"message"`
-	Picture     string `json:"picture"`
+	Id          string           `json:"id"`
+	CreatedTime string           `json:"created_time"`
+	From        *FacebookProfile `json:"from"`
+	Link        string           `json:"link"`
+	Message     string           `json:"message"`
+	Picture     string           `json:"picture"`
+}
+
+type FacebookProfile struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
 	values := &url.Values{}
 	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
-	values.Set("fields", "created_time,link,message,picture")
+	values.Set("fields", "created_time,from,link,message,picture")
 
 	resp, err := http.Get(FacebookApiEndpoint + userId + "/posts?" + values.Encode())
 	if err != nil {
@@ -74,6 +80,7 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string, title string) (*fee
 
 		items = append(items, &feeds.Item{
 			Id:          post.Id,
+			Author:      &feeds.Author{Name: post.From.Name},
 			Title:       title,
 			Description: description,
 			Created:     created,
