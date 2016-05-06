@@ -59,8 +59,8 @@ func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 		return nil, err
 	}
 
-	items := make([]*feeds.Item, info.Count)
-	for i, infoItem := range info.Data {
+	items := make([]*feeds.Item, 0, info.Count)
+	for _, infoItem := range info.Data {
 		created, err := time.Parse("2006/01/02", infoItem.PublicDate)
 		if err != nil {
 			return nil, err
@@ -68,13 +68,13 @@ func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 
 		description := fmt.Sprintf(`<img src="%s" />`, infoItem.ThumbnailMiddle)
 
-		items[i] = &feeds.Item{
+		items = append(items, &feeds.Item{
 			Title:       html.UnescapeString(infoItem.Title),
 			Link:        &feeds.Link{Href: infoItem.Url},
 			Id:          infoItem.Url,
 			Created:     created,
 			Description: description,
-		}
+		})
 	}
 
 	feed := &feeds.Feed{

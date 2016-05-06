@@ -55,9 +55,8 @@ func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
 func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed, error) {
 	descriptionReplacer := strings.NewReplacer("\n", "<br />")
 
-	var items []*feeds.Item
-	items = make([]*feeds.Item, len(events.Items))
-	for i, event := range events.Items {
+	items := make([]*feeds.Item, 0, len(events.Items))
+	for _, event := range events.Items {
 		created, err := time.Parse(time.RFC3339, event.Created)
 		if err != nil {
 			return nil, err
@@ -129,7 +128,7 @@ func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed
 		description += fmt.Sprintf("Duration: %s<br /><br />", html.EscapeString(duration))
 		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
 
-		items[i] = &feeds.Item{
+		items = append(items, &feeds.Item{
 			Id:          event.Etag,
 			Title:       event.Summary,
 			Description: description,
@@ -137,7 +136,7 @@ func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed
 			Author:      &feeds.Author{Name: event.Creator.DisplayName, Email: event.Creator.Email},
 			Created:     created,
 			Updated:     updated,
-		}
+		})
 	}
 
 	updated, err := time.Parse(time.RFC3339, events.Updated)
