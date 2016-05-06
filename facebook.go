@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -21,16 +22,16 @@ type FacebookPosts struct {
 // https://developers.facebook.com/docs/graph-api/reference/v2.6/post
 type FacebookPost struct {
 	Id          string `json:"id"`
-	Caption     string `json:"caption"`
 	CreatedTime string `json:"created_time"`
-	Description string `json:"description"`
-	Message     string `json:"message"`
 	Link        string `json:"link"`
+	Message     string `json:"message"`
+	Picture     string `json:"picture"`
 }
 
 func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
 	values := &url.Values{}
 	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
+	values.Set("fields", "created_time,link,message,picture")
 
 	resp, err := http.Get(FacebookApiEndpoint + userId + "/posts?" + values.Encode())
 	if err != nil {
@@ -64,6 +65,9 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string, title string) (*fee
 		if index := strings.Index(post.Message, "\n"); index >= 0 {
 			title = post.Message[0:index]
 			description = messageReplacer.Replace(post.Message)
+			if post.Picture != "" {
+				description += fmt.Sprintf(`<br /><img src="%s" />`, post.Picture)
+			}
 		} else {
 			title = post.Message
 		}
