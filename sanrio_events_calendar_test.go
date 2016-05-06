@@ -16,8 +16,7 @@ func TestGetSanrioEventsCalendarFromReader(t *testing.T) {
 	}
 
 	var events calendar.Events
-	err = json.Unmarshal(jsonData, &events)
-	if err != nil {
+	if err := json.Unmarshal(jsonData, &events); err != nil {
 		t.Fatal(err)
 	}
 

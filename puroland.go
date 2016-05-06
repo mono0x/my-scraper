@@ -55,8 +55,7 @@ func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 	}
 
 	var info information
-	err = json.Unmarshal(jsonData, &info)
-	if err != nil {
+	if err := json.Unmarshal(jsonData, &info); err != nil {
 		return nil, err
 	}
 
