@@ -26,4 +26,5 @@ func TestGetMucchanMusaoFromPosts(t *testing.T) {
 
 	assert.Equal(t, 25, len(feed.Items))
 	assert.Equal(t, "★☆Next ムサさび〜ず☆★", feed.Items[0].Title)
+	assert.Equal(t, "高尾山公認キャラ\u3000ムッちゃん", feed.Items[0].Author.Name)
 }
