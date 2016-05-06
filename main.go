@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -16,14 +15,12 @@ import (
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
-	atom, err := feed.ToAtom()
-	if err != nil {
+	if err := feed.WriteAtom(w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/atom+xml")
-	fmt.Fprintln(w, atom)
 }
 
 func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, *http.Request) {
