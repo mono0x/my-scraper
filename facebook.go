@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -57,8 +58,12 @@ func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
 	return &posts, nil
 }
 
-func RenderFacebookFeed(posts *FacebookPosts, userId string, title string) (*feeds.Feed, error) {
+func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error) {
 	messageReplacer := strings.NewReplacer("\n", "<br />")
+
+	if len(posts.Data) == 0 {
+		return nil, errors.New("no posts found")
+	}
 
 	items := make([]*feeds.Item, 0, len(posts.Data))
 	for _, post := range posts.Data {
@@ -89,7 +94,7 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string, title string) (*fee
 	}
 
 	feed := &feeds.Feed{
-		Title: title,
+		Title: posts.Data[0].From.Name,
 		Link:  &feeds.Link{Href: "https://www.facebook.com/" + userId},
 		Items: items,
 	}

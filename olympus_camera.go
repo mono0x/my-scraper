@@ -3,7 +3,6 @@ package main
 import "github.com/gorilla/feeds"
 
 const (
-	OlympusCameraTitle  = "オリンパスカメラ"
 	OlympusCameraUserId = "FotoPus"
 )
 
@@ -16,5 +15,5 @@ func GetOlympusCamera() (*feeds.Feed, error) {
 }
 
 func GetOlympusCameraFromPosts(posts *FacebookPosts) (*feeds.Feed, error) {
-	return RenderFacebookFeed(posts, OlympusCameraUserId, OlympusCameraTitle)
+	return RenderFacebookFeed(posts, OlympusCameraUserId)
 }

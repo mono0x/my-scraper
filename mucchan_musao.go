@@ -3,7 +3,6 @@ package main
 import "github.com/gorilla/feeds"
 
 const (
-	MucchanMusaoTitle  = "高尾山公認キャラ ムッちゃん"
 	MucchanMusaoUserId = "mucchan.musao"
 )
 
@@ -16,5 +15,5 @@ func GetMucchanMusao() (*feeds.Feed, error) {
 }
 
 func GetMucchanMusaoFromPosts(posts *FacebookPosts) (*feeds.Feed, error) {
-	return RenderFacebookFeed(posts, MucchanMusaoUserId, MucchanMusaoTitle)
+	return RenderFacebookFeed(posts, MucchanMusaoUserId)
 }
