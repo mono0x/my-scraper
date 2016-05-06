@@ -36,6 +36,8 @@ func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, 
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile)
+
 	_ = godotenv.Load()
 
 	signalChan := make(chan os.Signal)
