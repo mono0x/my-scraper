@@ -40,8 +40,7 @@ type FacebookProfile struct {
 }
 
 var (
-	PhotosUrlRe = regexp.MustCompile(
-		`^(` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+)/photos/([^/]+)/([^/]+)/`)
+	PhotosUrlRe = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
 )
 
 func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
@@ -93,8 +92,12 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 		}
 
 		var link string
-		if m := PhotosUrlRe.FindStringSubmatch(post.Link); m != nil {
-			link = fmt.Sprintf("%s/posts/%s/", m[1], m[3])
+		if PhotosUrlRe.MatchString(post.Link) {
+			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
+				link = FacebookServiceUrl + userId + "/posts/" + parts[1] + "/"
+			} else {
+				link = post.Link
+			}
 		} else {
 			link = post.Link
 		}
@@ -111,7 +114,7 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 
 	feed := &feeds.Feed{
 		Title: posts.Data[0].From.Name,
-		Link:  &feeds.Link{Href: "https://www.facebook.com/" + userId},
+		Link:  &feeds.Link{Href: FacebookServiceUrl + userId},
 		Items: items,
 	}
 	return feed, nil
