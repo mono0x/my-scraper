@@ -10,11 +10,11 @@ import (
 )
 
 const (
-	CharactershowUrl = "http://charactershow.jp/"
+	CharacterShowUrl = "http://charactershow.jp/"
 )
 
 func GetCharacterShow() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(CharactershowUrl)
+	doc, err := goquery.NewDocument(CharacterShowUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func GetCharacterShow() (*feeds.Feed, error) {
 func GetCharacterShowFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "キャラクターショーファンサイト",
-		Link:  &feeds.Link{Href: CharactershowUrl},
+		Link:  &feeds.Link{Href: CharacterShowUrl},
 	}
 
 	dateReplacer := strings.NewReplacer("開催予定日", "", " ", "")
