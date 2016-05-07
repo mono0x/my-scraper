@@ -84,11 +84,12 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 		if index := strings.Index(post.Message, "\n"); index >= 0 {
 			title = post.Message[0:index]
 			description = messageReplacer.Replace(post.Message)
-			if post.Picture != "" {
-				description += fmt.Sprintf(`<br /><img src="%s" />`, post.Picture)
-			}
 		} else {
 			title = post.Message
+			description = post.Message
+		}
+		if post.Picture != "" {
+			description += fmt.Sprintf(`<br /><img src="%s" />`, post.Picture)
 		}
 
 		var link string
