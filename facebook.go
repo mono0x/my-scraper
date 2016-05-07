@@ -8,13 +8,17 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
 )
 
-const FacebookApiEndpoint = "https://graph.facebook.com/v2.6/"
+const (
+	FacebookServiceUrl  = "https://www.facebook.com/"
+	FacebookApiEndpoint = "https://graph.facebook.com/v2.6/"
+)
 
 type FacebookPosts struct {
 	Data []*FacebookPost `json:"data"`
@@ -34,6 +38,11 @@ type FacebookProfile struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
+
+var (
+	PhotosUrlRe = regexp.MustCompile(
+		`^(` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+)/photos/([^/]+)/([^/]+)/`)
+)
 
 func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
 	values := &url.Values{}
@@ -83,13 +92,20 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 			title = post.Message
 		}
 
+		var link string
+		if m := PhotosUrlRe.FindStringSubmatch(post.Link); m != nil {
+			link = fmt.Sprintf("%s/posts/%s/", m[1], m[3])
+		} else {
+			link = post.Link
+		}
+
 		items = append(items, &feeds.Item{
 			Id:          post.Id,
 			Author:      &feeds.Author{Name: post.From.Name},
 			Title:       title,
 			Description: description,
 			Created:     created,
-			Link:        &feeds.Link{Href: post.Link},
+			Link:        &feeds.Link{Href: link},
 		})
 	}
 
