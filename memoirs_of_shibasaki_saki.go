@@ -47,6 +47,8 @@ func GetMemoirsOfShibasakiSakiFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		var href string
 		if s.Is("a") {
 			href = s.AttrOr("href", "")
+		} else {
+			href = MemoirsOfShibasakiSakiUrl
 		}
 
 		text := strings.TrimSpace(s.Text())
