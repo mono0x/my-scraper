@@ -18,5 +18,5 @@ func TestGetMemoirsOfShibasakiSakiFromReader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, 5, len(feed.Items))
+	assert.Equal(t, 2, len(feed.Items))
 }

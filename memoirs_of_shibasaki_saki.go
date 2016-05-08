@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -15,6 +16,10 @@ import (
 
 const (
 	MemoirsOfShibasakiSakiUrl = "http://shibasakisaki.web.fc2.com/"
+)
+
+var (
+	TitleRe = regexp.MustCompile(`^\d+/\d+`)
 )
 
 func GetMemoirsOfShibasakiSaki() (*feeds.Feed, error) {
@@ -53,6 +58,9 @@ func GetMemoirsOfShibasakiSakiFromDocument(doc *goquery.Document) (*feeds.Feed, 
 
 		text := strings.TrimSpace(s.Text())
 		if text == "" {
+			return
+		}
+		if !TitleRe.MatchString(text) {
 			return
 		}
 
