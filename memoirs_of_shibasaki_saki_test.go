@@ -19,4 +19,6 @@ func TestGetMemoirsOfShibasakiSakiFromReader(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, 2, len(feed.Items))
+	assert.Equal(t, "5/14,15　調布観光フェスティバル", feed.Items[0].Title)
+	assert.Equal(t, "http://www.csa.gr.jp/enjoy/bussanten.html", feed.Items[0].Link.Href)
 }
