@@ -2,6 +2,21 @@
 
 [![Build Status](https://travis-ci.org/mono0x/my-scraper.svg)](https://travis-ci.org/mono0x/my-scraper)
 
+`my-scraper` is an atom feed generator for my favorite websites.
+
+Either [Server::Starter](https://metacpan.org/pod/Server::Starter) or [go-server-starter](https://github.com/lestrrat/go-server-starter) is required to run this application.
+
+```sh
+# Install go-server-starter
+go get github.com/lestrrat/go-server-starter/cmd/start_server
+# Install dependencies
+go get ./...
+# Build the application
+go build
+# Start the application
+start_server --port=13000 -- ./my-scraper
+```
+
 ## Supported Websites
 
 - Character Show Fansite <http://charactershow.jp/>
