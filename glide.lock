@@ -1,0 +1,74 @@
+hash: 0a5fd6fc485f8e828f4e3c134c3e418f9e0fe430d70b3448734d64b6aee431fa
+updated: 2016-05-19T17:41:32.847691978+09:00
+imports:
+- name: github.com/andybalholm/cascadia
+  version: 3ad29d1ad1c4f2023e355603324348cf1f4b2d48
+- name: github.com/braintree/manners
+  version: 82a8879fc5fd0381fa8b2d8033b19bf255252088
+- name: github.com/golang/protobuf
+  version: 7cc19b78d562895b13596ddce7aafb59dd789318
+  subpackages:
+  - proto
+- name: github.com/gorilla/feeds
+  version: 441264de03a8117ed530ae8e049d8f601a33a099
+- name: github.com/joho/godotenv
+  version: 4ed13390c0acd2ff4e371e64d8b97c8954138243
+- name: github.com/kennygrant/sanitize
+  version: ce9fd1f6ce32afaa38b51feea32320fc8875e8e4
+- name: github.com/lestrrat/go-server-starter
+  version: 901cec093d58ca36652e8d7906e4bd3e32793801
+  subpackages:
+  - listener
+- name: github.com/PuerkitoBio/goquery
+  version: 2e29ea41f0d13f4a303c75553f4eeadddc7a4c56
+- name: golang.org/x/net
+  version: 5916dcb167ed985a5b9e6871fbfd74848a4c170b
+  subpackages:
+  - html
+  - context
+  - context/ctxhttp
+  - html/atom
+- name: golang.org/x/oauth2
+  version: e86e2718db89775a4604abc10a5d3a5672e7336e
+  subpackages:
+  - google
+  - internal
+  - jws
+  - jwt
+- name: golang.org/x/text
+  version: f773ec03ce334298742df7f3108fc0d402646d22
+  subpackages:
+  - encoding/japanese
+  - transform
+  - encoding
+  - encoding/internal
+  - encoding/internal/identifier
+- name: golang.org/x/tools
+  version: 9ae4729fba20b3533d829a9c6ba8195b068f2abc
+  subpackages:
+  - blog/atom
+- name: google.golang.org/api
+  version: 7059a7f3d456870ff1e8424a6b1f62abe5f95f36
+  subpackages:
+  - calendar/v3
+  - gensupport
+  - googleapi
+  - googleapi/internal/uritemplates
+- name: google.golang.org/appengine
+  version: e234e71924d4aa52444bc76f2f831f13fa1eca60
+  subpackages:
+  - urlfetch
+  - internal
+  - internal/urlfetch
+  - internal/app_identity
+  - internal/modules
+  - internal/base
+  - internal/datastore
+  - internal/log
+  - internal/remote_api
+- name: google.golang.org/cloud
+  version: 426f71cccabdf34d0fd67fc49e25038c8f49a0bb
+  subpackages:
+  - compute/metadata
+  - internal
+devImports: []
