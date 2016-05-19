@@ -1,4 +1,4 @@
 /.env
 /google_client_credentials.json
 /my-scraper
-/vendor
+/vendor/
