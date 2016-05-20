@@ -59,37 +59,35 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 	}
 
 	var items []*feeds.Item
-	doc.Find("p").Each(func(_ int, s *goquery.Selection) {
-		if len(items) >= 100 {
-			return
-		}
-
-		var title string
-		var description string
-		var link string
+	doc.Find("p").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+		var (
+			title, description, link string
+		)
 		s.Find("font").Each(func(_ int, s *goquery.Selection) {
 			color, ok := s.Attr("color")
 			if !ok {
 				return
 			}
-			if color == "#0000ff" {
+			switch color {
+			case "#0000ff":
 				title = strings.TrimSpace(s.Text())
-			} else if color == "#000000" {
+				break
+			case "#000000":
 				description, _ = s.Html()
-				s.Find("a").Each(func(_ int, s *goquery.Selection) {
-					if link != "" {
-						return
-					}
+				s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
 					if href, ok := s.Attr("href"); ok {
 						link = href
+						return false
 					}
+					return true
 				})
+				break
 			}
 		})
 
 		matches := titleDateRe.FindStringSubmatch(title)
 		if len(matches) < 2 || matches[1] == "" {
-			return
+			return true
 		}
 		title = matches[1]
 
@@ -97,15 +95,15 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 		if len(matches) >= 5 && matches[2] != "" && matches[3] != "" && matches[4] != "" {
 			year, err := strconv.Atoi(matches[2])
 			if err != nil {
-				return
+				return true
 			}
 			month, err := strconv.Atoi(matches[3])
 			if err != nil {
-				return
+				return true
 			}
 			day, err := strconv.Atoi(matches[4])
 			if err != nil {
-				return
+				return true
 			}
 			updated = time.Date(year, time.Month(month), day, 0, 0, 0, 0, loc)
 		}
@@ -118,7 +116,12 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 				Link:        &feeds.Link{Href: link},
 				Id:          link,
 			})
+			if len(items) >= 100 {
+				return false
+			}
+
 		}
+		return true
 	})
 	feed.Items = items
 
