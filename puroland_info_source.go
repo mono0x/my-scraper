@@ -33,22 +33,24 @@ type informationItem struct {
 	ThumbnailMiddle string `json:"thumbnail_m"`
 }
 
-func GetPurolandInfo() (*feeds.Feed, error) {
+type PurolandInfoSource struct {
+}
+
+func NewPurolandInfoSource() *PurolandInfoSource {
+	return &PurolandInfoSource{}
+}
+
+func (s *PurolandInfoSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(PurolandInfoApiUrl)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	feed, err := GetPurolandInfoFromReader(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return feed, nil
+	return s.ScrapeFromReader(res.Body)
 }
 
-func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *PurolandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	jsonData, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -61,6 +63,9 @@ func GetPurolandInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
 
 	items := make([]*feeds.Item, 0, info.Count)
 	for _, infoItem := range info.Data {
+		if infoItem.PublicDate == "" {
+			continue
+		}
 		created, err := time.Parse("2006/01/02", infoItem.PublicDate)
 		if err != nil {
 			return nil, err

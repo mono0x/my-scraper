@@ -9,11 +9,13 @@ import (
 
 func TestGetPurolandInfoFromDocument(t *testing.T) {
 	f, err := os.Open("data/www.puroland.jp/api/live/get_information/index.json")
-	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
-	feed, err := GetPurolandInfoFromReader(f)
+	defer f.Close()
+
+	source := NewPurolandInfoSource()
+	feed, err := source.ScrapeFromReader(f)
 	if err != nil {
 		t.Fatal(err)
 	}

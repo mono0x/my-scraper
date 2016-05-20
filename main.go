@@ -85,7 +85,6 @@ func main() {
 	mux.HandleFunc("/memoirs-of-shibasaki-saki", feedHandler(GetMemoirsOfShibasakiSaki))
 	mux.HandleFunc("/mucchan-musao", feedHandler(GetMucchanMusao))
 	mux.HandleFunc("/olympus-camera", feedHandler(GetOlympusCamera))
-	mux.HandleFunc("/puroland-info", feedHandler(GetPurolandInfo))
 	mux.HandleFunc("/sanrio-alerts", feedHandler(GetSanrioAlerts))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
 	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
@@ -94,6 +93,7 @@ func main() {
 		Path   string
 		Source Source
 	}{
+		{"/puroland-info", NewPurolandInfoSource()},
 		{"/seibuen-event", NewSeibuenEventSource()},
 	}
 	for _, entry := range entries {
