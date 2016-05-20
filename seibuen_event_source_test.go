@@ -11,10 +11,11 @@ import (
 
 func TestSeibuenEventSource(t *testing.T) {
 	f, err := os.Open("data/www.seibuen-yuuenchi.jp/event/index.html")
-	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer f.Close()
+
 	doc, err := goquery.NewDocumentFromReader(bufio.NewReader(f))
 	if err != nil {
 		t.Fatal(err)
