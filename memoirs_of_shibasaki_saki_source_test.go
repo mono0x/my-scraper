@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"os"
 	"testing"
 
@@ -10,11 +9,13 @@ import (
 
 func TestGetMemoirsOfShibasakiSakiFromReader(t *testing.T) {
 	f, err := os.Open("data/shibasakisaki.web.fc2.com/index.html")
-	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
-	feed, err := GetMemoirsOfShibasakiSakiFromReader(bufio.NewReader(f))
+	defer f.Close()
+
+	source := NewMemoirsOfShibasakiSakiSource()
+	feed, err := source.ScrapeFromReader(f)
 	if err != nil {
 		t.Fatal(err)
 	}

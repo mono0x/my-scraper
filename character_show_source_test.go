@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"os"
 	"testing"
 
@@ -11,15 +10,17 @@ import (
 
 func TestGetCharacterShowFromDocument(t *testing.T) {
 	f, err := os.Open("data/charactershow.jp/index.html")
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer f.Close()
+
+	doc, err := goquery.NewDocumentFromReader(f)
 	if err != nil {
 		t.Fatal(err)
 	}
-	doc, err := goquery.NewDocumentFromReader(bufio.NewReader(f))
-	if err != nil {
-		t.Fatal(err)
-	}
-	feed, err := GetCharacterShowFromDocument(doc)
+	source := NewCharacterShowSource()
+	feed, err := source.ScrapeFromDocument(doc)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -13,15 +13,22 @@ const (
 	CharacterShowUrl = "http://charactershow.jp/"
 )
 
-func GetCharacterShow() (*feeds.Feed, error) {
+type CharacterShowSource struct {
+}
+
+func NewCharacterShowSource() *CharacterShowSource {
+	return &CharacterShowSource{}
+}
+
+func (s *CharacterShowSource) Scrape() (*feeds.Feed, error) {
 	doc, err := goquery.NewDocument(CharacterShowUrl)
 	if err != nil {
 		return nil, err
 	}
-	return GetCharacterShowFromDocument(doc)
+	return s.ScrapeFromDocument(doc)
 }
 
-func GetCharacterShowFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *CharacterShowSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "キャラクターショーファンサイト",
 		Link:  &feeds.Link{Href: CharacterShowUrl},

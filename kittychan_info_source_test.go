@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"os"
 	"testing"
 
@@ -10,11 +9,13 @@ import (
 
 func TestGetKittychanInfoFromReader(t *testing.T) {
 	f, err := os.Open("data/www.kittychan.info/information.html")
-	defer f.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
-	feed, err := GetKittychanInfoFromReader(bufio.NewReader(f))
+	defer f.Close()
+
+	source := NewKittychanInfoSource()
+	feed, err := source.ScrapeFromReader(f)
 	if err != nil {
 		t.Fatal(err)
 	}

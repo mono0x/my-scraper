@@ -19,26 +19,33 @@ const (
 	KittychanInfoUrl = "http://www.kittychan.info/information.html"
 )
 
-func GetKittychanInfo() (*feeds.Feed, error) {
+type KittychanInfoSource struct {
+}
+
+func NewKittychanInfoSource() *KittychanInfoSource {
+	return &KittychanInfoSource{}
+}
+
+func (s *KittychanInfoSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(KittychanInfoUrl)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	return GetKittychanInfoFromReader(res.Body)
+	return s.ScrapeFromReader(res.Body)
 }
 
-func GetKittychanInfoFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *KittychanInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
 		return nil, err
 	}
-	return GetKittychanInfoFromDocument(doc)
+	return s.ScrapeFromDocument(doc)
 }
 
-func GetKittychanInfoFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
 		Link:  &feeds.Link{Href: KittychanInfoUrl},

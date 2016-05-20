@@ -19,7 +19,8 @@ func TestGetMucchanMusaoFromPosts(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	feed, err := GetMucchanMusaoFromPosts(&posts)
+	source := NewMucchanMusaoFacebookSource()
+	feed, err := source.Render(&posts)
 	if err != nil {
 		t.Fatal(err)
 	}

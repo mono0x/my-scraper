@@ -14,7 +14,27 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
+type GoogleCalendarSource struct {
+	calendarId string
+	url        string
+}
+
+func NewGoogleCalendarSource(calendarId, url string) *GoogleCalendarSource {
+	return &GoogleCalendarSource{
+		calendarId: calendarId,
+		url:        url,
+	}
+}
+
+func (s *GoogleCalendarSource) Scrape() (*feeds.Feed, error) {
+	events, err := s.Fetch()
+	if err != nil {
+		return nil, err
+	}
+	return s.Render(events)
+}
+
+func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 	json, err := ioutil.ReadFile("google_client_credentials.json")
 	if err != nil {
 		return nil, err
@@ -34,14 +54,14 @@ func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
-	events, err := service.Events.List(calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
+	events, err := service.Events.List(s.calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
 		return nil, err
 	}
 
 	items := events.Items
 	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
-		events, err := service.Events.List(calendarId).PageToken(pageToken).Do()
+		events, err := service.Events.List(s.calendarId).PageToken(pageToken).Do()
 		if err != nil {
 			return nil, err
 		}
@@ -52,7 +72,7 @@ func GetEventsFromGoogleCalendar(calendarId string) (*calendar.Events, error) {
 	return events, nil
 }
 
-func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed, error) {
+func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, error) {
 	descriptionReplacer := strings.NewReplacer("\n", "<br />")
 
 	items := make([]*feeds.Item, 0, len(events.Items))
@@ -148,7 +168,7 @@ func RenderGoogleCalendarFeed(events *calendar.Events, href string) (*feeds.Feed
 		Id:          events.Etag,
 		Title:       events.Summary,
 		Description: events.Description,
-		Link:        &feeds.Link{Href: href},
+		Link:        &feeds.Link{Href: s.url},
 		Updated:     updated,
 		Items:       items,
 	}

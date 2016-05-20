@@ -39,16 +39,34 @@ type FacebookProfile struct {
 	Name string `json:"name"`
 }
 
+type FacebookSource struct {
+	userId string
+}
+
+func NewFacebookSource(userId string) *FacebookSource {
+	return &FacebookSource{
+		userId: userId,
+	}
+}
+
 var (
 	PhotosUrlRe = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
 )
 
-func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
+func (s *FacebookSource) Scrape() (*feeds.Feed, error) {
+	posts, err := s.Fetch()
+	if err != nil {
+		return nil, err
+	}
+	return s.Render(posts)
+}
+
+func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
 	values := &url.Values{}
 	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
 	values.Set("fields", "created_time,from,link,message,picture")
 
-	resp, err := http.Get(FacebookApiEndpoint + userId + "/posts?" + values.Encode())
+	resp, err := http.Get(FacebookApiEndpoint + s.userId + "/posts?" + values.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +84,7 @@ func GetPostsFromFacebook(userId string) (*FacebookPosts, error) {
 	return &posts, nil
 }
 
-func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error) {
+func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 	messageReplacer := strings.NewReplacer("\n", "<br />")
 
 	if len(posts.Data) == 0 {
@@ -95,7 +113,7 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 		var link string
 		if PhotosUrlRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
-				link = FacebookServiceUrl + userId + "/posts/" + parts[1] + "/"
+				link = FacebookServiceUrl + s.userId + "/posts/" + parts[1] + "/"
 			} else {
 				link = post.Link
 			}
@@ -115,7 +133,7 @@ func RenderFacebookFeed(posts *FacebookPosts, userId string) (*feeds.Feed, error
 
 	feed := &feeds.Feed{
 		Title: posts.Data[0].From.Name,
-		Link:  &feeds.Link{Href: FacebookServiceUrl + userId},
+		Link:  &feeds.Link{Href: FacebookServiceUrl + s.userId},
 		Items: items,
 	}
 	return feed, nil

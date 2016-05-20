@@ -79,19 +79,19 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/character-show", feedHandler(GetCharacterShow))
-	mux.HandleFunc("/gotouchi-chara-calendar", feedHandler(GetGotouchiCharaCalendar))
-	mux.HandleFunc("/kittychan-info", feedHandler(GetKittychanInfo))
-	mux.HandleFunc("/memoirs-of-shibasaki-saki", feedHandler(GetMemoirsOfShibasakiSaki))
-	mux.HandleFunc("/mucchan-musao", feedHandler(GetMucchanMusao))
-	mux.HandleFunc("/olympus-camera", feedHandler(GetOlympusCamera))
-	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
 
 	entries := []struct {
 		Path   string
 		Source Source
 	}{
+		{"/character-show", NewCharacterShowSource()},
+		{"/gotouchi-chara-calendar", NewGotouchiCharaCalendarGoogleCalendarSource()},
+		{"/kittychan-info", NewKittychanInfoSource()},
+		{"/memoirs-of-shibasaki-saki", NewMemoirsOfShibasakiSakiSource()},
+		{"/mucchan-musao", NewMucchanMusaoFacebookSource()},
+		{"/olympus-camera", NewOlympusCameraFacebookSource()},
 		{"/puroland-info", NewPurolandInfoSource()},
+		{"/sanrio-events-calendar", NewSanrioEventsCalendarGoogleCalendarSource()},
 		{"/seibuen-event", NewSeibuenEventSource()},
 	}
 	for _, entry := range entries {

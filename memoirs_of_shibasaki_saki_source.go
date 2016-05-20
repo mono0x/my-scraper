@@ -22,27 +22,33 @@ var (
 	TitleRe = regexp.MustCompile(`^\d+/\d+`)
 )
 
-func GetMemoirsOfShibasakiSaki() (*feeds.Feed, error) {
+type MemoirsOfShibasakiSakiSource struct {
+}
+
+func NewMemoirsOfShibasakiSakiSource() *MemoirsOfShibasakiSakiSource {
+	return &MemoirsOfShibasakiSakiSource{}
+}
+
+func (s *MemoirsOfShibasakiSakiSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(MemoirsOfShibasakiSakiUrl)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	return GetMemoirsOfShibasakiSakiFromReader(res.Body)
+	return s.ScrapeFromReader(res.Body)
 }
 
-func GetMemoirsOfShibasakiSakiFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *MemoirsOfShibasakiSakiSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
 		return nil, err
 	}
-	return GetMemoirsOfShibasakiSakiFromDocument(doc)
+	return s.ScrapeFromDocument(doc)
 }
 
-func GetMemoirsOfShibasakiSakiFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-
+func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	var items []*feeds.Item
 	doc.Find(`td[bgcolor="#330066"] font[size="+1"] > *`).Each(func(_ int, s *goquery.Selection) {
 		if s.Is("br") {

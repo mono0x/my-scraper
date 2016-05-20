@@ -20,7 +20,8 @@ func TestGetSanrioEventsCalendarFromReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	feed, err := GetSanrioEventsCalendarFromEvents(&events)
+	source := NewSanrioEventsCalendarGoogleCalendarSource()
+	feed, err := source.Render(&events)
 	if err != nil {
 		t.Fatal(err)
 	}
