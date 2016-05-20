@@ -13,15 +13,22 @@ const (
 	SeibuenEventUrl = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
 )
 
-func GetSeibuenEvent() (*feeds.Feed, error) {
+type SeibuenEventSource struct {
+}
+
+func NewSeibuenEventSource() *SeibuenEventSource {
+	return &SeibuenEventSource{}
+}
+
+func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
 	doc, err := goquery.NewDocument(SeibuenEventUrl)
 	if err != nil {
 		return nil, err
 	}
-	return GetSeibuenEventFromDocument(doc)
+	return s.ScrapeFromDocument(doc)
 }
 
-func GetSeibuenEventFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	titleReplacer := strings.NewReplacer("『", "", "』", "")
 	textReplacer := strings.NewReplacer("\n", "", "\t", "")
 

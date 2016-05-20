@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetSeibuenEventFromDocument(t *testing.T) {
+func TestSeibuenEventSource(t *testing.T) {
 	f, err := os.Open("data/www.seibuen-yuuenchi.jp/event/index.html")
 	defer f.Close()
 	if err != nil {
@@ -19,7 +19,8 @@ func TestGetSeibuenEventFromDocument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	feed, err := GetSeibuenEventFromDocument(doc)
+	source := NewSeibuenEventSource()
+	feed, err := source.ScrapeFromDocument(doc)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -23,6 +23,18 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
 }
 
+func sourceHandler(source Source) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		feed, err := source.Scrape()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
+	}
+}
+
 func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := fetcher()
@@ -77,7 +89,7 @@ func main() {
 	mux.HandleFunc("/sanrio-alerts", feedHandler(GetSanrioAlerts))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
 	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
-	mux.HandleFunc("/seibuen-event", feedHandler(GetSeibuenEvent))
+	mux.HandleFunc("/seibuen-event", sourceHandler(NewSeibuenEventSource()))
 
 	manners.Serve(l, mux)
 }
