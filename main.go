@@ -89,7 +89,16 @@ func main() {
 	mux.HandleFunc("/sanrio-alerts", feedHandler(GetSanrioAlerts))
 	mux.HandleFunc("/sanrio-event", feedHandler(GetSanrioEvent))
 	mux.HandleFunc("/sanrio-events-calendar", feedHandler(GetSanrioEventsCalendar))
-	mux.HandleFunc("/seibuen-event", sourceHandler(NewSeibuenEventSource()))
+
+	entries := []struct {
+		Path   string
+		Source Source
+	}{
+		{"/seibuen-event", NewSeibuenEventSource()},
+	}
+	for _, entry := range entries {
+		mux.HandleFunc(entry.Path, sourceHandler(entry.Source))
+	}
 
 	manners.Serve(l, mux)
 }
