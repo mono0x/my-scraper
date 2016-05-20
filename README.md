@@ -7,12 +7,14 @@
 Either [Server::Starter](https://metacpan.org/pod/Server::Starter) or [go-server-starter](https://github.com/lestrrat/go-server-starter) is required to run this application.
 
 ```sh
+# Install glide
+brew install glide
 # Install go-server-starter
 go get github.com/lestrrat/go-server-starter/cmd/start_server
 # Install dependencies
-go get ./...
+glide install
 # Build the application
-go build
+GO15VENDOREXPERIMENT=1 go build
 # Start the application
 start_server --port=13000 -- ./my-scraper
 ```
