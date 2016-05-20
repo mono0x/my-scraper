@@ -25,7 +25,6 @@ start_server --port=13000 -- ./my-scraper
 - Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
 - Mucchan Musao <https://www.facebook.com/mucchan.musao>
 - Olympus Camera <https://www.facebook.com/FotoPus>
-- Sanrio Alerts (combined feed of multiple Google Alerts feeds)
 - Sanrio Event Information <http://www.sanrio.co.jp/event/search/>
 - Sanrio Events Calendar <http://ameblo.jp/ohtaket/entry-12059393801.html>
 - Sanrio Puroland <http://www.puroland.jp/>

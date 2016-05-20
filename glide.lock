@@ -1,5 +1,5 @@
-hash: 0a5fd6fc485f8e828f4e3c134c3e418f9e0fe430d70b3448734d64b6aee431fa
-updated: 2016-05-19T17:41:32.847691978+09:00
+hash: 773802e940d68ada746591f38ab93c98777722063efdc3c89ac1aaad2d363b49
+updated: 2016-05-20T22:25:30.589544929+09:00
 imports:
 - name: github.com/andybalholm/cascadia
   version: 3ad29d1ad1c4f2023e355603324348cf1f4b2d48
@@ -13,8 +13,6 @@ imports:
   version: 441264de03a8117ed530ae8e049d8f601a33a099
 - name: github.com/joho/godotenv
   version: 4ed13390c0acd2ff4e371e64d8b97c8954138243
-- name: github.com/kennygrant/sanitize
-  version: ce9fd1f6ce32afaa38b51feea32320fc8875e8e4
 - name: github.com/lestrrat/go-server-starter
   version: 901cec093d58ca36652e8d7906e4bd3e32793801
   subpackages:
