@@ -1,6 +1,7 @@
-package main
+package scraper
 
 import (
+	"bufio"
 	"os"
 	"testing"
 
@@ -8,21 +9,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetCharacterShowFromDocument(t *testing.T) {
-	f, err := os.Open("data/charactershow.jp/index.html")
+func TestSeibuenEventSource(t *testing.T) {
+	f, err := os.Open("data/www.seibuen-yuuenchi.jp/event/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer f.Close()
 
-	doc, err := goquery.NewDocumentFromReader(f)
+	doc, err := goquery.NewDocumentFromReader(bufio.NewReader(f))
 	if err != nil {
 		t.Fatal(err)
 	}
-	source := NewCharacterShowSource()
+	source := NewSeibuenEventSource()
 	feed, err := source.ScrapeFromDocument(doc)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, 115, len(feed.Items))
+	assert.Equal(t, 10, len(feed.Items))
 }

@@ -1,4 +1,4 @@
-package main
+package scraper
 
 const (
 	SanrioEventsCalendarId  = "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com"

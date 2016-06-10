@@ -1,4 +1,4 @@
-package main
+package scraper
 
 const (
 	MucchanMusaoUserId = "mucchan.musao"

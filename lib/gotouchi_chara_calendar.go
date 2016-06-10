@@ -1,4 +1,4 @@
-package main
+package scraper
 
 const (
 	GotouchiCharaCalendarId  = "gnr0r3kevuuv3j0q6q25gj4hks@group.calendar.google.com"

@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/feeds"
 	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
+	"github.com/mono0x/my-scraper/lib"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
@@ -23,7 +24,7 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
 }
 
-func sourceHandler(source Source) func(http.ResponseWriter, *http.Request) {
+func sourceHandler(source scraper.Source) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
 		if err != nil {
@@ -82,17 +83,17 @@ func main() {
 
 	entries := []struct {
 		Path   string
-		Source Source
+		Source scraper.Source
 	}{
-		{"/character-show", NewCharacterShowSource()},
-		{"/gotouchi-chara-calendar", NewGotouchiCharaCalendarGoogleCalendarSource()},
-		{"/kittychan-info", NewKittychanInfoSource()},
-		{"/memoirs-of-shibasaki-saki", NewMemoirsOfShibasakiSakiSource()},
-		{"/mucchan-musao", NewMucchanMusaoFacebookSource()},
-		{"/olympus-camera", NewOlympusCameraFacebookSource()},
-		{"/puroland-info", NewPurolandInfoSource()},
-		{"/sanrio-events-calendar", NewSanrioEventsCalendarGoogleCalendarSource()},
-		{"/seibuen-event", NewSeibuenEventSource()},
+		{"/character-show", scraper.NewCharacterShowSource()},
+		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
+		{"/kittychan-info", scraper.NewKittychanInfoSource()},
+		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
+		{"/mucchan-musao", scraper.NewMucchanMusaoFacebookSource()},
+		{"/olympus-camera", scraper.NewOlympusCameraFacebookSource()},
+		{"/puroland-info", scraper.NewPurolandInfoSource()},
+		{"/sanrio-events-calendar", scraper.NewSanrioEventsCalendarGoogleCalendarSource()},
+		{"/seibuen-event", scraper.NewSeibuenEventSource()},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceHandler(entry.Source))
