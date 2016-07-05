@@ -86,6 +86,7 @@ func main() {
 		Source scraper.Source
 	}{
 		{"/character-show", scraper.NewCharacterShowSource()},
+		{"/fukkachan-calendar", scraper.NewFukkachanCalendarGoogleCalendarSource()},
 		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},

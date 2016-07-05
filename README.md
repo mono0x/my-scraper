@@ -22,6 +22,7 @@ start_server --port=13000 -- ./my-scraper
 ## Supported Websites
 
 - Character Show Fansite <http://charactershow.jp/>
+- Fukkachan Calendar <http://www.fukkachan.com/>
 - Gotouchi Chara Calendar <http://gotouchi-chara.jp/calendar_.html>
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
