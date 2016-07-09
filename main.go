@@ -94,6 +94,7 @@ func main() {
 		{"/olympus-camera", scraper.NewOlympusCameraFacebookSource()},
 		{"/puroland-info", scraper.NewPurolandInfoSource()},
 		{"/sanrio-events-calendar", scraper.NewSanrioEventsCalendarGoogleCalendarSource()},
+		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
 	}
 	for _, entry := range entries {
