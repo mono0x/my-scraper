@@ -61,7 +61,7 @@ func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*fe
 
 		items = append(items, &feeds.Item{
 			Title:   title,
-			Link:    &feeds.Link{Href: href},
+			Link:    &feeds.Link{Href: "http://www.sanrio.co.jp/" + href},
 			Id:      href,
 			Created: date,
 		})
