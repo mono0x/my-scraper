@@ -96,6 +96,7 @@ func main() {
 		{"/sanrio-events-calendar", scraper.NewSanrioEventsCalendarGoogleCalendarSource()},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
+		{"/yufuterashima-calendar", scraper.NewYufuTerashimaCalendarGoogleCalendarSource()},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceHandler(entry.Source))

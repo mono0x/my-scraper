@@ -32,3 +32,4 @@ start_server --port=13000 -- ./my-scraper
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>
 - Sanrio Puroland <http://www.puroland.jp/>
 - Seibuen Event <http://www.seibuen-yuuenchi.jp/event/index.html?category=e1>
+- Yufu Terashima Calendar <http://sp.yufuterashima.com/>
