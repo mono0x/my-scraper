@@ -14,7 +14,7 @@ go get github.com/lestrrat/go-server-starter/cmd/start_server
 # Install dependencies
 glide install
 # Build the application
-GO15VENDOREXPERIMENT=1 go build
+go build
 # Start the application
 start_server --port=13000 -- ./my-scraper
 ```
