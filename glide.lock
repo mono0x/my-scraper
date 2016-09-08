@@ -1,5 +1,5 @@
 hash: 773802e940d68ada746591f38ab93c98777722063efdc3c89ac1aaad2d363b49
-updated: 2016-05-20T22:25:30.589544929+09:00
+updated: 2016-09-08T14:22:31.633622088+09:00
 imports:
 - name: github.com/andybalholm/cascadia
   version: 3ad29d1ad1c4f2023e355603324348cf1f4b2d48
@@ -22,9 +22,9 @@ imports:
 - name: golang.org/x/net
   version: 5916dcb167ed985a5b9e6871fbfd74848a4c170b
   subpackages:
-  - html
   - context
   - context/ctxhttp
+  - html
   - html/atom
 - name: golang.org/x/oauth2
   version: e86e2718db89775a4604abc10a5d3a5672e7336e
@@ -36,11 +36,11 @@ imports:
 - name: golang.org/x/text
   version: f773ec03ce334298742df7f3108fc0d402646d22
   subpackages:
-  - encoding/japanese
-  - transform
   - encoding
   - encoding/internal
   - encoding/internal/identifier
+  - encoding/japanese
+  - transform
 - name: golang.org/x/tools
   version: 9ae4729fba20b3533d829a9c6ba8195b068f2abc
   subpackages:
@@ -55,18 +55,30 @@ imports:
 - name: google.golang.org/appengine
   version: e234e71924d4aa52444bc76f2f831f13fa1eca60
   subpackages:
-  - urlfetch
   - internal
-  - internal/urlfetch
   - internal/app_identity
-  - internal/modules
   - internal/base
   - internal/datastore
   - internal/log
+  - internal/modules
   - internal/remote_api
+  - internal/urlfetch
+  - urlfetch
 - name: google.golang.org/cloud
   version: 426f71cccabdf34d0fd67fc49e25038c8f49a0bb
   subpackages:
   - compute/metadata
   - internal
-devImports: []
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
+  subpackages:
+  - difflib
+- name: github.com/stretchr/testify
+  version: d77da356e56a7428ad25149ca77381849a6a5232
+  subpackages:
+  - assert
