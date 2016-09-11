@@ -89,6 +89,7 @@ func main() {
 		{"/fukkachan-calendar", scraper.NewFukkachanCalendarGoogleCalendarSource()},
 		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
+		{"/lifecorp", scraper.NewLifeCorpFacebookSource()},
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
 		{"/mucchan-musao", scraper.NewMucchanMusaoFacebookSource()},
 		{"/olympus-camera", scraper.NewOlympusCameraFacebookSource()},
