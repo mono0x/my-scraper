@@ -93,6 +93,7 @@ func main() {
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
 		{"/mucchan-musao", scraper.NewMucchanMusaoFacebookSource()},
 		{"/olympus-camera", scraper.NewOlympusCameraFacebookSource()},
+		{"/prtimes-sanrio", scraper.NewPRTimesSource()},
 		{"/puroland-info", scraper.NewPurolandInfoSource()},
 		{"/sanrio-events-calendar", scraper.NewSanrioEventsCalendarGoogleCalendarSource()},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
