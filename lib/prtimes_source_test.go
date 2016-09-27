@@ -28,6 +28,6 @@ func TestGetPRTimesFromReader(t *testing.T) {
 
 	assert.Equal(t, 20, len(feed.Items))
 	assert.Equal(t, "ディズニー、スヌーピー、サンリオ、ポケモンなどの人気キャラクターを取り入れた最旬トレンドファッション“キャラディネート”を一冊に！", feed.Items[0].Title)
-	assert.Equal(t, "/main/html/rd/p/000000431.000005069.html", feed.Items[0].Link.Href)
+	assert.Equal(t, "http://prtimes.jp/main/html/rd/p/000000431.000005069.html", feed.Items[0].Link.Href)
 	assert.WithinDuration(t, time.Date(2016, 9, 16, 19, 10, 39, 0, loc), feed.Items[0].Created, 0)
 }
