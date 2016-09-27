@@ -3,6 +3,7 @@ package scraper
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -45,6 +46,7 @@ func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		Link:  &feeds.Link{Href: PRTimesUrl},
 	}
 
+	baseUrl, _ := url.Parse(PRTimesUrl)
 	var items []*feeds.Item
 	doc.Find("a.link-title-item-ordinary").Each(func(_ int, s *goquery.Selection) {
 		title := strings.TrimSpace(s.Text())
@@ -52,6 +54,12 @@ func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		if !ok {
 			return
 		}
+		refUrl, err := url.Parse(link)
+		if err != nil {
+			return
+		}
+		absUrl := baseUrl.ResolveReference(refUrl)
+		link = absUrl.String()
 		dt, ok := s.Parent().Next().Next().Attr("datetime")
 		if !ok {
 			return
