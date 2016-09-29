@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	PRTimesUrl = "http://prtimes.jp/topics/keywords/サンリオ"
+	PRTimesUrl = `http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1`
 )
 
 type PRTimesSource struct {
@@ -42,7 +42,7 @@ func (s *PRTimesSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) 
 
 func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
-		Title: "PRTimes",
+		Title: "PR TIMES (Sanrio)",
 		Link:  &feeds.Link{Href: PRTimesUrl},
 	}
 
@@ -60,7 +60,7 @@ func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		}
 		absUrl := baseUrl.ResolveReference(refUrl)
 		link = absUrl.String()
-		dt, ok := s.Parent().Next().Next().Attr("datetime")
+		dt, ok := s.Parent().Next().Attr("datetime")
 		if !ok {
 			return
 		}
