@@ -68,9 +68,11 @@ func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		if err != nil {
 			return
 		}
+		author := strings.TrimSpace(s.Parent().Next().Next().Text())
 		items = append(items, &feeds.Item{
 			Title:   title,
 			Link:    &feeds.Link{Href: link},
+			Author:  &feeds.Author{Name: author},
 			Id:      link,
 			Created: t,
 		})
