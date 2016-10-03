@@ -24,21 +24,9 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
 }
 
-func sourceHandler(source scraper.Source) func(http.ResponseWriter, *http.Request) {
+func renderSource(source scraper.Source) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
-		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		renderFeed(w, feed)
-	}
-}
-
-func feedHandler(fetcher func() (*feeds.Feed, error)) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		feed, err := fetcher()
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -101,7 +89,7 @@ func main() {
 		{"/yufuterashima-calendar", scraper.NewYufuTerashimaCalendarGoogleCalendarSource()},
 	}
 	for _, entry := range entries {
-		mux.HandleFunc(entry.Path, sourceHandler(entry.Source))
+		mux.HandleFunc(entry.Path, renderSource(entry.Source))
 	}
 
 	manners.Serve(l, mux)
