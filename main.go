@@ -24,7 +24,7 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
 }
 
-func renderSource(source scraper.Source) func(http.ResponseWriter, *http.Request) {
+func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
 		if err != nil {
@@ -89,7 +89,7 @@ func main() {
 		{"/yufuterashima-calendar", scraper.NewYufuTerashimaCalendarGoogleCalendarSource()},
 	}
 	for _, entry := range entries {
-		mux.HandleFunc(entry.Path, renderSource(entry.Source))
+		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
 	}
 
 	manners.Serve(l, mux)
