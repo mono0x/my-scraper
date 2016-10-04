@@ -36,11 +36,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 	}
 }
 
-func main() {
-	log.SetFlags(log.Lshortfile)
-
-	_ = godotenv.Load()
-
+func run() error {
 	signalChan := make(chan os.Signal)
 	signal.Notify(signalChan, syscall.SIGTERM)
 	go func() {
@@ -54,7 +50,7 @@ func main() {
 
 	listeners, err := listener.ListenAll()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	var l net.Listener
@@ -63,7 +59,7 @@ func main() {
 	} else {
 		l, err = net.Listen("tcp", ":13000")
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 
@@ -93,4 +89,15 @@ func main() {
 	}
 
 	manners.Serve(l, mux)
+	return nil
+}
+
+func main() {
+	log.SetFlags(log.Lshortfile)
+
+	_ = godotenv.Load()
+
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
 }
