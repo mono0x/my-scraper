@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetMucchanMusaoFromPosts(t *testing.T) {
+func TestFacebookSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("data/graph.facebook.com/v2.6/mucchan.musao/posts")
 	if err != nil {
 		t.Fatal(err)
@@ -19,7 +19,7 @@ func TestGetMucchanMusaoFromPosts(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewMucchanMusaoFacebookSource()
+	source := NewFacebookSource("mucchan.musao")
 	feed, err := source.Render(&posts)
 	if err != nil {
 		t.Fatal(err)

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetSanrioNewsReleaseFromDocument(t *testing.T) {
+func TestSanrioNewsReleaseSource(t *testing.T) {
 	f, err := os.Open("data/www.sanrio.co.jp/corporate/release/index.html")
 	if err != nil {
 		t.Fatal(err)

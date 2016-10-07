@@ -73,16 +73,16 @@ func run() error {
 		{"/fukkachan-calendar", scraper.NewFukkachanCalendarGoogleCalendarSource()},
 		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
-		{"/lifecorp", scraper.NewLifeCorpFacebookSource()},
+		{"/lifecorp", scraper.NewFacebookSource("lifecorp428")},
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
-		{"/mucchan-musao", scraper.NewMucchanMusaoFacebookSource()},
-		{"/olympus-camera", scraper.NewOlympusCameraFacebookSource()},
+		{"/mucchan-musao", scraper.NewFacebookSource("mucchan.musao")},
+		{"/olympus-camera", scraper.NewFacebookSource("FotoPus")},
 		{"/prtimes-sanrio", scraper.NewPRTimesSource()},
 		{"/puroland-info", scraper.NewPurolandInfoSource()},
-		{"/sanrio-events-calendar", scraper.NewSanrioEventsCalendarGoogleCalendarSource()},
+		{"/sanrio-events-calendar", scraper.NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com", "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
-		{"/yufuterashima-calendar", scraper.NewYufuTerashimaCalendarGoogleCalendarSource()},
+		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com", "https://calendar.google.com/calendar/embed?src=pompomyufu@gmail.com")},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))

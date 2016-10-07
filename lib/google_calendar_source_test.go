@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-func TestGetSanrioEventsCalendarFromReader(t *testing.T) {
+func TestGoogleCalendarSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("data/sanrio_events_calendar.json")
 	if err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func TestGetSanrioEventsCalendarFromReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewSanrioEventsCalendarGoogleCalendarSource()
+	source := NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com", "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
 	feed, err := source.Render(&events)
 	if err != nil {
 		t.Fatal(err)

@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPurolandInfoFromDocument(t *testing.T) {
+func TestPurolandInfoSource(t *testing.T) {
 	f, err := os.Open("data/www.puroland.jp/api/live/get_information/index.json")
 	if err != nil {
 		t.Fatal(err)

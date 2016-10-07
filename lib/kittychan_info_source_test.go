@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetKittychanInfoFromReader(t *testing.T) {
+func TestKittychanInfoSource(t *testing.T) {
 	f, err := os.Open("data/www.kittychan.info/information.html")
 	if err != nil {
 		t.Fatal(err)

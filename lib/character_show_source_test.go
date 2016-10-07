@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetCharacterShowFromDocument(t *testing.T) {
+func TestCharacterShowSource(t *testing.T) {
 	f, err := os.Open("data/charactershow.jp/index.html")
 	if err != nil {
 		t.Fatal(err)

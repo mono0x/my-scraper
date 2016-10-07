@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetMemoirsOfShibasakiSakiFromReader(t *testing.T) {
+func TestMemoirsOfShibasakiSakiSource(t *testing.T) {
 	f, err := os.Open("data/shibasakisaki.web.fc2.com/index.html")
 	if err != nil {
 		t.Fatal(err)

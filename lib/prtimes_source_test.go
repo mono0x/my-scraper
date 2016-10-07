@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPRTimesFromReader(t *testing.T) {
+func TestPRTimesSource(t *testing.T) {
 	f, err := os.Open("data/prtimes.jp/main/action.php")
 	if err != nil {
 		t.Fatal(err)
