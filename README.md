@@ -23,6 +23,7 @@ start_server --port=13000 -- ./my-scraper
 
 - Character Show Fansite <http://charactershow.jp/>
 - Fukkachan Calendar <http://www.fukkachan.com/>
+- Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Gotouchi Chara Calendar <http://gotouchi-chara.jp/calendar_.html>
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Life Corporation <https://www.facebook.com/lifecorp428>
