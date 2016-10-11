@@ -71,6 +71,7 @@ func run() error {
 	}{
 		{"/character-show", scraper.NewCharacterShowSource()},
 		{"/fukkachan-calendar", scraper.NewFukkachanCalendarGoogleCalendarSource()},
+		{"/fukoku-life", scraper.NewFukokuLifeEventSource()},
 		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
 		{"/lifecorp", scraper.NewFacebookSource("lifecorp428")},
