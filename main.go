@@ -83,8 +83,8 @@ func run() error {
 		{"/sanrio-events-calendar", scraper.NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com", "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
-		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com", "https://calendar.google.com/calendar/embed?src=pompomyufu@gmail.com")},
 		{"/value-press-sanrio", scraper.NewValuePressSource()},
+		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com", "https://calendar.google.com/calendar/embed?src=pompomyufu@gmail.com")},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
