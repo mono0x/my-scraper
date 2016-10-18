@@ -35,4 +35,5 @@ start_server --port=13000 -- ./my-scraper
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>
 - Sanrio Puroland <http://www.puroland.jp/>
 - Seibuen Event <http://www.seibuen-yuuenchi.jp/event/index.html?category=e1>
+- ValuePress! (Sanrio) <https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA>
 - Yufu Terashima Calendar <http://sp.yufuterashima.com/>
