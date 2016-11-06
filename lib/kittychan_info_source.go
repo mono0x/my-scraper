@@ -17,6 +17,12 @@ import (
 
 const (
 	KittychanInfoUrl = "http://www.kittychan.info/information.html"
+	TitlePrefix      = `★`
+)
+
+var (
+	titleDateRe = regexp.MustCompile(
+		`\A` + TitlePrefix + `?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
 )
 
 type KittychanInfoSource struct {
@@ -50,8 +56,6 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 		Title: "♪キティちゃん情報",
 		Link:  &feeds.Link{Href: KittychanInfoUrl},
 	}
-
-	titleDateRe := regexp.MustCompile(`\A★?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
