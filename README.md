@@ -25,6 +25,7 @@ start_server --port=13000 -- ./my-scraper
 - Fukkachan Calendar <http://www.fukkachan.com/>
 - Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Gotouchi Chara Calendar <http://gotouchi-chara.jp/calendar_.html>
+- Harmonyland <http://www.harmonyland.jp/welcome.html>
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Life Corporation <https://www.facebook.com/lifecorp428>
 - Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
