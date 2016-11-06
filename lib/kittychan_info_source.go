@@ -4,7 +4,6 @@ import (
 	"io"
 	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 
@@ -21,8 +20,9 @@ const (
 )
 
 var (
-	titleDateRe = regexp.MustCompile(
-		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
+	titleRe = regexp.MustCompile(
+		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
+	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 )
 
 type KittychanInfoSource struct {
@@ -63,59 +63,77 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 	}
 
 	var items []*feeds.Item
-	doc.Find("p").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+
+	skippedHrCount := 0
+	doc.Find("hr, p").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+		if s.Is("hr") {
+			skippedHrCount += 1
+			return true
+		}
+		if skippedHrCount < 2 {
+			return true
+		}
+
 		var (
-			title, description, link string
+			title, description, extraInfo, link string
 		)
-		s.Find("font").Each(func(_ int, s *goquery.Selection) {
+		s.ChildrenFiltered("font").Each(func(_ int, s *goquery.Selection) {
 			color, ok := s.Attr("color")
 			if !ok {
 				return
 			}
 			switch color {
 			case "#0000ff":
-				title = strings.TrimSpace(s.Text())
+				matches := titleRe.FindStringSubmatch(strings.TrimSpace(s.Text()))
+				if len(matches) == 3 {
+					title = matches[1]
+					extraInfo = matches[2]
+				} else if len(matches) == 2 {
+					title = matches[1]
+					extraInfo = ""
+				} else {
+					title = ""
+					extraInfo = ""
+				}
 				break
 			case "#000000":
-				description, _ = s.Html()
-				s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
-					if href, ok := s.Attr("href"); ok {
-						link = href
-						return false
+				{
+					extraElement := s.Find(`b font[color="#ff0000"]`)
+					if extraElement.Length() > 0 {
+						extraInfo = strings.TrimSpace(extraElement.Text())
+						break
 					}
-					return true
-				})
+				}
+				{
+					description, _ = s.Html()
+					s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+						if href, ok := s.Attr("href"); ok {
+							link = href
+							return false
+						}
+						return true
+					})
+				}
 				break
 			}
 		})
 
-		matches := titleDateRe.FindStringSubmatch(title)
-		if len(matches) < 2 || matches[1] == "" {
-			return true
-		}
-		title = matches[1]
-
-		var updated time.Time
-		if len(matches) >= 5 && matches[2] != "" && matches[3] != "" && matches[4] != "" {
-			year, err := strconv.Atoi(matches[2])
-			if err != nil {
-				return true
+		var created time.Time
+		if extraInfo != "" {
+			matches := dateRe.FindStringSubmatch(extraInfo)
+			if len(matches) > 0 {
+				c, err := time.ParseInLocation("2006年1月2日", matches[0], loc)
+				if err != nil {
+					return true
+				}
+				created = c
 			}
-			month, err := strconv.Atoi(matches[3])
-			if err != nil {
-				return true
-			}
-			day, err := strconv.Atoi(matches[4])
-			if err != nil {
-				return true
-			}
-			updated = time.Date(year, time.Month(month), day, 0, 0, 0, 0, loc)
 		}
 
 		if title != "" && description != "" && link != "" {
 			items = append(items, &feeds.Item{
 				Title:       title,
-				Updated:     updated,
+				Created:     created,
 				Description: description,
 				Link:        &feeds.Link{Href: link},
 				Id:          link,
