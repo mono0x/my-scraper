@@ -22,7 +22,7 @@ const (
 
 var (
 	titleDateRe = regexp.MustCompile(
-		`\A` + TitlePrefix + `?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
+		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4})年(\d{1,2})月(\d{1,2})日）)?\z`)
 )
 
 type KittychanInfoSource struct {
