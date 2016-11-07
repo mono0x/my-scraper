@@ -31,7 +31,7 @@ func TestKittychanInfoSource(t *testing.T) {
 	assert.Equal(t, "http://www.tamacenter-cm.com/illumi/", feed.Items[0].Link.Href)
 	assert.WithinDuration(t, time.Date(2016, 11, 6, 0, 0, 0, 0, loc), feed.Items[0].Created, 0)
 
-	assert.Equal(t, "ハローキティのハロウィーンマーチ（イオンモール多摩平の森）", feed.Items[99].Title)
-	assert.Equal(t, "http://tamadairanomori-aeonmall.com/news/event/663", feed.Items[99].Link.Href)
-	assert.WithinDuration(t, time.Date(2016, 9, 20, 0, 0, 0, 0, loc), feed.Items[99].Created, 0)
+	assert.Equal(t, "「Hello Kitty Japanダイバーシティ東京店」　リニューアルオープン", feed.Items[99].Title)
+	assert.Equal(t, "http://www.sanrio.co.jp/news/kt-gu-hkj-odaiba-renewal-20160921/", feed.Items[99].Link.Href)
+	assert.WithinDuration(t, time.Date(2016, 9, 21, 0, 0, 0, 0, loc), feed.Items[99].Created, 0)
 }

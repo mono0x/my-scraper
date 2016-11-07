@@ -20,7 +20,7 @@ const (
 )
 
 var (
-	titleRe = regexp.MustCompile(
+	headerRe = regexp.MustCompile(
 		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 )
@@ -65,6 +65,8 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 	var items []*feeds.Item
 
 	skippedHrCount := 0
+	section := ""
+	link := ""
 	doc.Find("hr, p").EachWithBreak(func(_ int, s *goquery.Selection) bool {
 		if s.Is("hr") {
 			skippedHrCount += 1
@@ -74,49 +76,52 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 			return true
 		}
 
-		var (
-			title, description, extraInfo, link string
-		)
-		s.ChildrenFiltered("font").Each(func(_ int, s *goquery.Selection) {
-			color, ok := s.Attr("color")
-			if !ok {
-				return
+		p := strings.TrimSpace(s.Text())
+
+		var extractedLink string
+		s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+			if href, ok := s.Attr("href"); ok {
+				extractedLink = href
+				return false
 			}
-			switch color {
-			case "#0000ff":
-				matches := titleRe.FindStringSubmatch(strings.TrimSpace(s.Text()))
-				if len(matches) == 3 {
-					title = matches[1]
-					extraInfo = matches[2]
-				} else if len(matches) == 2 {
-					title = matches[1]
-					extraInfo = ""
-				} else {
-					title = ""
-					extraInfo = ""
-				}
-				break
-			case "#000000":
-				{
-					extraElement := s.Find(`b font[color="#ff0000"]`)
-					if extraElement.Length() > 0 {
-						extraInfo = strings.TrimSpace(extraElement.Text())
-						break
-					}
-				}
-				{
-					description, _ = s.Html()
-					s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
-						if href, ok := s.Attr("href"); ok {
-							link = href
-							return false
-						}
-						return true
-					})
-				}
-				break
-			}
+			return true
 		})
+
+		if !strings.HasPrefix(p, TitlePrefix) {
+			section += p
+			if link == "" {
+				link = extractedLink
+			}
+			return true
+		}
+
+		defer func() {
+			section = p
+			link = extractedLink
+		}()
+
+		parts := strings.SplitN(section, "\n", 2)
+		if len(parts) < 2 {
+			return true
+		}
+
+		header := parts[0]
+		description := parts[1]
+
+		var title, extraInfo string
+		{
+			matches := headerRe.FindStringSubmatch(header)
+			if len(matches) == 3 {
+				title = matches[1]
+				extraInfo = matches[2]
+			} else if len(matches) == 2 {
+				title = matches[1]
+				extraInfo = ""
+			} else {
+				title = ""
+				extraInfo = ""
+			}
+		}
 
 		var created time.Time
 		if extraInfo != "" {
