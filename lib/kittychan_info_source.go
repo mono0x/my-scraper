@@ -23,6 +23,8 @@ var (
 	headerRe = regexp.MustCompile(
 		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
+
+	descriptionReplacer = strings.NewReplacer("\n", "<br />")
 )
 
 type KittychanInfoSource struct {
@@ -106,7 +108,7 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 		}
 
 		header := parts[0]
-		description := parts[1]
+		description := descriptionReplacer.Replace(parts[1])
 
 		var title, extraInfo string
 		{
