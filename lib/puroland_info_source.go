@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/feeds"
 )
@@ -66,18 +65,13 @@ func (s *PurolandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, er
 		if infoItem.PublicDate == "" {
 			continue
 		}
-		created, err := time.Parse("2006/01/02", infoItem.PublicDate)
-		if err != nil {
-			return nil, err
-		}
 
-		description := fmt.Sprintf(`<img src="%s" />`, infoItem.ThumbnailMiddle)
+		description := fmt.Sprintf(`%s<br /><img src="%s" />`, infoItem.PublicDate, infoItem.ThumbnailMiddle)
 
 		items = append(items, &feeds.Item{
 			Title:       html.UnescapeString(infoItem.Title),
 			Link:        &feeds.Link{Href: infoItem.Url},
 			Id:          infoItem.Url,
-			Created:     created,
 			Description: description,
 		})
 	}
