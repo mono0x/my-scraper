@@ -70,9 +70,9 @@ func run() error {
 		Source scraper.Source
 	}{
 		{"/character-show", scraper.NewCharacterShowSource()},
-		{"/fukkachan-calendar", scraper.NewFukkachanCalendarGoogleCalendarSource()},
+		{"/fukkachan-calendar", scraper.NewGoogleCalendarSource("fukkachan.com@gmail.com")},
 		{"/fukoku-life", scraper.NewFukokuLifeEventSource()},
-		{"/gotouchi-chara-calendar", scraper.NewGotouchiCharaCalendarGoogleCalendarSource()},
+		{"/gotouchi-chara-calendar", scraper.NewGoogleCalendarSource("gnr0r3kevuuv3j0q6q25gj4hks@group.calendar.google.com")},
 		{"/harmonyland-info", scraper.NewHarmonylandInfoSource()},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
 		{"/lifecorp", scraper.NewFacebookSource("lifecorp428")},
@@ -81,11 +81,11 @@ func run() error {
 		{"/olympus-camera", scraper.NewFacebookSource("FotoPus")},
 		{"/prtimes-sanrio", scraper.NewPRTimesSource()},
 		{"/puroland-info", scraper.NewPurolandInfoSource()},
-		{"/sanrio-events-calendar", scraper.NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com", "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")},
+		{"/sanrio-events-calendar", scraper.NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
 		{"/value-press-sanrio", scraper.NewValuePressSource()},
-		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com", "https://calendar.google.com/calendar/embed?src=pompomyufu@gmail.com")},
+		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com")},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))

@@ -14,15 +14,17 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
+const (
+	prefix = `https://calendar.google.com/calendar/embed?src=`
+)
+
 type GoogleCalendarSource struct {
 	calendarId string
-	url        string
 }
 
-func NewGoogleCalendarSource(calendarId, url string) *GoogleCalendarSource {
+func NewGoogleCalendarSource(calendarId string) *GoogleCalendarSource {
 	return &GoogleCalendarSource{
 		calendarId: calendarId,
-		url:        url,
 	}
 }
 
@@ -168,7 +170,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 		Id:          events.Etag,
 		Title:       events.Summary,
 		Description: events.Description,
-		Link:        &feeds.Link{Href: s.url},
+		Link:        &feeds.Link{Href: prefix + s.calendarId},
 		Updated:     updated,
 		Items:       items,
 	}
