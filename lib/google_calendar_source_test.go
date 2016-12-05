@@ -20,7 +20,7 @@ func TestGoogleCalendarSource(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com", "https://calendar.google.com/calendar/embed?src=qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
+	source := NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
 	feed, err := source.Render(&events)
 	if err != nil {
 		t.Fatal(err)
