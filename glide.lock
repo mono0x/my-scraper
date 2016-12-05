@@ -1,5 +1,5 @@
-hash: 773802e940d68ada746591f38ab93c98777722063efdc3c89ac1aaad2d363b49
-updated: 2016-10-04T11:26:14.178839047+09:00
+hash: 0590aab12f70fee2a74ec2b86687109f38f191a5efdf1b6139bac88a04ff9548
+updated: 2016-12-05T14:57:54.207025399+09:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -8,8 +8,22 @@ imports:
   - internal
 - name: github.com/andybalholm/cascadia
   version: 3ad29d1ad1c4f2023e355603324348cf1f4b2d48
+- name: github.com/azr/backoff
+  version: 53511d3c733003985b0b76f733df1f4d0095ee6a
 - name: github.com/braintree/manners
   version: 82a8879fc5fd0381fa8b2d8033b19bf255252088
+- name: github.com/ChimeraCoder/anaconda
+  version: 91bfbf5de08def2e8b5480b52cae811d2bde3af9
+- name: github.com/ChimeraCoder/tokenbucket
+  version: c5a927568de7aad8a58127d80bcd36ca4e71e454
+- name: github.com/dustin/go-jsonpointer
+  version: 2efc9fef1d9421a8d252a32e20beb10cecd2bbca
+- name: github.com/dustin/gojson
+  version: 2e71ec9dd5adce3b168cd0dbde03b5cc04951c30
+- name: github.com/garyburd/go-oauth
+  version: 719b069913e1151a73ea30d2ea4f90deda3ce234
+  subpackages:
+  - oauth
 - name: github.com/golang/protobuf
   version: 7cc19b78d562895b13596ddce7aafb59dd789318
   subpackages:
