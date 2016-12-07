@@ -74,6 +74,7 @@ func run() error {
 		{"/fukoku-life", scraper.NewFukokuLifeEventSource()},
 		{"/gotouchi-chara-calendar", scraper.NewGoogleCalendarSource("gnr0r3kevuuv3j0q6q25gj4hks@group.calendar.google.com")},
 		{"/harmonyland-info", scraper.NewHarmonylandInfoSource()},
+		{"/kaisei-ajisaichan", scraper.NewFacebookSource("kaisei.ajisaichan")},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
 		{"/lifecorp", scraper.NewFacebookSource("lifecorp428")},
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
