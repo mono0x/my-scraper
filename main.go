@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/braintree/manners"
@@ -70,27 +71,75 @@ func run() error {
 		Source scraper.Source
 	}{
 		{"/character-show", scraper.NewCharacterShowSource()},
-		{"/fukkachan-calendar", scraper.NewGoogleCalendarSource("fukkachan.com@gmail.com")},
 		{"/fukoku-life", scraper.NewFukokuLifeEventSource()},
-		{"/gotouchi-chara-calendar", scraper.NewGoogleCalendarSource("gnr0r3kevuuv3j0q6q25gj4hks@group.calendar.google.com")},
 		{"/harmonyland-info", scraper.NewHarmonylandInfoSource()},
-		{"/kaisei-ajisaichan", scraper.NewFacebookSource("kaisei.ajisaichan")},
 		{"/kittychan-info", scraper.NewKittychanInfoSource()},
-		{"/lifecorp", scraper.NewFacebookSource("lifecorp428")},
 		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
-		{"/mucchan-musao", scraper.NewFacebookSource("mucchan.musao")},
-		{"/olympus-camera", scraper.NewFacebookSource("FotoPus")},
 		{"/prtimes-sanrio", scraper.NewPRTimesSource()},
 		{"/puroland-info", scraper.NewPurolandInfoSource()},
-		{"/sanrio-events-calendar", scraper.NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")},
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
 		{"/value-press-sanrio", scraper.NewValuePressSource()},
-		{"/yufuterashima-calendar", scraper.NewGoogleCalendarSource("pompomyufu@gmail.com")},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
 	}
+
+	mux.HandleFunc("/facebook", func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		id := query.Get("id")
+		if id == "" {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		source := scraper.NewFacebookSource(id)
+		feed, err := source.Scrape()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
+	})
+
+	mux.HandleFunc("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		id := query.Get("id")
+		if id == "" {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		source := scraper.NewGoogleCalendarSource(id)
+		feed, err := source.Scrape()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
+	})
+
+	mux.HandleFunc("/twitter", func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		idStr := query.Get("id")
+		if idStr == "" {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		id, err := strconv.ParseInt(idStr, 10, 64)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		source := scraper.NewTwitterSource(id)
+		feed, err := source.Scrape()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
+	})
 
 	manners.Serve(l, mux)
 	return nil
