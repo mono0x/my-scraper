@@ -26,6 +26,7 @@ start_server --port=13000 -- ./my-scraper
 - Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Google Calendar
 - Harmonyland <http://www.harmonyland.jp/welcome.html>
+- Instagram
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
 - PR TIMES (Sanrio) <http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1>

@@ -119,6 +119,23 @@ func run() error {
 		renderFeed(w, feed)
 	})
 
+	mux.HandleFunc("/instagram", func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		id := query.Get("id")
+		if id == "" {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		source := scraper.NewInstagramSource(id)
+		feed, err := source.Scrape()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		renderFeed(w, feed)
+	})
+
 	mux.HandleFunc("/twitter", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		idStr := query.Get("id")
