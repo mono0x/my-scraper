@@ -70,6 +70,7 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 		return nil, err
 	}
 
+	sharedDataRe := sharedDataRe.Copy()
 	submatches := sharedDataRe.FindSubmatch(src)
 	if len(submatches) == 0 {
 		return nil, errors.New("data not found")

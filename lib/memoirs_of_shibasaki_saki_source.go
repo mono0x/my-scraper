@@ -19,7 +19,7 @@ const (
 )
 
 var (
-	TitleRe = regexp.MustCompile(`^\d+/\d+`)
+	titleRe = regexp.MustCompile(`^\d+/\d+`)
 )
 
 type MemoirsOfShibasakiSakiSource struct {
@@ -49,6 +49,8 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromReader(reader io.Reader) (*feed
 }
 
 func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+	titleRe := titleRe.Copy()
+
 	var items []*feeds.Item
 	doc.Find(`td[bgcolor="#330066"] font[size="+1"] > *`).Each(func(_ int, s *goquery.Selection) {
 		if s.Is("br") {
@@ -66,7 +68,7 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document)
 		if text == "" {
 			return
 		}
-		if !TitleRe.MatchString(text) {
+		if !titleRe.MatchString(text) {
 			return
 		}
 

@@ -50,7 +50,7 @@ func NewFacebookSource(userId string) *FacebookSource {
 }
 
 var (
-	PhotosUrlRe = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
+	photosUrlRe = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
 )
 
 func (s *FacebookSource) Scrape() (*feeds.Feed, error) {
@@ -111,7 +111,8 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 		}
 
 		var link string
-		if PhotosUrlRe.MatchString(post.Link) {
+		photosUrlRe := photosUrlRe.Copy()
+		if photosUrlRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
 				link = FacebookServiceUrl + s.userId + "/posts/" + parts[1] + "/"
 			} else {
