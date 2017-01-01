@@ -64,6 +64,8 @@ type instagramData struct {
 	} `json:"entry_data"`
 }
 
+var emojiRe = regexp.MustCompile(`[^\x{0000}-\x{ffff}]+`)
+
 func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	src, err := ioutil.ReadAll(reader)
 	if err != nil {
@@ -94,11 +96,12 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 
 	items := make([]*feeds.Item, 0, len(user.Media.Nodes))
 	for _, node := range user.Media.Nodes {
+		caption := emojiRe.ReplaceAllString(node.Caption, "")
 		items = append(items, &feeds.Item{
-			Title:       node.Caption,
+			Title:       caption,
 			Created:     time.Unix(node.Date, 0).In(loc),
 			Link:        &feeds.Link{Href: fmt.Sprintf("http://www.instagram.com/p/%s/", node.Code)},
-			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", html.EscapeString(node.Caption), node.DisplaySrc),
+			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", html.EscapeString(caption), node.DisplaySrc),
 		})
 	}
 
