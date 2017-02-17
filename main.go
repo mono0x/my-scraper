@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
 	"net/http"
@@ -9,7 +10,6 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/braintree/manners"
 	"github.com/gorilla/feeds"
 	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
@@ -38,16 +38,6 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 }
 
 func run() error {
-	signalChan := make(chan os.Signal)
-	signal.Notify(signalChan, syscall.SIGTERM)
-	go func() {
-		for {
-			s := <-signalChan
-			if s == syscall.SIGTERM {
-				manners.Close()
-			}
-		}
-	}()
 
 	listeners, err := listener.ListenAll()
 	if err != nil {
@@ -158,8 +148,26 @@ func run() error {
 		renderFeed(w, feed)
 	})
 
-	manners.Serve(l, mux)
-	return nil
+	server := http.Server{Handler: mux}
+
+	go func() {
+		if err := server.Serve(l); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	signalChan := make(chan os.Signal)
+	signal.Notify(signalChan, syscall.SIGTERM)
+
+	for {
+		s := <-signalChan
+		if s == syscall.SIGTERM {
+			if err := server.Shutdown(context.Background()); err != nil {
+				return err
+			}
+			return nil
+		}
+	}
 }
 
 func main() {
