@@ -156,7 +156,7 @@ func run() error {
 		}
 	}()
 
-	signalChan := make(chan os.Signal)
+	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGTERM)
 
 	for {

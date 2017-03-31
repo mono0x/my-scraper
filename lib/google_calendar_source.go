@@ -1,6 +1,7 @@
 package scraper
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"html"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
-	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
 )
@@ -47,7 +47,7 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 		return nil, err
 	}
 
-	client := config.Client(oauth2.NoContext)
+	client := config.Client(context.Background())
 
 	service, err := calendar.New(client)
 	if err != nil {
