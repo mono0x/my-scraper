@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
@@ -45,24 +44,14 @@ func (s *HarmonylandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed,
 }
 
 func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, err
-	}
-
 	baseUrl, _ := url.Parse(HarmonylandInfoUrl)
 
 	titleReplacer := strings.NewReplacer("\n", " ")
 
 	var items []*feeds.Item
 	doc.Find("#pickup, #cp").Each(func(_ int, s *goquery.Selection) {
-		s.Find("dd .pickup_date").Each(func(_ int, s *goquery.Selection) {
-			date, err := time.ParseInLocation("2006.1/2", s.Text(), loc)
-			if err != nil {
-				return
-			}
-
-			link := s.Next().Find("a")
+		s.Find("dd .pick_up").Each(func(_ int, s *goquery.Selection) {
+			link := s.Find("a")
 
 			href, ok := link.Attr("href")
 			if !ok {
@@ -73,12 +62,11 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 				return
 			}
 
-			title := titleReplacer.Replace(strings.TrimSpace(link.Text()))
+			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
 
 			items = append(items, &feeds.Item{
-				Title:   title,
-				Link:    &feeds.Link{Href: baseUrl.ResolveReference(hrefUrl).String()},
-				Created: date,
+				Title: title,
+				Link:  &feeds.Link{Href: baseUrl.ResolveReference(hrefUrl).String()},
 			})
 		})
 	})
