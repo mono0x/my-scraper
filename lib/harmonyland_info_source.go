@@ -1,6 +1,8 @@
 package scraper
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -62,11 +64,14 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 				return
 			}
 
+			resolvedHref := baseUrl.ResolveReference(hrefUrl).String()
+
 			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
 
 			items = append(items, &feeds.Item{
 				Title: title,
-				Link:  &feeds.Link{Href: baseUrl.ResolveReference(hrefUrl).String()},
+				Link:  &feeds.Link{Href: resolvedHref},
+				Id:    fmt.Sprintf("%x", sha256.Sum256([]byte(title+resolvedHref))),
 			})
 		})
 	})
