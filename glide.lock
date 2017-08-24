@@ -1,5 +1,5 @@
 hash: 4ba324bc8d6e259ede34e566e60d143126b12e1369216fd694451376e474192d
-updated: 2017-02-17T22:41:09.684182262+09:00
+updated: 2017-08-24T23:37:05.593020666+09:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -31,11 +31,11 @@ imports:
 - name: github.com/joho/godotenv
   version: 4ed13390c0acd2ff4e371e64d8b97c8954138243
 - name: github.com/lestrrat/go-server-starter
-  version: 901cec093d58ca36652e8d7906e4bd3e32793801
+  version: 88699d57aeee0276b4198e135883ff24b88a742f
   subpackages:
   - listener
 - name: github.com/PuerkitoBio/goquery
-  version: 2e29ea41f0d13f4a303c75553f4eeadddc7a4c56
+  version: e1271ee34c6a305e38566ecd27ae374944907ee9
 - name: golang.org/x/net
   version: 5916dcb167ed985a5b9e6871fbfd74848a4c170b
   subpackages:
@@ -91,6 +91,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 976c720a22c8eb4eb6a0b4348ad85ad12491a506
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert
