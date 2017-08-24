@@ -18,32 +18,18 @@ type TwitterSource struct {
 
 // https://github.com/ChimeraCoder/anaconda/issues/101
 var (
-	lock       sync.RWMutex
+	once       sync.Once
 	twitterApi *anaconda.TwitterApi
 )
 
 func getTwitterApi() *anaconda.TwitterApi {
-	{
-		lock.RLock()
-		defer lock.RUnlock()
-		if twitterApi != nil {
-			return twitterApi
-		}
-	}
-
-	{
-		lock.Lock()
-		defer lock.Unlock()
-		if twitterApi != nil {
-			return twitterApi
-		}
-
+	once.Do(func() {
 		anaconda.SetConsumerKey(os.Getenv("TWITTER_CONSUMER_KEY"))
 		anaconda.SetConsumerSecret(os.Getenv("TWITTER_CONSUMER_SECRET"))
 		twitterApi = anaconda.NewTwitterApi(
 			os.Getenv("TWITTER_OAUTH_TOKEN"), os.Getenv("TWITTER_OAUTH_TOKEN_SECRET"))
-		return twitterApi
-	}
+	})
+	return twitterApi
 }
 
 func NewTwitterSource(userId int64) *TwitterSource {
