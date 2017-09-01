@@ -54,7 +54,9 @@ func (s *CharacterShowSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 		title := titleReplacer.Replace(s.Find(".event-name").Text())
 		spot := spotReplacer.Replace(s.Find(".event-spotname").Text())
 		link := "http://charactershow.jp/#" + pref
-		hash := fmt.Sprintf("%x", sha256.Sum256([]byte(date+title+spot)))
+		sha := sha256.New()
+		fmt.Fprint(sha, date, title, spot)
+		hash := fmt.Sprintf("%x", sha.Sum(nil))
 		items = append(items, &feeds.Item{
 			Title:       fmt.Sprintf("%s: %s", prefTitle, title),
 			Link:        &feeds.Link{Href: link},

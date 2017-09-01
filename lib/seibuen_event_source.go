@@ -55,13 +55,14 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 
 			description := fmt.Sprintf("%s<br /><br />日程: %s<br />時間: %s<br />場所: %s<br />その他: %s", summary, properties["日程"], properties["時間"], properties["場所"], properties["その他"])
 
-			hash := fmt.Sprintf("%x", sha256.Sum256([]byte(title+properties["日程"])))
+			sha := sha256.New()
+			fmt.Fprint(sha, title, properties["日程"])
 
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Description: description,
 				Link:        &feeds.Link{Href: SeibuenEventUrl},
-				Id:          hash,
+				Id:          fmt.Sprintf("%x", sha.Sum(nil)),
 			})
 		}
 	})

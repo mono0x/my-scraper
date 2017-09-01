@@ -72,12 +72,13 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document)
 			return
 		}
 
-		hash := fmt.Sprintf("%x", sha256.Sum256([]byte(text+href)))
+		sha := sha256.New()
+		fmt.Fprint(sha, text, href)
 
 		items = append(items, &feeds.Item{
 			Title: text,
 			Link:  &feeds.Link{Href: href},
-			Id:    hash,
+			Id:    fmt.Sprintf("%x", sha.Sum(nil)),
 		})
 	})
 

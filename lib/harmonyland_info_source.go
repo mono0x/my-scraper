@@ -68,10 +68,13 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
 
+			sha := sha256.New()
+			fmt.Fprint(sha, title, resolvedHref)
+
 			items = append(items, &feeds.Item{
 				Title: title,
 				Link:  &feeds.Link{Href: resolvedHref},
-				Id:    fmt.Sprintf("%x", sha256.Sum256([]byte(title+resolvedHref))),
+				Id:    fmt.Sprintf("%x", sha.Sum(nil)),
 			})
 		})
 	})
