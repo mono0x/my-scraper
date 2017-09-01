@@ -56,7 +56,7 @@ func (s *TwitterSource) Render(timeline []anaconda.Tweet) (*feeds.Feed, error) {
 		return nil, errors.New("timeline is empty")
 	}
 	user := timeline[0].User
-	userUrl := fmt.Sprintf("https://twitter.com/%s", user.ScreenName)
+	userURL := fmt.Sprintf("https://twitter.com/%s", user.ScreenName)
 	items := make([]*feeds.Item, 0, len(timeline))
 	for _, tweet := range timeline {
 		created, err := tweet.CreatedAtTime()
@@ -66,12 +66,12 @@ func (s *TwitterSource) Render(timeline []anaconda.Tweet) (*feeds.Feed, error) {
 		items = append(items, &feeds.Item{
 			Title:   tweet.Text,
 			Created: created,
-			Link:    &feeds.Link{Href: fmt.Sprintf("%s/status/%s", userUrl, tweet.IdStr)},
+			Link:    &feeds.Link{Href: fmt.Sprintf("%s/status/%s", userURL, tweet.IdStr)},
 		})
 	}
 	return &feeds.Feed{
 		Title: fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName),
-		Link:  &feeds.Link{Href: userUrl},
+		Link:  &feeds.Link{Href: userURL},
 		Items: items,
 	}, nil
 }

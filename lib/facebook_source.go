@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	FacebookServiceUrl  = "https://www.facebook.com/"
-	FacebookApiEndpoint = "https://graph.facebook.com/v2.6/"
+	facebookServiceURL  = "https://www.facebook.com/"
+	facebookAPIEndpoint = "https://graph.facebook.com/v2.6/"
 )
 
 type FacebookPosts struct {
@@ -50,7 +50,7 @@ func NewFacebookSource(userId string) *FacebookSource {
 }
 
 var (
-	photosUrlRe             = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
+	photosURLRe             = regexp.MustCompile(`^` + regexp.QuoteMeta(facebookServiceURL) + `[^/]+/photos/`)
 	facebookMessageReplacer = strings.NewReplacer("\n", "<br />")
 )
 
@@ -67,7 +67,7 @@ func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
 	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
 	values.Set("fields", "created_time,from,link,message,picture")
 
-	resp, err := http.Get(FacebookApiEndpoint + s.userId + "/posts?" + values.Encode())
+	resp, err := http.Get(facebookAPIEndpoint + s.userId + "/posts?" + values.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -110,10 +110,10 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 		}
 
 		var link string
-		photosUrlRe := photosUrlRe.Copy()
-		if photosUrlRe.MatchString(post.Link) {
+		photosURLRe := photosURLRe.Copy()
+		if photosURLRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
-				link = FacebookServiceUrl + s.userId + "/posts/" + parts[1] + "/"
+				link = facebookServiceURL + s.userId + "/posts/" + parts[1] + "/"
 			} else {
 				link = post.Link
 			}
@@ -133,7 +133,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 
 	feed := &feeds.Feed{
 		Title: posts.Data[0].From.Name,
-		Link:  &feeds.Link{Href: FacebookServiceUrl + s.userId},
+		Link:  &feeds.Link{Href: facebookServiceURL + s.userId},
 		Items: items,
 	}
 	return feed, nil

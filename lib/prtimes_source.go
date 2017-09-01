@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	PRTimesUrl = `http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1`
+	prTimesURL = `http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1`
 )
 
 type PRTimesSource struct {
@@ -23,7 +23,7 @@ func NewPRTimesSource() *PRTimesSource {
 }
 
 func (s *PRTimesSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(PRTimesUrl)
+	res, err := http.Get(prTimesURL)
 	if err != nil {
 		return nil, err
 	}
@@ -43,10 +43,10 @@ func (s *PRTimesSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) 
 func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "PR TIMES (Sanrio)",
-		Link:  &feeds.Link{Href: PRTimesUrl},
+		Link:  &feeds.Link{Href: prTimesURL},
 	}
 
-	baseUrl, _ := url.Parse(PRTimesUrl)
+	baseURL, _ := url.Parse(prTimesURL)
 	var items []*feeds.Item
 	doc.Find("a.link-title-item-ordinary").Each(func(_ int, s *goquery.Selection) {
 		title := strings.TrimSpace(s.Text())
@@ -54,12 +54,12 @@ func (s *PRTimesSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, 
 		if !ok {
 			return
 		}
-		refUrl, err := url.Parse(link)
+		refURL, err := url.Parse(link)
 		if err != nil {
 			return
 		}
-		absUrl := baseUrl.ResolveReference(refUrl)
-		link = absUrl.String()
+		absURL := baseURL.ResolveReference(refURL)
+		link = absURL.String()
 		dt, ok := s.Parent().Next().Attr("datetime")
 		if !ok {
 			return

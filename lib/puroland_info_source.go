@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	PurolandInfoUrl    = "http://www.puroland.jp/"
-	PurolandInfoApiUrl = "http://www.puroland.jp/api/live/get_information/?page=1&count=20"
+	purolandInfoURL         = "http://www.puroland.jp/"
+	purolandInfoAPIEndpoint = "http://www.puroland.jp/api/live/get_information/?page=1&count=20"
 )
 
 type information struct {
@@ -26,7 +26,7 @@ type information struct {
 }
 
 type informationItem struct {
-	Url             string `json:"url"`
+	URL             string `json:"url"`
 	Title           string `json:"title"`
 	PublicDate      string `json:"public_date"`
 	ThumbnailMiddle string `json:"thumbnail_m"`
@@ -40,7 +40,7 @@ func NewPurolandInfoSource() *PurolandInfoSource {
 }
 
 func (s *PurolandInfoSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(PurolandInfoApiUrl)
+	res, err := http.Get(purolandInfoAPIEndpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -70,15 +70,15 @@ func (s *PurolandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, er
 
 		items = append(items, &feeds.Item{
 			Title:       html.UnescapeString(infoItem.Title),
-			Link:        &feeds.Link{Href: infoItem.Url},
-			Id:          infoItem.Url,
+			Link:        &feeds.Link{Href: infoItem.URL},
+			Id:          infoItem.URL,
 			Description: description,
 		})
 	}
 
 	feed := &feeds.Feed{
 		Title: "お知らせ | サンリオピューロランド",
-		Link:  &feeds.Link{Href: PurolandInfoUrl},
+		Link:  &feeds.Link{Href: purolandInfoURL},
 		Items: items,
 	}
 

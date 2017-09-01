@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	SeibuenEventUrl = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
+	seibuenEventURL = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
 )
 
 var (
@@ -26,7 +26,7 @@ func NewSeibuenEventSource() *SeibuenEventSource {
 }
 
 func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(SeibuenEventUrl)
+	doc, err := goquery.NewDocument(seibuenEventURL)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Description: description,
-				Link:        &feeds.Link{Href: SeibuenEventUrl},
+				Link:        &feeds.Link{Href: seibuenEventURL},
 				Id:          fmt.Sprintf("%x", sha.Sum(nil)),
 			})
 		}
@@ -71,7 +71,7 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 
 	feed := &feeds.Feed{
 		Title: "西武園ゆうえんち メルヘンタウン",
-		Link:  &feeds.Link{Href: SeibuenEventUrl},
+		Link:  &feeds.Link{Href: seibuenEventURL},
 		Items: items,
 	}
 

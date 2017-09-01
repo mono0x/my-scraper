@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	FukokuLifeEventUrl = "https://act.fukoku-life.co.jp/event/index.php"
+	fukokuLifeEventURL = "https://act.fukoku-life.co.jp/event/index.php"
 )
 
 type FukokuLifeEventSource struct {
@@ -19,7 +19,7 @@ func NewFukokuLifeEventSource() *FukokuLifeEventSource {
 }
 
 func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(FukokuLifeEventUrl)
+	doc, err := goquery.NewDocument(fukokuLifeEventURL)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
 }
 
 func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	baseUrl, _ := url.Parse(FukokuLifeEventUrl)
+	baseURL, _ := url.Parse(fukokuLifeEventURL)
 	var items []*feeds.Item
 	doc.Find("div#result > table > tbody > tr").Each(func(_ int, s *goquery.Selection) {
 		titleCell := s.Children().First().Next()
@@ -39,12 +39,12 @@ func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 		if !ok {
 			return
 		}
-		refUrl, err := url.Parse(linkText)
+		refURL, err := url.Parse(linkText)
 		if err != nil {
 			return
 		}
-		absUrl := baseUrl.ResolveReference(refUrl)
-		link := absUrl.String()
+		absURL := baseURL.ResolveReference(refURL)
+		link := absURL.String()
 
 		description := dateCell.Text() + "\n" + locationCell.Text()
 
@@ -58,7 +58,7 @@ func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 	feed := &feeds.Feed{
 		Title: "フコク赤ちゃんクラブ",
-		Link:  &feeds.Link{Href: FukokuLifeEventUrl},
+		Link:  &feeds.Link{Href: fukokuLifeEventURL},
 		Items: items,
 	}
 

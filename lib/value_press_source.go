@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ValuePressUrl = `https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA`
+	valuePressURL = `https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA`
 )
 
 type ValuePressSource struct {
@@ -22,7 +22,7 @@ func NewValuePressSource() *ValuePressSource {
 }
 
 func (s *ValuePressSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(ValuePressUrl)
+	res, err := http.Get(valuePressURL)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (s *ValuePressSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Fee
 
 	feed := &feeds.Feed{
 		Title: "ValuePress! (Sanrio)",
-		Link:  &feeds.Link{Href: ValuePressUrl},
+		Link:  &feeds.Link{Href: valuePressURL},
 		Items: items,
 	}
 

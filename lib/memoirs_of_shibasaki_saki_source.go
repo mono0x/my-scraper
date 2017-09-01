@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	MemoirsOfShibasakiSakiUrl = "http://shibasakisaki.web.fc2.com/"
+	memoirsOfShibasakiSakiURL = "http://shibasakisaki.web.fc2.com/"
 )
 
 var (
@@ -30,7 +30,7 @@ func NewMemoirsOfShibasakiSakiSource() *MemoirsOfShibasakiSakiSource {
 }
 
 func (s *MemoirsOfShibasakiSakiSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(MemoirsOfShibasakiSakiUrl)
+	res, err := http.Get(memoirsOfShibasakiSakiURL)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document)
 		if s.Is("a") {
 			href = s.AttrOr("href", "")
 		} else {
-			href = MemoirsOfShibasakiSakiUrl
+			href = memoirsOfShibasakiSakiURL
 		}
 
 		text := strings.TrimSpace(s.Text())
@@ -84,7 +84,7 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromDocument(doc *goquery.Document)
 
 	feed := &feeds.Feed{
 		Title: "柴崎さきの見聞録",
-		Link:  &feeds.Link{Href: MemoirsOfShibasakiSakiUrl},
+		Link:  &feeds.Link{Href: memoirsOfShibasakiSakiURL},
 		Items: items,
 	}
 	return feed, nil

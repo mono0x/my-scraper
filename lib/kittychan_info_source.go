@@ -15,13 +15,13 @@ import (
 )
 
 const (
-	KittychanInfoUrl = "http://www.kittychan.info/information.html"
-	TitlePrefix      = `★`
+	kittychanInfoURL         = "http://www.kittychan.info/information.html"
+	kittychanInfoTitlePrefix = `★`
 )
 
 var (
 	headerRe = regexp.MustCompile(
-		`\A(?:` + regexp.QuoteMeta(TitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
+		`\A(?:` + regexp.QuoteMeta(kittychanInfoTitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 
 	descriptionReplacer = strings.NewReplacer("\n", "<br />")
@@ -35,7 +35,7 @@ func NewKittychanInfoSource() *KittychanInfoSource {
 }
 
 func (s *KittychanInfoSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(KittychanInfoUrl)
+	res, err := http.Get(kittychanInfoURL)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
-		Link:  &feeds.Link{Href: KittychanInfoUrl},
+		Link:  &feeds.Link{Href: kittychanInfoURL},
 	}
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
@@ -92,7 +92,7 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 			return true
 		})
 
-		if !strings.HasPrefix(p, TitlePrefix) {
+		if !strings.HasPrefix(p, kittychanInfoTitlePrefix) {
 			section += p
 			if link == "" {
 				link = extractedLink

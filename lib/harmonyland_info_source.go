@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	HarmonylandInfoUrl = "http://www.harmonyland.jp/welcome.html"
+	harmonylandInfoURL = "http://www.harmonyland.jp/welcome.html"
 )
 
 type HarmonylandInfoSource struct {
@@ -31,7 +31,7 @@ func NewHarmonylandInfoSource() *HarmonylandInfoSource {
 }
 
 func (s *HarmonylandInfoSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(HarmonylandInfoUrl)
+	res, err := http.Get(harmonylandInfoURL)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *HarmonylandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed,
 }
 
 func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	baseUrl, _ := url.Parse(HarmonylandInfoUrl)
+	baseURL, _ := url.Parse(harmonylandInfoURL)
 
 	var items []*feeds.Item
 	doc.Find("#pickup, #cp").Each(func(_ int, s *goquery.Selection) {
@@ -61,12 +61,12 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 			if !ok {
 				return
 			}
-			hrefUrl, err := url.Parse(href)
+			hrefURL, err := url.Parse(href)
 			if err != nil {
 				return
 			}
 
-			resolvedHref := baseUrl.ResolveReference(hrefUrl).String()
+			resolvedHref := baseURL.ResolveReference(hrefURL).String()
 
 			title := harmonylandInfoTitleReplacer.Replace(strings.TrimSpace(s.Text()))
 
@@ -83,7 +83,7 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 	feed := &feeds.Feed{
 		Title: "ハーモニーランド",
-		Link:  &feeds.Link{Href: HarmonylandInfoUrl},
+		Link:  &feeds.Link{Href: harmonylandInfoURL},
 		Items: items,
 	}
 	return feed, nil

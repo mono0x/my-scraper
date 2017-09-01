@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	CharacterShowUrl = "http://charactershow.jp/"
+	characterShowURL = "http://charactershow.jp/"
 )
 
 var (
@@ -27,7 +27,7 @@ func NewCharacterShowSource() *CharacterShowSource {
 }
 
 func (s *CharacterShowSource) Scrape() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(CharacterShowUrl)
+	doc, err := goquery.NewDocument(characterShowURL)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *CharacterShowSource) Scrape() (*feeds.Feed, error) {
 func (s *CharacterShowSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title: "キャラクターショーファンサイト",
-		Link:  &feeds.Link{Href: CharacterShowUrl},
+		Link:  &feeds.Link{Href: characterShowURL},
 	}
 
 	var items []*feeds.Item

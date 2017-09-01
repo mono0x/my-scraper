@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	SanrioNewsReleaseUrl = "http://www.sanrio.co.jp/corporate/release/"
+	sanrioNewsReleaseURL = "http://www.sanrio.co.jp/corporate/release/"
 )
 
 type SanrioNewsReleaseSource struct {
@@ -21,7 +21,7 @@ func NewSanrioNewsReleaseSource() *SanrioNewsReleaseSource {
 }
 
 func (s *SanrioNewsReleaseSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(SanrioNewsReleaseUrl)
+	res, err := http.Get(sanrioNewsReleaseURL)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*fe
 
 	feed := &feeds.Feed{
 		Title: "ニュースリリース | 会社情報 | サンリオ",
-		Link:  &feeds.Link{Href: SanrioNewsReleaseUrl},
+		Link:  &feeds.Link{Href: sanrioNewsReleaseURL},
 		Items: items,
 	}
 	return feed, nil
