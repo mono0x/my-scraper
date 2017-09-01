@@ -22,6 +22,10 @@ type GoogleCalendarSource struct {
 	calendarId string
 }
 
+var (
+	googleCalendarDescriptionReplacer = strings.NewReplacer("\n", "<br />")
+)
+
 func NewGoogleCalendarSource(calendarId string) *GoogleCalendarSource {
 	return &GoogleCalendarSource{
 		calendarId: calendarId,
@@ -75,8 +79,6 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 }
 
 func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, error) {
-	descriptionReplacer := strings.NewReplacer("\n", "<br />")
-
 	items := make([]*feeds.Item, 0, len(events.Items))
 	for _, event := range events.Items {
 		created, err := time.Parse(time.RFC3339, event.Created)
@@ -148,7 +150,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			description += fmt.Sprintf("Location: %s<br />", html.EscapeString(event.Location))
 		}
 		description += fmt.Sprintf("Duration: %s<br /><br />", html.EscapeString(duration))
-		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
+		description += googleCalendarDescriptionReplacer.Replace(html.EscapeString(event.Description))
 
 		items = append(items, &feeds.Item{
 			Id:          event.Etag,

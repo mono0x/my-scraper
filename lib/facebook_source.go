@@ -50,7 +50,8 @@ func NewFacebookSource(userId string) *FacebookSource {
 }
 
 var (
-	photosUrlRe = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
+	photosUrlRe             = regexp.MustCompile(`^` + regexp.QuoteMeta(FacebookServiceUrl) + `[^/]+/photos/`)
+	facebookMessageReplacer = strings.NewReplacer("\n", "<br />")
 )
 
 func (s *FacebookSource) Scrape() (*feeds.Feed, error) {
@@ -85,8 +86,6 @@ func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
 }
 
 func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
-	messageReplacer := strings.NewReplacer("\n", "<br />")
-
 	if len(posts.Data) == 0 {
 		return nil, errors.New("no posts found")
 	}
@@ -101,7 +100,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 		var title, description string
 		if index := strings.Index(post.Message, "\n"); index >= 0 {
 			title = post.Message[0:index]
-			description = messageReplacer.Replace(post.Message)
+			description = facebookMessageReplacer.Replace(post.Message)
 		} else {
 			title = post.Message
 			description = post.Message

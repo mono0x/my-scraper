@@ -13,6 +13,12 @@ const (
 	CharacterShowUrl = "http://charactershow.jp/"
 )
 
+var (
+	characterShowDateReplacer  = strings.NewReplacer("開催予定日", "", " ", "")
+	characterShowTitleReplacer = strings.NewReplacer("イベント内容", "")
+	characterShowSpotReplacer  = strings.NewReplacer("開催場所(出典)", "")
+)
+
 type CharacterShowSource struct {
 }
 
@@ -34,10 +40,6 @@ func (s *CharacterShowSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 		Link:  &feeds.Link{Href: CharacterShowUrl},
 	}
 
-	dateReplacer := strings.NewReplacer("開催予定日", "", " ", "")
-	titleReplacer := strings.NewReplacer("イベント内容", "")
-	spotReplacer := strings.NewReplacer("開催場所(出典)", "")
-
 	var items []*feeds.Item
 	pref := ""
 	prefTitle := ""
@@ -50,9 +52,9 @@ func (s *CharacterShowSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 			prefTitle = strings.TrimSpace(s.Find("div:first-child").Text())
 			return
 		}
-		date := dateReplacer.Replace(s.Find(".event-date").Text())
-		title := titleReplacer.Replace(s.Find(".event-name").Text())
-		spot := spotReplacer.Replace(s.Find(".event-spotname").Text())
+		date := characterShowDateReplacer.Replace(s.Find(".event-date").Text())
+		title := characterShowTitleReplacer.Replace(s.Find(".event-name").Text())
+		spot := characterShowSpotReplacer.Replace(s.Find(".event-spotname").Text())
 		link := "http://charactershow.jp/#" + pref
 		sha := sha256.New()
 		fmt.Fprint(sha, date, title, spot)

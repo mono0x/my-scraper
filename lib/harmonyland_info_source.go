@@ -22,6 +22,10 @@ const (
 type HarmonylandInfoSource struct {
 }
 
+var (
+	harmonylandInfoTitleReplacer = strings.NewReplacer("\n", " ")
+)
+
 func NewHarmonylandInfoSource() *HarmonylandInfoSource {
 	return &HarmonylandInfoSource{}
 }
@@ -48,8 +52,6 @@ func (s *HarmonylandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed,
 func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	baseUrl, _ := url.Parse(HarmonylandInfoUrl)
 
-	titleReplacer := strings.NewReplacer("\n", " ")
-
 	var items []*feeds.Item
 	doc.Find("#pickup, #cp").Each(func(_ int, s *goquery.Selection) {
 		s.Find("dd .pick_up").Each(func(_ int, s *goquery.Selection) {
@@ -66,7 +68,7 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 			resolvedHref := baseUrl.ResolveReference(hrefUrl).String()
 
-			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
+			title := harmonylandInfoTitleReplacer.Replace(strings.TrimSpace(s.Text()))
 
 			sha := sha256.New()
 			fmt.Fprint(sha, title, resolvedHref)
