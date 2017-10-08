@@ -10,7 +10,7 @@ import (
 )
 
 func TestFukokuLifeEventSource(t *testing.T) {
-	f, err := os.Open("data/act.fukoku-life.co.jp/event/index.php")
+	f, err := os.Open("testdata/act.fukoku-life.co.jp/event/index.php")
 	if err != nil {
 		t.Fatal(err)
 	}

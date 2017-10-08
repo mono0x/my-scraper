@@ -11,7 +11,7 @@ import (
 )
 
 func TestTwitterSource(t *testing.T) {
-	jsonData, err := ioutil.ReadFile("data/api.twitter.com/1.1/statuses/user_timeline.json")
+	jsonData, err := ioutil.ReadFile("testdata/api.twitter.com/1.1/statuses/user_timeline.json")
 	if err != nil {
 		t.Fatal(err)
 	}

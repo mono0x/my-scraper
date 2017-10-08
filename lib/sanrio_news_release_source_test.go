@@ -10,7 +10,7 @@ import (
 )
 
 func TestSanrioNewsReleaseSource(t *testing.T) {
-	f, err := os.Open("data/www.sanrio.co.jp/corporate/release/index.html")
+	f, err := os.Open("testdata/www.sanrio.co.jp/corporate/release/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 func TestSeibuenEventSource(t *testing.T) {
-	f, err := os.Open("data/www.seibuen-yuuenchi.jp/event/index.html")
+	f, err := os.Open("testdata/www.seibuen-yuuenchi.jp/event/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}

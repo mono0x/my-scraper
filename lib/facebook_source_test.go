@@ -9,7 +9,7 @@ import (
 )
 
 func TestFacebookSource(t *testing.T) {
-	jsonData, err := ioutil.ReadFile("data/graph.facebook.com/v2.6/mucchan.musao/posts")
+	jsonData, err := ioutil.ReadFile("testdata/graph.facebook.com/v2.6/mucchan.musao/posts")
 	if err != nil {
 		t.Fatal(err)
 	}

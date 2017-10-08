@@ -8,7 +8,7 @@ import (
 )
 
 func TestHarmonylandInfoSource(t *testing.T) {
-	f, err := os.Open("data/www.harmonyland.jp/welcome.html")
+	f, err := os.Open("testdata/www.harmonyland.jp/welcome.html")
 	if err != nil {
 		t.Fatal(err)
 	}

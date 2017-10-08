@@ -9,7 +9,7 @@ import (
 )
 
 func TestValuePressSource(t *testing.T) {
-	f, err := os.Open("data/www.value-press.com/search")
+	f, err := os.Open("testdata/www.value-press.com/search")
 	if err != nil {
 		t.Fatal(err)
 	}

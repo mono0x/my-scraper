@@ -9,7 +9,7 @@ import (
 )
 
 func TestCharacterShowSource(t *testing.T) {
-	f, err := os.Open("data/charactershow.jp/index.html")
+	f, err := os.Open("testdata/charactershow.jp/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}

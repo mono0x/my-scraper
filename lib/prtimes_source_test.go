@@ -9,7 +9,7 @@ import (
 )
 
 func TestPRTimesSource(t *testing.T) {
-	f, err := os.Open("data/prtimes.jp/main/action.php")
+	f, err := os.Open("testdata/prtimes.jp/main/action.php")
 	if err != nil {
 		t.Fatal(err)
 	}

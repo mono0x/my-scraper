@@ -10,7 +10,7 @@ import (
 )
 
 func TestGoogleCalendarSource(t *testing.T) {
-	jsonData, err := ioutil.ReadFile("data/sanrio_events_calendar.json")
+	jsonData, err := ioutil.ReadFile("testdata/sanrio_events_calendar.json")
 	if err != nil {
 		t.Fatal(err)
 	}

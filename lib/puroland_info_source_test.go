@@ -8,7 +8,7 @@ import (
 )
 
 func TestPurolandInfoSource(t *testing.T) {
-	f, err := os.Open("data/www.puroland.jp/api/live/get_information/index.json")
+	f, err := os.Open("testdata/www.puroland.jp/api/live/get_information/index.json")
 	if err != nil {
 		t.Fatal(err)
 	}

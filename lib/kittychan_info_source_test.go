@@ -9,7 +9,7 @@ import (
 )
 
 func TestKittychanInfoSource(t *testing.T) {
-	f, err := os.Open("data/www.kittychan.info/information.html")
+	f, err := os.Open("testdata/www.kittychan.info/information.html")
 	if err != nil {
 		t.Fatal(err)
 	}
