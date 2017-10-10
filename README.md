@@ -7,12 +7,12 @@
 Either [Server::Starter](https://metacpan.org/pod/Server::Starter) or [go-server-starter](https://github.com/lestrrat/go-server-starter) is required to run this application.
 
 ```sh
-# Install glide
-brew install glide
+# Install dep
+go get github.com/golang/dep/cmd/dep
 # Install go-server-starter
 go get github.com/lestrrat/go-server-starter/cmd/start_server
 # Install dependencies
-glide install
+dep ensure
 # Build the application
 go build
 # Start the application
