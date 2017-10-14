@@ -4,12 +4,16 @@ go:
 - 1.9.1
 before_install:
 - go get github.com/golang/dep/cmd/dep
+- go get honnef.co/go/tools/cmd/gosimple
 - go get honnef.co/go/tools/cmd/staticcheck
+- go get honnef.co/go/tools/cmd/unused
 install:
 - dep ensure
 script:
 - go vet ./...
+- gosimple ./...
 - staticcheck ./...
+- unused ./...
 - go test -v ./...
 notifications:
   slack:
