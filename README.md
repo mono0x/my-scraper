@@ -1,6 +1,7 @@
 # my-scraper
 
 [![Build Status](https://travis-ci.org/mono0x/my-scraper.svg)](https://travis-ci.org/mono0x/my-scraper)
+[![Coverage Status](https://coveralls.io/repos/github/mono0x/my-scraper/badge.svg)](https://coveralls.io/github/mono0x/my-scraper)
 
 `my-scraper` is an atom feed generator for my favorite websites.
 
