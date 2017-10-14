@@ -162,10 +162,7 @@ func run() error {
 	for {
 		s := <-signalChan
 		if s == syscall.SIGTERM {
-			if err := server.Shutdown(context.Background()); err != nil {
-				return err
-			}
-			return nil
+			return server.Shutdown(context.Background())
 		}
 	}
 }
