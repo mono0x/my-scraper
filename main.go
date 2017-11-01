@@ -70,6 +70,7 @@ func run() error {
 		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
 		{"/seibuen-event", scraper.NewSeibuenEventSource()},
 		{"/value-press-sanrio", scraper.NewValuePressSource()},
+		{"/yuyakekoyake-news", scraper.NewYuyakekoyakeNewsSource()},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
