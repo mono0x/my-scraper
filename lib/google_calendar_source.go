@@ -81,6 +81,13 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, error) {
 	items := make([]*feeds.Item, 0, len(events.Items))
 	for _, event := range events.Items {
+		if event.Visibility == "private" {
+			continue
+		}
+		if event.Status == "cancelled" {
+			continue
+		}
+
 		created, err := time.Parse(time.RFC3339, event.Created)
 		if err != nil {
 			return nil, err
