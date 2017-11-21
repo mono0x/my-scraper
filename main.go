@@ -18,6 +18,7 @@ import (
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
+	w.Header().Set("Cache-Control", "public, max-age=3600")
 	if err := feed.WriteAtom(w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
