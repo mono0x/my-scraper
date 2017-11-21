@@ -17,12 +17,12 @@ import (
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
+	w.Header().Set("Content-Type", "application/atom+xml")
 	if err := feed.WriteAtom(w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "application/atom+xml")
 }
 
 func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Request) {
