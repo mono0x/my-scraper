@@ -153,7 +153,7 @@ func run() error {
 	server := http.Server{Handler: mux}
 
 	go func() {
-		if err := server.Serve(l); err != nil {
+		if err := server.Serve(l); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
 	}()
