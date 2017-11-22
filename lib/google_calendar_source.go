@@ -2,7 +2,6 @@ package scraper
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"html"
 	"io/ioutil"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
 )
@@ -43,33 +43,33 @@ func (s *GoogleCalendarSource) Scrape() (*feeds.Feed, error) {
 func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 	json, err := ioutil.ReadFile("google_client_credentials.json")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	config, err := google.JWTConfigFromJSON(json, calendar.CalendarReadonlyScope)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	client := config.Client(context.Background())
 
 	service, err := calendar.New(client)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
 	events, err := service.Events.List(s.calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	items := events.Items
 	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
 		events, err := service.Events.List(s.calendarId).PageToken(pageToken).Do()
 		if err != nil {
-			return nil, err
+			return nil, errors.WithStack(err)
 		}
 		items = append(items, events.Items...)
 		pageToken = events.NextPageToken
@@ -90,11 +90,11 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 
 		created, err := time.Parse(time.RFC3339, event.Created)
 		if err != nil {
-			return nil, err
+			return nil, errors.WithStack(err)
 		}
 		updated, err := time.Parse(time.RFC3339, event.Updated)
 		if err != nil {
-			return nil, err
+			return nil, errors.WithStack(err)
 		}
 
 		var duration string
@@ -103,19 +103,19 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 		case event.Start.Date != "" && event.End.Date != "":
 			startLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			start, err := time.ParseInLocation("2006-01-02", event.Start.Date, startLoc)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			endLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			end, err := time.ParseInLocation("2006-01-02", event.End.Date, endLoc)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 
 			if start.Format("2006-01-02") == end.Format("2006-01-02") {
@@ -127,19 +127,19 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 		case event.Start.DateTime != "" && event.End.DateTime != "":
 			startLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			start, err := time.ParseInLocation(time.RFC3339, event.Start.DateTime, startLoc)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			endLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 			end, err := time.ParseInLocation(time.RFC3339, event.End.DateTime, endLoc)
 			if err != nil {
-				return nil, err
+				return nil, errors.WithStack(err)
 			}
 
 			if start.Format("2006-01-02") == end.Format("2006-01-02") {
@@ -172,7 +172,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 
 	updated, err := time.Parse(time.RFC3339, events.Updated)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	feed := &feeds.Feed{

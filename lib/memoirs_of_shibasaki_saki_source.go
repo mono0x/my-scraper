@@ -10,6 +10,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
 )
@@ -32,7 +33,7 @@ func NewMemoirsOfShibasakiSakiSource() *MemoirsOfShibasakiSakiSource {
 func (s *MemoirsOfShibasakiSakiSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(memoirsOfShibasakiSakiURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -43,7 +44,7 @@ func (s *MemoirsOfShibasakiSakiSource) ScrapeFromReader(reader io.Reader) (*feed
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

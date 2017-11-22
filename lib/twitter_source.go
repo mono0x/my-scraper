@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 	"os"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 type TwitterSource struct {
@@ -46,7 +46,7 @@ func (s *TwitterSource) Scrape() (*feeds.Feed, error) {
 	values.Set("count", "100")
 	timeline, err := api.GetUserTimeline(values)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.Render(timeline)
 }

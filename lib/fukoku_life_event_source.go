@@ -5,6 +5,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -21,7 +22,7 @@ func NewFukokuLifeEventSource() *FukokuLifeEventSource {
 func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
 	doc, err := goquery.NewDocument(fukokuLifeEventURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

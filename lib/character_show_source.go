@@ -7,6 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -29,7 +30,7 @@ func NewCharacterShowSource() *CharacterShowSource {
 func (s *CharacterShowSource) Scrape() (*feeds.Feed, error) {
 	doc, err := goquery.NewDocument(characterShowURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

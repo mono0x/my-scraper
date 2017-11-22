@@ -7,6 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -28,7 +29,7 @@ func NewSeibuenEventSource() *SeibuenEventSource {
 func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
 	doc, err := goquery.NewDocument(seibuenEventURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

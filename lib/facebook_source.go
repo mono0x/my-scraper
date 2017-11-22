@@ -2,7 +2,6 @@ package scraper
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -69,13 +69,13 @@ func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
 
 	resp, err := http.Get(facebookAPIEndpoint + s.userId + "/posts?" + values.Encode())
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer resp.Body.Close()
 
 	jsonData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	var posts FacebookPosts
@@ -94,7 +94,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 	for _, post := range posts.Data {
 		created, err := time.Parse("2006-01-02T15:04:05-0700", post.CreatedTime)
 		if err != nil {
-			return nil, err
+			return nil, errors.WithStack(err)
 		}
 
 		var title, description string

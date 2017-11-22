@@ -37,6 +37,9 @@
   name = "github.com/lestrrat/go-server-starter"
 
 [[constraint]]
+  name = "github.com/pkg/errors"
+
+[[constraint]]
   name = "github.com/stretchr/testify"
 
 [[constraint]]

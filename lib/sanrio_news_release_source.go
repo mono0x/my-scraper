@@ -7,6 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -23,13 +24,13 @@ func NewSanrioNewsReleaseSource() *SanrioNewsReleaseSource {
 func (s *SanrioNewsReleaseSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(sanrioNewsReleaseURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -39,7 +40,7 @@ func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*fe
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	doc.Find(".news_release_list dl").Each(func(_ int, s *goquery.Selection) {

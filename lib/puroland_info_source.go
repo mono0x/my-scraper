@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -42,7 +43,7 @@ func NewPurolandInfoSource() *PurolandInfoSource {
 func (s *PurolandInfoSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(purolandInfoAPIEndpoint)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -52,12 +53,12 @@ func (s *PurolandInfoSource) Scrape() (*feeds.Feed, error) {
 func (s *PurolandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	jsonData, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	var info information
 	if err := json.Unmarshal(jsonData, &info); err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	items := make([]*feeds.Item, 0, info.Count)

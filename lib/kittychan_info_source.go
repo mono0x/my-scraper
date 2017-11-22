@@ -12,6 +12,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -37,7 +38,7 @@ func NewKittychanInfoSource() *KittychanInfoSource {
 func (s *KittychanInfoSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(kittychanInfoURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -48,7 +49,7 @@ func (s *KittychanInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, e
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -64,7 +65,7 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	var items []*feeds.Item

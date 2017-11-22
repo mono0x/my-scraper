@@ -9,6 +9,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -25,7 +26,7 @@ func NewPRTimesSource() *PRTimesSource {
 func (s *PRTimesSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(prTimesURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -35,7 +36,7 @@ func (s *PRTimesSource) Scrape() (*feeds.Feed, error) {
 func (s *PRTimesSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

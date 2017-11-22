@@ -8,6 +8,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -24,7 +25,7 @@ func NewValuePressSource() *ValuePressSource {
 func (s *ValuePressSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(valuePressURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -34,7 +35,7 @@ func (s *ValuePressSource) Scrape() (*feeds.Feed, error) {
 func (s *ValuePressSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -42,7 +43,7 @@ func (s *ValuePressSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, erro
 func (s *ValuePressSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	var items []*feeds.Item

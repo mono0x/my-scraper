@@ -13,6 +13,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -33,7 +34,7 @@ func NewHarmonylandInfoSource() *HarmonylandInfoSource {
 func (s *HarmonylandInfoSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get(harmonylandInfoURL)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -44,7 +45,7 @@ func (s *HarmonylandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed,
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return s.ScrapeFromDocument(doc)
 }

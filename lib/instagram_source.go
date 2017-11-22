@@ -2,7 +2,6 @@ package scraper
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"html"
 	"io"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
+	"github.com/pkg/errors"
 )
 
 type InstagramSource struct {
@@ -27,7 +27,7 @@ func NewInstagramSource(userId string) *InstagramSource {
 func (s *InstagramSource) Scrape() (*feeds.Feed, error) {
 	res, err := http.Get("https://www.instagram.com/" + s.userId)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
@@ -69,7 +69,7 @@ var emojiRe = regexp.MustCompile(`[^\x{0000}-\x{ffff}]+`)
 func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	src, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	sharedDataRe := sharedDataRe.Copy()
@@ -80,7 +80,7 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 
 	var data instagramData
 	if err := json.Unmarshal(submatches[1], &data); err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	if len(data.EntryData.ProfilePage) == 0 {
@@ -91,7 +91,7 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 
 	loc, err := time.LoadLocation("UTC")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	items := make([]*feeds.Item, 0, len(user.Media.Nodes))

@@ -15,6 +15,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
+	"github.com/pkg/errors"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
@@ -31,7 +32,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Println(err)
+			log.Printf("%+v\n", err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
@@ -40,10 +41,9 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 }
 
 func run() error {
-
 	listeners, err := listener.ListenAll()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	var l net.Listener
@@ -52,7 +52,7 @@ func run() error {
 	} else {
 		l, err = net.Listen("tcp", ":13000")
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 	}
 
@@ -88,7 +88,7 @@ func run() error {
 		source := scraper.NewFacebookSource(id)
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Println(err)
+			log.Printf("%+v\n", err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
@@ -105,7 +105,7 @@ func run() error {
 		source := scraper.NewGoogleCalendarSource(id)
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Println(err)
+			log.Printf("%+v\n", err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
@@ -122,7 +122,7 @@ func run() error {
 		source := scraper.NewInstagramSource(id)
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Println(err)
+			log.Printf("%+v\n", err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
@@ -144,7 +144,7 @@ func run() error {
 		source := scraper.NewTwitterSource(id)
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Println(err)
+			log.Printf("%+v\n", err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
@@ -178,6 +178,6 @@ func main() {
 	_ = godotenv.Load()
 
 	if err := run(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("%+v\n", err)
 	}
 }
