@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/gorilla/feeds"
 	"github.com/joho/godotenv"
@@ -164,7 +165,9 @@ func run() error {
 	for {
 		s := <-signalChan
 		if s == syscall.SIGTERM {
-			return server.Shutdown(context.Background())
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			return server.Shutdown(ctx)
 		}
 	}
 }
