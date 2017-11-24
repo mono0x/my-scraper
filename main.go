@@ -86,13 +86,7 @@ func run() error {
 			return
 		}
 		source := scraper.NewFacebookSource(id)
-		feed, err := source.Scrape()
-		if err != nil {
-			log.Printf("%+v\n", err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		renderFeed(w, feed)
+		sourceRenderer(source)(w, r)
 	})
 
 	mux.HandleFunc("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
@@ -103,13 +97,7 @@ func run() error {
 			return
 		}
 		source := scraper.NewGoogleCalendarSource(id)
-		feed, err := source.Scrape()
-		if err != nil {
-			log.Printf("%+v\n", err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		renderFeed(w, feed)
+		sourceRenderer(source)(w, r)
 	})
 
 	mux.HandleFunc("/instagram", func(w http.ResponseWriter, r *http.Request) {
@@ -120,13 +108,7 @@ func run() error {
 			return
 		}
 		source := scraper.NewInstagramSource(id)
-		feed, err := source.Scrape()
-		if err != nil {
-			log.Printf("%+v\n", err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		renderFeed(w, feed)
+		sourceRenderer(source)(w, r)
 	})
 
 	mux.HandleFunc("/twitter", func(w http.ResponseWriter, r *http.Request) {
@@ -142,13 +124,7 @@ func run() error {
 			return
 		}
 		source := scraper.NewTwitterSource(id)
-		feed, err := source.Scrape()
-		if err != nil {
-			log.Printf("%+v\n", err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		renderFeed(w, feed)
+		sourceRenderer(source)(w, r)
 	})
 
 	server := http.Server{Handler: mux}
