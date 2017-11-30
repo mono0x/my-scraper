@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -97,11 +98,22 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 	items := make([]*feeds.Item, 0, len(user.Media.Nodes))
 	for _, node := range user.Media.Nodes {
 		caption := emojiRe.ReplaceAllString(node.Caption, "")
+		lines := strings.Split(caption, "\n")
+		if len(lines) == 0 {
+			continue
+		}
+
+		title := lines[0]
+
+		escapedLines := make([]string, 0, len(lines))
+		for _, line := range lines {
+			escapedLines = append(escapedLines, html.EscapeString(line))
+		}
 		items = append(items, &feeds.Item{
-			Title:       caption,
+			Title:       title,
 			Created:     time.Unix(node.Date, 0).In(loc),
 			Link:        &feeds.Link{Href: fmt.Sprintf("http://www.instagram.com/p/%s/", node.Code)},
-			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", html.EscapeString(caption), node.DisplaySrc),
+			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", strings.Join(escapedLines, "<br />"), node.DisplaySrc),
 		})
 	}
 
