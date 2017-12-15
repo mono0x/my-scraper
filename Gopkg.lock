@@ -3,14 +3,15 @@
 
 [[projects]]
   name = "cloud.google.com/go"
-  packages = ["compute/metadata","internal"]
-  revision = "fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f"
-  version = "v0.2.0"
+  packages = ["compute/metadata"]
+  revision = "050b16d2314d5fc3d4c9a51e4cd5c7468e77f162"
+  version = "v0.17.0"
 
 [[projects]]
   name = "github.com/ChimeraCoder/anaconda"
   packages = ["."]
-  revision = "91bfbf5de08def2e8b5480b52cae811d2bde3af9"
+  revision = "0cb3e4c3ff8c6df5c73d5058c64e9c4eb6299c4b"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -25,9 +26,10 @@
   version = "v1.1.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/andybalholm/cascadia"
   packages = ["."]
-  revision = "3ad29d1ad1c4f2023e355603324348cf1f4b2d48"
+  revision = "349dd0209470eabd9514242c688c403c0926d266"
 
 [[projects]]
   branch = "master"
@@ -38,12 +40,14 @@
 [[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
-  revision = "6d212800a42e8ab5c146b8ace3490ee17e5225f9"
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/dustin/go-jsonpointer"
   packages = ["."]
-  revision = "2efc9fef1d9421a8d252a32e20beb10cecd2bbca"
+  revision = "ba0abeacc3dcca5b9b20f31509c46794edbc9965"
 
 [[projects]]
   branch = "master"
@@ -52,24 +56,28 @@
   revision = "2e71ec9dd5adce3b168cd0dbde03b5cc04951c30"
 
 [[projects]]
+  branch = "master"
   name = "github.com/garyburd/go-oauth"
   packages = ["oauth"]
-  revision = "719b069913e1151a73ea30d2ea4f90deda3ce234"
+  revision = "4cff9ef7b7003713efa191899dbaab8fa75e3e73"
 
 [[projects]]
+  branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
-  revision = "7cc19b78d562895b13596ddce7aafb59dd789318"
+  revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
 
 [[projects]]
   name = "github.com/gorilla/feeds"
   packages = ["."]
-  revision = "441264de03a8117ed530ae8e049d8f601a33a099"
+  revision = "4b936b5221c53c99fcd4b15ac0b8c38ff490ab89"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/joho/godotenv"
   packages = ["."]
-  revision = "4ed13390c0acd2ff4e371e64d8b97c8954138243"
+  revision = "a79fa1e548e2c689c241d10173efd51e5d689d5b"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/lestrrat/go-server-starter"
@@ -86,7 +94,8 @@
 [[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
-  revision = "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/stretchr/testify"
@@ -95,29 +104,34 @@
   version = "v1.1.4"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = ["context","context/ctxhttp","html","html/atom"]
-  revision = "5916dcb167ed985a5b9e6871fbfd74848a4c170b"
+  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/oauth2"
   packages = [".","google","internal","jws","jwt"]
-  revision = "3c3a985cb79f52a3190fbc056984415ca6763d01"
+  revision = "dfbc86644130ce8e95021c2c5b424bf5d76274a7"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/text"
   packages = ["encoding","encoding/internal","encoding/internal/identifier","encoding/japanese","internal/gen","transform","unicode/cldr"]
-  revision = "f773ec03ce334298742df7f3108fc0d402646d22"
+  revision = "73f72487b7d8a81970fbf571cd9b660d3d5e604c"
 
 [[projects]]
+  branch = "master"
   name = "google.golang.org/api"
   packages = ["calendar/v3","gensupport","googleapi","googleapi/internal/uritemplates"]
-  revision = "7059a7f3d456870ff1e8424a6b1f62abe5f95f36"
+  revision = "f4694fe510ef1f58a08157aa15e795ffea4d4766"
 
 [[projects]]
   name = "google.golang.org/appengine"
   packages = [".","internal","internal/app_identity","internal/base","internal/datastore","internal/log","internal/modules","internal/remote_api","internal/urlfetch","urlfetch"]
-  revision = "e234e71924d4aa52444bc76f2f831f13fa1eca60"
+  revision = "150dc57a1b433e64154302bdc40b6bb8aefa313a"
+  version = "v1.0.0"
 
 [solve-meta]
   analyzer-name = "dep"
