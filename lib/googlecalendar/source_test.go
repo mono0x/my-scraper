@@ -1,4 +1,4 @@
-package scraper
+package googlecalendar
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-func TestGoogleCalendarSource(t *testing.T) {
+func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/sanrio_events_calendar.json")
 	if err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func TestGoogleCalendarSource(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewGoogleCalendarSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
+	source := NewSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
 	feed, err := source.Render(&events)
 	if err != nil {
 		t.Fatal(err)

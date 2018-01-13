@@ -1,4 +1,4 @@
-package scraper
+package googlecalendar
 
 import (
 	"context"
@@ -23,10 +23,10 @@ type GoogleCalendarSource struct {
 }
 
 var (
-	googleCalendarDescriptionReplacer = strings.NewReplacer("\n", "<br />")
+	descriptionReplacer = strings.NewReplacer("\n", "<br />")
 )
 
-func NewGoogleCalendarSource(calendarId string) *GoogleCalendarSource {
+func NewSource(calendarId string) *GoogleCalendarSource {
 	return &GoogleCalendarSource{
 		calendarId: calendarId,
 	}
@@ -157,7 +157,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			description += fmt.Sprintf("Location: %s<br />", html.EscapeString(event.Location))
 		}
 		description += fmt.Sprintf("Duration: %s<br /><br />", html.EscapeString(duration))
-		description += googleCalendarDescriptionReplacer.Replace(html.EscapeString(event.Description))
+		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
 
 		items = append(items, &feeds.Item{
 			Id:          event.Etag,
