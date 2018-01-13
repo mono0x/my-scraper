@@ -1,4 +1,4 @@
-package scraper
+package instagram
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ type InstagramSource struct {
 	userId string
 }
 
-func NewInstagramSource(userId string) *InstagramSource {
+func NewSource(userId string) *InstagramSource {
 	return &InstagramSource{
 		userId: userId,
 	}

@@ -1,4 +1,4 @@
-package scraper
+package instagram
 
 import (
 	"os"
@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestInstagramSource(t *testing.T) {
+func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/www.instagram.com/fukkachan628/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer f.Close()
 
-	source := NewInstagramSource("fukkachan628")
+	source := NewSource("fukkachan628")
 	feed, err := source.ScrapeFromReader(f)
 	if err != nil {
 		t.Fatal(err)
