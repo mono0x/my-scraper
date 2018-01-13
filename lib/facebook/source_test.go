@@ -1,4 +1,4 @@
-package scraper
+package facebook
 
 import (
 	"encoding/json"
@@ -8,18 +8,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFacebookSource(t *testing.T) {
+func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/graph.facebook.com/v2.6/mucchan.musao/posts")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var posts FacebookPosts
+	var posts Posts
 	if err := json.Unmarshal(jsonData, &posts); err != nil {
 		t.Fatal(err)
 	}
 
-	source := NewFacebookSource("mucchan.musao")
+	source := NewSource("mucchan.musao")
 	feed, err := source.Render(&posts)
 	if err != nil {
 		t.Fatal(err)

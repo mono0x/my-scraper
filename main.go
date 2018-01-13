@@ -15,6 +15,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib/facebook"
 	"github.com/pkg/errors"
 )
 
@@ -85,7 +86,7 @@ func run() error {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := scraper.NewFacebookSource(id)
+		source := facebook.NewSource(id)
 		sourceRenderer(source)(w, r)
 	})
 

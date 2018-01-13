@@ -1,4 +1,4 @@
-package scraper
+package facebook
 
 import (
 	"encoding/json"
@@ -16,45 +16,45 @@ import (
 )
 
 const (
-	facebookServiceURL  = "https://www.facebook.com/"
-	facebookAPIEndpoint = "https://graph.facebook.com/v2.6/"
+	ServiceURL  = "https://www.facebook.com/"
+	APIEndpoint = "https://graph.facebook.com/v2.6/"
 )
 
-type FacebookPosts struct {
-	Data []*FacebookPost `json:"data"`
+type Posts struct {
+	Data []*Post `json:"data"`
 }
 
 // https://developers.facebook.com/docs/graph-api/reference/v2.6/post
-type FacebookPost struct {
-	Id          string           `json:"id"`
-	CreatedTime string           `json:"created_time"`
-	From        *FacebookProfile `json:"from"`
-	Link        string           `json:"link"`
-	Message     string           `json:"message"`
-	Picture     string           `json:"picture"`
+type Post struct {
+	Id          string   `json:"id"`
+	CreatedTime string   `json:"created_time"`
+	From        *Profile `json:"from"`
+	Link        string   `json:"link"`
+	Message     string   `json:"message"`
+	Picture     string   `json:"picture"`
 }
 
-type FacebookProfile struct {
+type Profile struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
-type FacebookSource struct {
+type Source struct {
 	userId string
 }
 
-func NewFacebookSource(userId string) *FacebookSource {
-	return &FacebookSource{
+func NewSource(userId string) *Source {
+	return &Source{
 		userId: userId,
 	}
 }
 
 var (
-	photosURLRe             = regexp.MustCompile(`^` + regexp.QuoteMeta(facebookServiceURL) + `[^/]+/photos/`)
-	facebookMessageReplacer = strings.NewReplacer("\n", "<br />")
+	photosURLRe     = regexp.MustCompile(`^` + regexp.QuoteMeta(ServiceURL) + `[^/]+/photos/`)
+	messageReplacer = strings.NewReplacer("\n", "<br />")
 )
 
-func (s *FacebookSource) Scrape() (*feeds.Feed, error) {
+func (s *Source) Scrape() (*feeds.Feed, error) {
 	posts, err := s.Fetch()
 	if err != nil {
 		return nil, err
@@ -62,12 +62,12 @@ func (s *FacebookSource) Scrape() (*feeds.Feed, error) {
 	return s.Render(posts)
 }
 
-func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
+func (s *Source) Fetch() (*Posts, error) {
 	values := &url.Values{}
 	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
 	values.Set("fields", "created_time,from,link,message,picture")
 
-	resp, err := http.Get(facebookAPIEndpoint + s.userId + "/posts?" + values.Encode())
+	resp, err := http.Get(APIEndpoint + s.userId + "/posts?" + values.Encode())
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -78,14 +78,14 @@ func (s *FacebookSource) Fetch() (*FacebookPosts, error) {
 		return nil, errors.WithStack(err)
 	}
 
-	var posts FacebookPosts
+	var posts Posts
 	if err := json.Unmarshal(jsonData, &posts); err != nil {
 		return nil, err
 	}
 	return &posts, nil
 }
 
-func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
+func (s *Source) Render(posts *Posts) (*feeds.Feed, error) {
 	if len(posts.Data) == 0 {
 		return nil, errors.New("no posts found")
 	}
@@ -100,7 +100,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 		var title, description string
 		if index := strings.Index(post.Message, "\n"); index >= 0 {
 			title = post.Message[0:index]
-			description = facebookMessageReplacer.Replace(post.Message)
+			description = messageReplacer.Replace(post.Message)
 		} else {
 			title = post.Message
 			description = post.Message
@@ -113,7 +113,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 		photosURLRe := photosURLRe.Copy()
 		if photosURLRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
-				link = facebookServiceURL + s.userId + "/posts/" + parts[1] + "/"
+				link = ServiceURL + s.userId + "/posts/" + parts[1] + "/"
 			} else {
 				link = post.Link
 			}
@@ -133,7 +133,7 @@ func (s *FacebookSource) Render(posts *FacebookPosts) (*feeds.Feed, error) {
 
 	feed := &feeds.Feed{
 		Title: posts.Data[0].From.Name,
-		Link:  &feeds.Link{Href: facebookServiceURL + s.userId},
+		Link:  &feeds.Link{Href: ServiceURL + s.userId},
 		Items: items,
 	}
 	return feed, nil
