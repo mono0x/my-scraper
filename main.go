@@ -16,6 +16,7 @@ import (
 	"github.com/lestrrat/go-server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
 	"github.com/mono0x/my-scraper/lib/facebook"
+	"github.com/mono0x/my-scraper/lib/twitter"
 	"github.com/pkg/errors"
 )
 
@@ -124,7 +125,7 @@ func run() error {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := scraper.NewTwitterSource(id)
+		source := twitter.NewSource(id)
 		sourceRenderer(source)(w, r)
 	})
 

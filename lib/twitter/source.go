@@ -1,4 +1,4 @@
-package scraper
+package twitter
 
 import (
 	"fmt"
@@ -32,7 +32,7 @@ func getTwitterApi() *anaconda.TwitterApi {
 	return twitterApi
 }
 
-func NewTwitterSource(userId int64) *TwitterSource {
+func NewSource(userId int64) *TwitterSource {
 	return &TwitterSource{
 		userId: userId,
 	}

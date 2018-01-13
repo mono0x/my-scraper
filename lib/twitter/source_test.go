@@ -1,4 +1,4 @@
-package scraper
+package twitter
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTwitterSource(t *testing.T) {
+func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/api.twitter.com/1.1/statuses/user_timeline.json")
 	if err != nil {
 		t.Fatal(err)
@@ -21,7 +21,7 @@ func TestTwitterSource(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewTwitterSource(725638238291943424)
+	source := NewSource(725638238291943424)
 	feed, err := source.Render(timeline)
 	if err != nil {
 		t.Fatal(err)
