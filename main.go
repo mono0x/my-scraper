@@ -15,10 +15,21 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lestrrat/go-server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib/charactershow"
 	"github.com/mono0x/my-scraper/lib/facebook"
+	"github.com/mono0x/my-scraper/lib/fukokulifeevent"
 	"github.com/mono0x/my-scraper/lib/googlecalendar"
+	"github.com/mono0x/my-scraper/lib/harmonylandinfo"
 	"github.com/mono0x/my-scraper/lib/instagram"
+	"github.com/mono0x/my-scraper/lib/kittychaninfo"
+	"github.com/mono0x/my-scraper/lib/memoirsofshibasakisaki"
+	"github.com/mono0x/my-scraper/lib/prtimes"
+	"github.com/mono0x/my-scraper/lib/purolandinfo"
+	"github.com/mono0x/my-scraper/lib/sanrionewsrelease"
+	"github.com/mono0x/my-scraper/lib/seibuenevent"
 	"github.com/mono0x/my-scraper/lib/twitter"
+	"github.com/mono0x/my-scraper/lib/valuepress"
+	"github.com/mono0x/my-scraper/lib/yuyakekoyakenews"
 	"github.com/pkg/errors"
 )
 
@@ -66,17 +77,17 @@ func run() error {
 		Path   string
 		Source scraper.Source
 	}{
-		{"/character-show", scraper.NewCharacterShowSource()},
-		{"/fukoku-life", scraper.NewFukokuLifeEventSource()},
-		{"/harmonyland-info", scraper.NewHarmonylandInfoSource()},
-		{"/kittychan-info", scraper.NewKittychanInfoSource()},
-		{"/memoirs-of-shibasaki-saki", scraper.NewMemoirsOfShibasakiSakiSource()},
-		{"/prtimes-sanrio", scraper.NewPRTimesSource()},
-		{"/puroland-info", scraper.NewPurolandInfoSource()},
-		{"/sanrio-news-release", scraper.NewSanrioNewsReleaseSource()},
-		{"/seibuen-event", scraper.NewSeibuenEventSource()},
-		{"/value-press-sanrio", scraper.NewValuePressSource()},
-		{"/yuyakekoyake-news", scraper.NewYuyakekoyakeNewsSource()},
+		{"/character-show", charactershow.NewSource()},
+		{"/fukoku-life", fukokulifeevent.NewSource()},
+		{"/harmonyland-info", harmonylandinfo.NewSource()},
+		{"/kittychan-info", kittychaninfo.NewSource()},
+		{"/memoirs-of-shibasaki-saki", memoirsofshibasakisaki.NewSource()},
+		{"/prtimes-sanrio", prtimes.NewSource()},
+		{"/puroland-info", purolandinfo.NewSource()},
+		{"/sanrio-news-release", sanrionewsrelease.NewSource()},
+		{"/seibuen-event", seibuenevent.NewSource()},
+		{"/value-press-sanrio", valuepress.NewSource()},
+		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource()},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
