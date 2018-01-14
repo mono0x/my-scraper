@@ -10,7 +10,7 @@ import (
 )
 
 func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/www.seibuen-yuuenchi.jp/event/index.html")
+	f, err := os.Open("testdata/www.seibu-leisure.co.jp/event/index.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,5 +25,5 @@ func TestSource(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, 10, len(feed.Items))
+	assert.Equal(t, 1, len(feed.Items))
 }

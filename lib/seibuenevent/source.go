@@ -3,7 +3,6 @@ package seibuenevent
 import (
 	"crypto/sha256"
 	"fmt"
-	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
@@ -11,12 +10,7 @@ import (
 )
 
 const (
-	seibuenEventURL = "http://www.seibuen-yuuenchi.jp/event/index.html?category=e1"
-)
-
-var (
-	titleReplacer = strings.NewReplacer("『", "", "』", "")
-	textReplacer  = strings.NewReplacer("\n", "", "\t", "")
+	seibuenEventURL = "http://www.seibu-leisure.co.jp/event/index.html?category=e1"
 )
 
 type SeibuenEventSource struct {
@@ -42,24 +36,20 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 	doc.Find(".elem-section > div > div > div > div > div").Each(func(_ int, s *goquery.Selection) {
 		switch {
 		case s.HasClass("elem-heading-lv3"):
-			title = titleReplacer.Replace(s.Find("h3").Text())
+			title = s.Find("h3").Text()
 		case s.HasClass("elem-pic-block"):
-			properties := map[string]string{}
-			s.Find("table tr").Each(func(_ int, s *goquery.Selection) {
-				key := textReplacer.Replace(strings.TrimSpace(s.Find("th").Text()))
-				value := textReplacer.Replace((strings.TrimSpace(s.Find("td").Text())))
-				properties[key] = value
-			})
-			if len(properties) == 0 {
+			paragraph := s.Find(".elem-paragraph p")
+			if paragraph.Length() == 0 {
 				return
 			}
 
-			summary := textReplacer.Replace(s.Find(".txt-box > div > .txt-body > div > .elem-paragraph").Text())
-
-			description := fmt.Sprintf("%s<br /><br />日程: %s<br />時間: %s<br />場所: %s<br />その他: %s", summary, properties["日程"], properties["時間"], properties["場所"], properties["その他"])
+			description, err := paragraph.Html()
+			if err != nil {
+				return
+			}
 
 			sha := sha256.New()
-			fmt.Fprint(sha, title, properties["日程"])
+			fmt.Fprint(sha, title)
 
 			items = append(items, &feeds.Item{
 				Title:       title,
