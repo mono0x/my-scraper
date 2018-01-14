@@ -29,7 +29,6 @@ start_server --port=13000 -- ./my-scraper
 - Harmonyland <http://www.harmonyland.jp/welcome.html>
 - Instagram
 - Kittychan Info <http://www.kittychan.info/information.html>
-- Memoirs of Shibasaki Saki <http://shibasakisaki.web.fc2.com/>
 - PR TIMES (Sanrio) <http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1>
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>
 - Sanrio Puroland <http://www.puroland.jp/>

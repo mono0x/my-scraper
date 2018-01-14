@@ -22,7 +22,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/harmonylandinfo"
 	"github.com/mono0x/my-scraper/lib/instagram"
 	"github.com/mono0x/my-scraper/lib/kittychaninfo"
-	"github.com/mono0x/my-scraper/lib/memoirsofshibasakisaki"
 	"github.com/mono0x/my-scraper/lib/prtimes"
 	"github.com/mono0x/my-scraper/lib/purolandinfo"
 	"github.com/mono0x/my-scraper/lib/sanrionewsrelease"
@@ -81,7 +80,6 @@ func run() error {
 		{"/fukoku-life", fukokulifeevent.NewSource()},
 		{"/harmonyland-info", harmonylandinfo.NewSource()},
 		{"/kittychan-info", kittychaninfo.NewSource()},
-		{"/memoirs-of-shibasaki-saki", memoirsofshibasakisaki.NewSource()},
 		{"/prtimes-sanrio", prtimes.NewSource()},
 		{"/puroland-info", purolandinfo.NewSource()},
 		{"/sanrio-news-release", sanrionewsrelease.NewSource()},
