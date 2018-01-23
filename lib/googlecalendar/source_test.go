@@ -5,9 +5,12 @@ import (
 	"io/ioutil"
 	"testing"
 
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/api/calendar/v3"
 )
+
+var _ scraper.Source = (*GoogleCalendarSource)(nil)
 
 func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/sanrio_events_calendar.json")

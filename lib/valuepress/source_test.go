@@ -5,8 +5,11 @@ import (
 	"testing"
 	"time"
 
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
+
+var _ scraper.Source = (*ValuePressSource)(nil)
 
 func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/www.value-press.com/search")

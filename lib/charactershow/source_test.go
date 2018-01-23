@@ -5,8 +5,11 @@ import (
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
+
+var _ scraper.Source = (*CharacterShowSource)(nil)
 
 func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/charactershow.jp/index.html")
