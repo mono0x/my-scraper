@@ -23,30 +23,40 @@
 
 [[constraint]]
   name = "github.com/ChimeraCoder/anaconda"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/PuerkitoBio/goquery"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/gorilla/feeds"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/joho/godotenv"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/lestrrat/go-server-starter"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/pkg/errors"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/stretchr/testify"
+  branch = "master"
 
 [[constraint]]
   name = "golang.org/x/oauth2"
+  branch = "master"
 
 [[constraint]]
   name = "golang.org/x/text"
+  branch = "master"
 
 [[constraint]]
   name = "google.golang.org/api"
+  branch = "master"
