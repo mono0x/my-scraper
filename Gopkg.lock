@@ -8,10 +8,10 @@
   version = "v0.18.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/ChimeraCoder/anaconda"
   packages = ["."]
-  revision = "37d498d409d0ec1fbd0ffa155a4db612e2ce7f54"
+  revision = "9c68684170b980d5b4c2ed08fae9b530e659904d"
+  version = "v2.0.0"
 
 [[projects]]
   branch = "master"

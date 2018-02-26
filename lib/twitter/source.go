@@ -16,7 +16,6 @@ type TwitterSource struct {
 	userId int64
 }
 
-// https://github.com/ChimeraCoder/anaconda/issues/101
 var (
 	once       sync.Once
 	twitterApi *anaconda.TwitterApi
@@ -24,10 +23,11 @@ var (
 
 func getTwitterApi() *anaconda.TwitterApi {
 	once.Do(func() {
-		anaconda.SetConsumerKey(os.Getenv("TWITTER_CONSUMER_KEY"))
-		anaconda.SetConsumerSecret(os.Getenv("TWITTER_CONSUMER_SECRET"))
-		twitterApi = anaconda.NewTwitterApi(
-			os.Getenv("TWITTER_OAUTH_TOKEN"), os.Getenv("TWITTER_OAUTH_TOKEN_SECRET"))
+		twitterApi = anaconda.NewTwitterApiWithCredentials(
+			os.Getenv("TWITTER_OAUTH_TOKEN"),
+			os.Getenv("TWITTER_OAUTH_TOKEN_SECRET"),
+			os.Getenv("TWITTER_CONSUMER_KEY"),
+			os.Getenv("TWITTER_CONSUMER_SECRET"))
 	})
 	return twitterApi
 }
