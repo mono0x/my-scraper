@@ -81,9 +81,9 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/lestrrat/go-server-starter"
+  name = "github.com/lestrrat-go/server-starter"
   packages = ["listener"]
-  revision = "f9cb0b066498d26a90fd918fe265adbb0ea02bcf"
+  revision = "e24b30b99ae6ed143a7166ab4bd62b570af55822"
 
 [[projects]]
   branch = "master"
@@ -171,6 +171,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7ead88a318d7d45b2d508163d7dd440a0ff21a0450d71523196af509ab075967"
+  inputs-digest = "ea962eb0481c3ef5ebfe5aec665df694ef8f86363b70d9b8a7b1fa070b8ab547"
   solver-name = "gps-cdcl"
   solver-version = 1

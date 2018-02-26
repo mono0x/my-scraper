@@ -13,7 +13,7 @@ import (
 
 	"github.com/gorilla/feeds"
 	"github.com/joho/godotenv"
-	"github.com/lestrrat/go-server-starter/listener"
+	"github.com/lestrrat-go/server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
 	"github.com/mono0x/my-scraper/lib/charactershow"
 	"github.com/mono0x/my-scraper/lib/facebook"
