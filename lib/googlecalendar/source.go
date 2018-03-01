@@ -79,6 +79,11 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 }
 
 func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, error) {
+	loc, err := time.LoadLocation(events.TimeZone)
+	if err != nil {
+		return nil, err
+	}
+
 	items := make([]*feeds.Item, 0, len(events.Items))
 	for _, event := range events.Items {
 		if event.Visibility == "private" {
@@ -97,19 +102,33 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			return nil, errors.WithStack(err)
 		}
 
+		var startLoc *time.Location
+		if event.Start.TimeZone != "" {
+			var err error
+			startLoc, err = time.LoadLocation(event.Start.TimeZone)
+			if err != nil {
+				return nil, errors.WithStack(err)
+			}
+		} else {
+			startLoc = loc
+		}
+
+		var endLoc *time.Location
+		if event.End.TimeZone != "" {
+			var err error
+			endLoc, err = time.LoadLocation(event.End.TimeZone)
+			if err != nil {
+				return nil, errors.WithStack(err)
+			}
+		} else {
+			endLoc = loc
+		}
+
 		var duration string
 
 		switch {
 		case event.Start.Date != "" && event.End.Date != "":
-			startLoc, err := time.LoadLocation(event.Start.TimeZone)
-			if err != nil {
-				return nil, errors.WithStack(err)
-			}
 			start, err := time.ParseInLocation("2006-01-02", event.Start.Date, startLoc)
-			if err != nil {
-				return nil, errors.WithStack(err)
-			}
-			endLoc, err := time.LoadLocation(event.End.TimeZone)
 			if err != nil {
 				return nil, errors.WithStack(err)
 			}
@@ -125,15 +144,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			}
 
 		case event.Start.DateTime != "" && event.End.DateTime != "":
-			startLoc, err := time.LoadLocation(event.Start.TimeZone)
-			if err != nil {
-				return nil, errors.WithStack(err)
-			}
 			start, err := time.ParseInLocation(time.RFC3339, event.Start.DateTime, startLoc)
-			if err != nil {
-				return nil, errors.WithStack(err)
-			}
-			endLoc, err := time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
 				return nil, errors.WithStack(err)
 			}
