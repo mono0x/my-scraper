@@ -136,6 +136,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			if err != nil {
 				return nil, errors.WithStack(err)
 			}
+			end = end.AddDate(0, 0, -1)
 
 			if start.Format("2006-01-02") == end.Format("2006-01-02") {
 				duration = start.Format("2006-01-02 (Mon)")
