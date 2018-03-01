@@ -109,7 +109,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			if err != nil {
 				return nil, errors.WithStack(err)
 			}
-			endLoc, err := time.LoadLocation(event.Start.TimeZone)
+			endLoc, err := time.LoadLocation(event.End.TimeZone)
 			if err != nil {
 				return nil, errors.WithStack(err)
 			}
