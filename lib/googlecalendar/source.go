@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html"
 	"io/ioutil"
+	"net/url"
 	"strings"
 	"time"
 
@@ -102,6 +103,25 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			return nil, errors.WithStack(err)
 		}
 
+		var timeZone string
+		if event.Start.TimeZone != "" {
+			timeZone = event.Start.TimeZone
+		} else if events.TimeZone != "" {
+			timeZone = events.TimeZone
+		}
+
+		link := event.HtmlLink
+		if timeZone != "" {
+			u, err := url.Parse(link)
+			if err != nil {
+				return nil, errors.WithStack(err)
+			}
+			query := u.Query()
+			query.Set("ctz", timeZone)
+			u.RawQuery = query.Encode()
+			link = u.String()
+		}
+
 		var startLoc *time.Location
 		if event.Start.TimeZone != "" {
 			var err error
@@ -175,7 +195,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 			Id:          event.Etag,
 			Title:       event.Summary,
 			Description: description,
-			Link:        &feeds.Link{Href: event.HtmlLink},
+			Link:        &feeds.Link{Href: link},
 			Author:      &feeds.Author{Name: event.Creator.DisplayName, Email: event.Creator.Email},
 			Created:     created,
 			Updated:     updated,
