@@ -192,7 +192,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
 
 		items = append(items, &feeds.Item{
-			Id:          event.Etag,
+			Id:          event.Id,
 			Title:       event.Summary,
 			Description: description,
 			Link:        &feeds.Link{Href: link},
@@ -208,7 +208,6 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 	}
 
 	feed := &feeds.Feed{
-		Id:          events.Etag,
 		Title:       events.Summary,
 		Description: events.Description,
 		Link:        &feeds.Link{Href: prefix + s.calendarId},
