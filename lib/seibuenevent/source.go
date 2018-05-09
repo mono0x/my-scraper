@@ -3,6 +3,7 @@ package seibuenevent
 import (
 	"crypto/sha256"
 	"fmt"
+	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
@@ -21,7 +22,13 @@ func NewSource() *SeibuenEventSource {
 }
 
 func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(seibuenEventURL)
+	res, err := http.Get(seibuenEventURL)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	defer res.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

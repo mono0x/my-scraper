@@ -1,6 +1,7 @@
 package fukokulifeevent
 
 import (
+	"net/http"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
@@ -20,7 +21,13 @@ func NewSource() *FukokuLifeEventSource {
 }
 
 func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
-	doc, err := goquery.NewDocument(fukokuLifeEventURL)
+	res, err := http.Get(fukokuLifeEventURL)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	defer res.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
