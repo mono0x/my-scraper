@@ -15,7 +15,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lestrrat-go/server-starter/listener"
 	"github.com/mono0x/my-scraper/lib"
-	"github.com/mono0x/my-scraper/lib/charactershow"
 	"github.com/mono0x/my-scraper/lib/facebook"
 	"github.com/mono0x/my-scraper/lib/fukokulifeevent"
 	"github.com/mono0x/my-scraper/lib/googlecalendar"
@@ -76,7 +75,6 @@ func run() error {
 		Path   string
 		Source scraper.Source
 	}{
-		{"/character-show", charactershow.NewSource()},
 		{"/fukoku-life", fukokulifeevent.NewSource()},
 		{"/harmonyland-info", harmonylandinfo.NewSource()},
 		{"/kittychan-info", kittychaninfo.NewSource()},

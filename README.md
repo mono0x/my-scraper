@@ -22,7 +22,6 @@ start_server --port=13000 -- ./my-scraper
 
 ## Supported Websites
 
-- Character Show Fansite <http://charactershow.jp/>
 - Facebook
 - Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Google Calendar
