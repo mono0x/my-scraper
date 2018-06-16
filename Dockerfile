@@ -15,7 +15,7 @@ ADD . .
 RUN /go/bin/dep ensure && go build -tags netgo -installsuffix netgo -ldflags "-w -s -extldflags -static"
 
 FROM alpine:latest
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates tzdata
 
 COPY --from=builder /go/src/github.com/mono0x/my-scraper/my-scraper /app
 EXPOSE 8080
