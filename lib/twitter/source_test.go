@@ -7,11 +7,8 @@ import (
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
-
-var _ scraper.Source = (*TwitterSource)(nil)
 
 func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/api.twitter.com/1.1/statuses/user_timeline.json")

@@ -6,11 +6,8 @@ import (
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
-
-var _ scraper.Source = (*FukokuLifeEventSource)(nil)
 
 func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/act.fukoku-life.co.jp/event/index.php")

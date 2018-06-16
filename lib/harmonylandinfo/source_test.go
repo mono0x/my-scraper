@@ -4,11 +4,8 @@ import (
 	"os"
 	"testing"
 
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
-
-var _ scraper.Source = (*HarmonylandInfoSource)(nil)
 
 func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/www.harmonyland.jp/welcome.html")
