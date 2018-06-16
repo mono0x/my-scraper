@@ -18,7 +18,7 @@ import (
 
 func run() error {
 	listeners, err := listener.ListenAll()
-	if err != nil {
+	if err != nil && err != listener.ErrNoListeningTarget {
 		return errors.WithStack(err)
 	}
 
@@ -26,7 +26,7 @@ func run() error {
 	if len(listeners) > 0 {
 		l = listeners[0]
 	} else {
-		l, err = net.Listen("tcp", ":13000")
+		l, err = net.Listen("tcp", ":8080")
 		if err != nil {
 			return errors.WithStack(err)
 		}
