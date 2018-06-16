@@ -1,4 +1,4 @@
-package scraper
+package server
 
 import (
 	"log"
@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/mono0x/my-scraper/lib/facebook"
 	"github.com/mono0x/my-scraper/lib/fukokulifeevent"
 	"github.com/mono0x/my-scraper/lib/googlecalendar"
@@ -31,7 +32,7 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	}
 }
 
-func sourceRenderer(source Source) func(http.ResponseWriter, *http.Request) {
+func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
 		if err != nil {
@@ -48,7 +49,7 @@ func NewServeMux() *http.ServeMux {
 
 	entries := []struct {
 		Path   string
-		Source Source
+		Source scraper.Source
 	}{
 		{"/fukoku-life", fukokulifeevent.NewSource()},
 		{"/harmonyland-info", harmonylandinfo.NewSource()},

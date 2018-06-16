@@ -12,7 +12,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/lestrrat-go/server-starter/listener"
-	"github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib/server"
 	"github.com/pkg/errors"
 )
 
@@ -32,7 +32,7 @@ func run() error {
 		}
 	}
 
-	mux := scraper.NewServeMux()
+	mux := server.NewServeMux()
 	server := http.Server{Handler: mux}
 
 	go func() {

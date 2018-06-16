@@ -5,8 +5,11 @@ import (
 	"io/ioutil"
 	"testing"
 
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
+
+var _ scraper.Source = (*Source)(nil)
 
 func TestSource(t *testing.T) {
 	jsonData, err := ioutil.ReadFile("testdata/graph.facebook.com/v2.6/mucchan.musao/posts")

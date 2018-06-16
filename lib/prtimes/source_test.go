@@ -5,8 +5,11 @@ import (
 	"testing"
 	"time"
 
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
+
+var _ scraper.Source = (*PRTimesSource)(nil)
 
 func TestSource(t *testing.T) {
 	f, err := os.Open("testdata/prtimes.jp/main/action.php")
