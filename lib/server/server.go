@@ -40,6 +40,10 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
+		if len(feed.Items) == 0 {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
 		renderFeed(w, feed)
 	}
 }
