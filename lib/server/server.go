@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"reflect"
 	"strconv"
 
 	"github.com/gorilla/feeds"
@@ -36,11 +37,12 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 	return func(w http.ResponseWriter, r *http.Request) {
 		feed, err := source.Scrape()
 		if err != nil {
-			log.Printf("%+v\n", err)
+			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
 		if len(feed.Items) == 0 {
+			log.Printf("%v: not found\n", reflect.TypeOf(source))
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
