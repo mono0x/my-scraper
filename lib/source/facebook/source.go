@@ -1,6 +1,7 @@
 package facebook
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -8,8 +9,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
-	"encoding/json"
 
 	"github.com/gorilla/feeds"
 	"github.com/pkg/errors"
