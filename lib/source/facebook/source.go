@@ -1,15 +1,15 @@
 package facebook
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"regexp"
 	"strings"
 	"time"
+
+	"encoding/json"
 
 	"github.com/gorilla/feeds"
 	"github.com/pkg/errors"
@@ -73,13 +73,8 @@ func (s *Source) Fetch() (*Posts, error) {
 	}
 	defer resp.Body.Close()
 
-	jsonData, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
 	var posts Posts
-	if err := json.Unmarshal(jsonData, &posts); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&posts); err != nil {
 		return nil, err
 	}
 	return &posts, nil

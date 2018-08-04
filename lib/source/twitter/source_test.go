@@ -2,25 +2,25 @@ package twitter
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
 var _ scraper.Source = (*TwitterSource)(nil)
 
 func TestSource(t *testing.T) {
-	jsonData, err := ioutil.ReadFile("testdata/api.twitter.com/1.1/statuses/user_timeline.json")
+	file, err := os.Open("testdata/api.twitter.com/1.1/statuses/user_timeline.json")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	var timeline []anaconda.Tweet
-	if err := json.Unmarshal(jsonData, &timeline); err != nil {
+	if err := json.NewDecoder(file).Decode(&timeline); err != nil {
 		t.Fatal(err)
 	}
 

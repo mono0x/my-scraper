@@ -2,23 +2,23 @@ package facebook
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
 var _ scraper.Source = (*Source)(nil)
 
 func TestSource(t *testing.T) {
-	jsonData, err := ioutil.ReadFile("testdata/graph.facebook.com/v2.6/mucchan.musao/posts")
+	file, err := os.Open("testdata/graph.facebook.com/v2.6/mucchan.musao/posts")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	var posts Posts
-	if err := json.Unmarshal(jsonData, &posts); err != nil {
+	if err := json.NewDecoder(file).Decode(&posts); err != nil {
 		t.Fatal(err)
 	}
 

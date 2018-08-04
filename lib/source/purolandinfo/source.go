@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html"
 	"io"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/feeds"
@@ -51,13 +50,8 @@ func (s *PurolandInfoSource) Scrape() (*feeds.Feed, error) {
 }
 
 func (s *PurolandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
-	jsonData, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
 	var info information
-	if err := json.Unmarshal(jsonData, &info); err != nil {
+	if err := json.NewDecoder(reader).Decode(&info); err != nil {
 		return nil, errors.WithStack(err)
 	}
 
