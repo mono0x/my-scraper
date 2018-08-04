@@ -90,11 +90,6 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 
 	user := data.EntryData.ProfilePage[0].User
 
-	loc, err := time.LoadLocation("UTC")
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
 	items := make([]*feeds.Item, 0, len(user.Media.Nodes))
 	for _, node := range user.Media.Nodes {
 		caption := emojiRe.ReplaceAllString(node.Caption, "")
@@ -111,7 +106,7 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 		}
 		items = append(items, &feeds.Item{
 			Title:       title,
-			Created:     time.Unix(node.Date, 0).In(loc),
+			Created:     time.Unix(node.Date, 0).In(time.UTC),
 			Link:        &feeds.Link{Href: fmt.Sprintf("http://www.instagram.com/p/%s/", node.Code)},
 			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", strings.Join(escapedLines, "<br />"), node.DisplaySrc),
 		})
