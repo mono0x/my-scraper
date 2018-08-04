@@ -18,6 +18,7 @@ func TestSource(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer file.Close()
 
 	var timeline []anaconda.Tweet
 	if err := json.NewDecoder(file).Decode(&timeline); err != nil {

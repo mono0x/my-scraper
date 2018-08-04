@@ -16,6 +16,7 @@ func TestSource(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer file.Close()
 
 	var posts Posts
 	if err := json.NewDecoder(file).Decode(&posts); err != nil {

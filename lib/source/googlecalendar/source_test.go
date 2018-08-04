@@ -17,6 +17,7 @@ func TestSource(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer file.Close()
 
 	var events calendar.Events
 	if err := json.NewDecoder(file).Decode(&events); err != nil {
