@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:2b10b9a545074605403d32baf9dda24b7582976ba7e9b46c4c7b9da9edac03e7"
+  digest = "1:8b95956b70e181b19025c7ba3578fdfd8efbec4ce916490700488afb9218972c"
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
   pruneopts = ""
-  revision = "aad3f485ee528456e0768f20397b4d9dd941e755"
-  version = "v0.25.0"
+  revision = "64a2037ec6be8a4b0c1d1f706ed35b428b989239"
+  version = "v0.26.0"
 
 [[projects]]
   branch = "master"
@@ -139,7 +139,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:be23bbce7dc7ac277c5914a43e2dafe81b0f1feda1451334de6cc28b921a2ab2"
+  digest = "1:98219b20d296a0031fdb434d30ca6e109623a09530a76cf57e41c94bd1e391a0"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -148,7 +148,7 @@
     "html/atom",
   ]
   pruneopts = ""
-  revision = "49c15d80dfbc983ea25246ee959d970efe09ec09"
+  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
 
 [[projects]]
   branch = "master"
@@ -166,7 +166,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:571116322b26326fefd352f9f43c4ee6aaacbb7a3c15b949baf5f6a7687ca910"
+  digest = "1:81b646c1c57e4bc00252a9c6ae7bb5f121697275bf6bf1c59d358a81f9020a2d"
   name = "golang.org/x/text"
   packages = [
     "encoding",
@@ -178,11 +178,11 @@
     "unicode/cldr",
   ]
   pruneopts = ""
-  revision = "0605a8320aceb4207a5fb3521281e17ec2075476"
+  revision = "6e3c4e7365ddcc329f090f96e4348398f6310088"
 
 [[projects]]
   branch = "master"
-  digest = "1:4354c871666c5c8f5836ca767bbe09809aa05eadb5dfa6ee7332e39ce461e8b4"
+  digest = "1:d7f117233eb274f6ac01cdfe0a6c4ce2bc79ef4961854e8b6e9b0adee5d64b86"
   name = "google.golang.org/api"
   packages = [
     "calendar/v3",
@@ -191,7 +191,7 @@
     "googleapi/internal/uritemplates",
   ]
   pruneopts = ""
-  revision = "31ca0e01cd791f07750cb23fc99327721f753290"
+  revision = "0e8d13b5c025da6a7cf249bb854e5869921dd459"
 
 [[projects]]
   digest = "1:c1771ca6060335f9768dff6558108bc5ef6c58506821ad43377ee23ff059e472"
@@ -223,6 +223,7 @@
     "github.com/lestrrat-go/server-starter/listener",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
+    "golang.org/x/oauth2",
     "golang.org/x/oauth2/google",
     "golang.org/x/text/encoding/japanese",
     "golang.org/x/text/transform",
