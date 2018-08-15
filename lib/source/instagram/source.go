@@ -12,27 +12,38 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
-type InstagramSource struct {
-	userId string
+const (
+	baseURL = "https://www.instagram.com"
+)
+
+type source struct {
+	httpClient *http.Client
+	userID     string
+	baseURL    string // for testing
 }
 
-func NewSource(userId string) *InstagramSource {
-	return &InstagramSource{
-		userId: userId,
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client, userID string) *source {
+	return &source{
+		httpClient: c,
+		userID:     userID,
+		baseURL:    baseURL,
 	}
 }
 
-func (s *InstagramSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get("https://www.instagram.com/" + s.userId)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + "/" + s.userID)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
-	return s.ScrapeFromReader(res.Body)
+	return s.scrapeFromReader(res.Body)
 }
 
 var sharedDataRe = regexp.MustCompile(`window\._sharedData\s*=\s*({.+})[\s\n]*[;<]`)
@@ -67,7 +78,7 @@ type instagramData struct {
 
 var emojiRe = regexp.MustCompile(`[^\x{0000}-\x{ffff}]+`)
 
-func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	src, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -107,14 +118,14 @@ func (s *InstagramSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error
 		items = append(items, &feeds.Item{
 			Title:       title,
 			Created:     time.Unix(node.Date, 0).In(time.UTC),
-			Link:        &feeds.Link{Href: fmt.Sprintf("http://www.instagram.com/p/%s/", node.Code)},
+			Link:        &feeds.Link{Href: fmt.Sprintf("%s/p/%s/", baseURL, node.Code)},
 			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", strings.Join(escapedLines, "<br />"), node.DisplaySrc),
 		})
 	}
 
 	return &feeds.Feed{
 		Title:       user.FullName,
-		Link:        &feeds.Link{Href: fmt.Sprintf("https://www.instagram.com/%s/", user.UserName)},
+		Link:        &feeds.Link{Href: fmt.Sprintf("%s/%s/", baseURL, user.UserName)},
 		Description: user.Biography,
 		Items:       items,
 	}, nil

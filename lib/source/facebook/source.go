@@ -5,81 +5,85 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	ServiceURL  = "https://www.facebook.com/"
-	APIEndpoint = "https://graph.facebook.com/v2.6/"
+	serviceURL = "https://www.facebook.com/"
+	baseURL    = "https://graph.facebook.com"
 )
 
-type Posts struct {
-	Data []*Post `json:"data"`
+type posts struct {
+	// https://developers.facebook.com/docs/graph-api/reference/v2.6/post
+	Data []struct {
+		Id          string `json:"id"`
+		CreatedTime string `json:"created_time"`
+		From        struct {
+			Id   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"from"`
+		Link    string `json:"link"`
+		Message string `json:"message"`
+		Picture string `json:"picture"`
+	} `json:"data"`
 }
 
-// https://developers.facebook.com/docs/graph-api/reference/v2.6/post
-type Post struct {
-	Id          string   `json:"id"`
-	CreatedTime string   `json:"created_time"`
-	From        *Profile `json:"from"`
-	Link        string   `json:"link"`
-	Message     string   `json:"message"`
-	Picture     string   `json:"picture"`
+type source struct {
+	httpClient  *http.Client
+	accessToken string
+	userID      string
+	baseURL     string // for testing
 }
 
-type Profile struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
+var _ scraper.Source = (*source)(nil)
 
-type Source struct {
-	userId string
-}
-
-func NewSource(userId string) *Source {
-	return &Source{
-		userId: userId,
+func NewSource(c *http.Client, accessToken string, userID string) *source {
+	return &source{
+		httpClient:  c,
+		accessToken: accessToken,
+		userID:      userID,
+		baseURL:     baseURL,
 	}
 }
 
 var (
-	photosURLRe     = regexp.MustCompile(`^` + regexp.QuoteMeta(ServiceURL) + `[^/]+/photos/`)
+	photosURLRe     = regexp.MustCompile(`^` + regexp.QuoteMeta(serviceURL) + `[^/]+/photos/`)
 	messageReplacer = strings.NewReplacer("\n", "<br />")
 )
 
-func (s *Source) Scrape() (*feeds.Feed, error) {
-	posts, err := s.Fetch()
+func (s *source) Scrape() (*feeds.Feed, error) {
+	posts, err := s.fetch()
 	if err != nil {
 		return nil, err
 	}
-	return s.Render(posts)
+	return s.render(posts)
 }
 
-func (s *Source) Fetch() (*Posts, error) {
+func (s *source) fetch() (*posts, error) {
 	values := &url.Values{}
-	values.Set("access_token", os.Getenv("FACEBOOK_ACCESS_TOKEN"))
+	values.Set("access_token", s.accessToken)
 	values.Set("fields", "created_time,from,link,message,picture")
 
-	resp, err := http.Get(APIEndpoint + s.userId + "/posts?" + values.Encode())
+	resp, err := s.httpClient.Get(s.baseURL + "/v2.6/" + s.userID + "/posts?" + values.Encode())
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 	defer resp.Body.Close()
 
-	var posts Posts
+	var posts posts
 	if err := json.NewDecoder(resp.Body).Decode(&posts); err != nil {
 		return nil, err
 	}
 	return &posts, nil
 }
 
-func (s *Source) Render(posts *Posts) (*feeds.Feed, error) {
+func (s *source) render(posts *posts) (*feeds.Feed, error) {
 	if len(posts.Data) == 0 {
 		return nil, errors.New("no posts found")
 	}
@@ -107,7 +111,7 @@ func (s *Source) Render(posts *Posts) (*feeds.Feed, error) {
 		photosURLRe := photosURLRe.Copy()
 		if photosURLRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
-				link = ServiceURL + s.userId + "/posts/" + parts[1] + "/"
+				link = serviceURL + s.userID + "/posts/" + parts[1] + "/"
 			} else {
 				link = post.Link
 			}
@@ -127,7 +131,7 @@ func (s *Source) Render(posts *Posts) (*feeds.Feed, error) {
 
 	feed := &feeds.Feed{
 		Title: posts.Data[0].From.Name,
-		Link:  &feeds.Link{Href: ServiceURL + s.userId},
+		Link:  &feeds.Link{Href: serviceURL + s.userID},
 		Items: items,
 	}
 	return feed, nil

@@ -13,45 +13,54 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	harmonylandInfoURL = "http://www.harmonyland.jp/welcome.html"
+	baseURL  = "http://www.harmonyland.jp"
+	endpoint = "/welcome.html"
 )
-
-type HarmonylandInfoSource struct {
-}
 
 var (
 	titleReplacer = strings.NewReplacer("\n", " ")
 )
 
-func NewSource() *HarmonylandInfoSource {
-	return &HarmonylandInfoSource{}
+type source struct {
+	httpClient *http.Client
+	baseURL    string
 }
 
-func (s *HarmonylandInfoSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(harmonylandInfoURL)
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
+}
+
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
-	return s.ScrapeFromReader(res.Body)
+	return s.scrapeFromReader(res.Body)
 }
 
-func (s *HarmonylandInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.ScrapeFromDocument(doc)
+	return s.scrapeFromDocument(doc)
 }
 
-func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	baseURL, _ := url.Parse(harmonylandInfoURL)
+func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+	absBaseURL, _ := url.Parse(baseURL + endpoint)
 
 	var items []*feeds.Item
 	doc.Find("#pickup, #cp").Each(func(_ int, s *goquery.Selection) {
@@ -67,7 +76,7 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 				return
 			}
 
-			resolvedHref := baseURL.ResolveReference(hrefURL).String()
+			resolvedHref := absBaseURL.ResolveReference(hrefURL).String()
 
 			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
 
@@ -84,7 +93,7 @@ func (s *HarmonylandInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 	feed := &feeds.Feed{
 		Title: "ハーモニーランド",
-		Link:  &feeds.Link{Href: harmonylandInfoURL},
+		Link:  &feeds.Link{Href: endpoint},
 		Items: items,
 	}
 	return feed, nil

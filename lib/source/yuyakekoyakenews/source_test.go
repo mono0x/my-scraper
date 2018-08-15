@@ -1,36 +1,38 @@
 package yuyakekoyakenews
 
 import (
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
-var _ scraper.Source = (*YuyakekoyakeNewsSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient)
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, baseURL, source.baseURL)
+}
 
-func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/yuyakekoyake.jp/news/index.php")
+func TestScrape(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/news/index.php", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "testdata/yuyakekoyake.jp/news/index.php")
+	})
+
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	source := NewSource(server.Client())
+	source.baseURL = server.URL
+
+	feed, err := source.Scrape()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer f.Close()
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	doc, err := goquery.NewDocumentFromReader(f)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	source := NewSource()
-	feed, err := source.ScrapeFromDocument(doc)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -2,56 +2,55 @@ package twitter
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 	"strconv"
-	"sync"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
-type TwitterSource struct {
-	userId int64
+type source struct {
+	httpClient *http.Client
+	userID     int64
+	baseURL    string // for testing
 }
 
-var (
-	once       sync.Once
-	twitterApi *anaconda.TwitterApi
-)
+var _ scraper.Source = (*source)(nil)
 
-func getTwitterApi() *anaconda.TwitterApi {
-	once.Do(func() {
-		twitterApi = anaconda.NewTwitterApiWithCredentials(
-			os.Getenv("TWITTER_OAUTH_TOKEN"),
-			os.Getenv("TWITTER_OAUTH_TOKEN_SECRET"),
-			os.Getenv("TWITTER_CONSUMER_KEY"),
-			os.Getenv("TWITTER_CONSUMER_SECRET"))
-	})
-	return twitterApi
-}
-
-func NewSource(userId int64) *TwitterSource {
-	return &TwitterSource{
-		userId: userId,
+func NewSource(c *http.Client, userID int64) *source {
+	return &source{
+		httpClient: c,
+		userID:     userID,
+		baseURL:    anaconda.BaseUrl,
 	}
 }
 
-func (s *TwitterSource) Scrape() (*feeds.Feed, error) {
-	api := getTwitterApi()
+func (s *source) Scrape() (*feeds.Feed, error) {
+	api := anaconda.NewTwitterApiWithCredentials(
+		os.Getenv("TWITTER_OAUTH_TOKEN"),
+		os.Getenv("TWITTER_OAUTH_TOKEN_SECRET"),
+		os.Getenv("TWITTER_CONSUMER_KEY"),
+		os.Getenv("TWITTER_CONSUMER_SECRET"))
+	defer api.Close()
+
+	api.HttpClient = s.httpClient
+	api.SetBaseUrl(s.baseURL)
 
 	values := url.Values{}
-	values.Set("user_id", strconv.FormatInt(s.userId, 10))
+	values.Set("user_id", strconv.FormatInt(s.userID, 10))
 	values.Set("count", "100")
 	timeline, err := api.GetUserTimeline(values)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.Render(timeline)
+	return s.render(timeline)
 }
 
-func (s *TwitterSource) Render(timeline []anaconda.Tweet) (*feeds.Feed, error) {
+func (s *source) render(timeline []anaconda.Tweet) (*feeds.Feed, error) {
 	if len(timeline) == 0 {
 		return nil, errors.New("timeline is empty")
 	}

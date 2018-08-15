@@ -1,25 +1,32 @@
 package harmonylandinfo
 
 import (
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
-var _ scraper.Source = (*HarmonylandInfoSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient)
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, baseURL, source.baseURL)
+}
 
-func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/www.harmonyland.jp/welcome.html")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
+func TestScrape(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/welcome.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "testdata/www.harmonyland.jp/welcome.html")
+	})
 
-	source := NewSource()
+	server := httptest.NewServer(mux)
+	defer server.Close()
 
-	feed, err := source.ScrapeFromReader(f)
+	source := NewSource(server.Client())
+	source.baseURL = server.URL
+
+	feed, err := source.Scrape()
 	if err != nil {
 		t.Fatal(err)
 	}

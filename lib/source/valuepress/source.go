@@ -8,39 +8,48 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	valuePressURL = `https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA`
+	baseURL  = "https://www.value-press.com"
+	endpoint = `/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA`
 )
 
-type ValuePressSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string
 }
 
-func NewSource() *ValuePressSource {
-	return &ValuePressSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *ValuePressSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(valuePressURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 	defer res.Body.Close()
 
-	return s.ScrapeFromReader(res.Body)
+	return s.scrapeFromReader(res.Body)
 }
 
-func (s *ValuePressSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.ScrapeFromDocument(doc)
+	return s.scrapeFromDocument(doc)
 }
 
-func (s *ValuePressSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -71,7 +80,7 @@ func (s *ValuePressSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Fee
 
 	feed := &feeds.Feed{
 		Title: "ValuePress! (Sanrio)",
-		Link:  &feeds.Link{Href: valuePressURL},
+		Link:  &feeds.Link{Href: s.baseURL + endpoint},
 		Items: items,
 	}
 

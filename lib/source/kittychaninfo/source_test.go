@@ -1,30 +1,38 @@
 package kittychaninfo
 
 import (
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
-var _ scraper.Source = (*KittychanInfoSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient)
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, baseURL, source.baseURL)
+}
 
-func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/www.kittychan.info/information.html")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
+func TestScrape(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/information.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "testdata/www.kittychan.info/information.html")
+	})
 
-	source := NewSource()
-	feed, err := source.ScrapeFromReader(f)
-	if err != nil {
-		t.Fatal(err)
-	}
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	source := NewSource(server.Client())
+	source.baseURL = server.URL
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	feed, err := source.Scrape()
 	if err != nil {
 		t.Fatal(err)
 	}

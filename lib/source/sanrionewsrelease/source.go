@@ -7,22 +7,31 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	sanrioNewsReleaseURL = "http://www.sanrio.co.jp/corporate/release/"
+	baseURL  = "http://www.sanrio.co.jp"
+	endpoint = "/corporate/release/"
 )
 
-type SanrioNewsReleaseSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string // for testing
 }
 
-func NewSource() *SanrioNewsReleaseSource {
-	return &SanrioNewsReleaseSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *SanrioNewsReleaseSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(sanrioNewsReleaseURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -32,10 +41,10 @@ func (s *SanrioNewsReleaseSource) Scrape() (*feeds.Feed, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.ScrapeFromDocument(doc)
+	return s.scrapeFromDocument(doc)
 }
 
-func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	var items []*feeds.Item
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
@@ -62,7 +71,7 @@ func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*fe
 
 		items = append(items, &feeds.Item{
 			Title:   title,
-			Link:    &feeds.Link{Href: "http://www.sanrio.co.jp" + href},
+			Link:    &feeds.Link{Href: baseURL + href},
 			Id:      href,
 			Created: date,
 		})
@@ -70,7 +79,7 @@ func (s *SanrioNewsReleaseSource) ScrapeFromDocument(doc *goquery.Document) (*fe
 
 	feed := &feeds.Feed{
 		Title: "ニュースリリース | 会社情報 | サンリオ",
-		Link:  &feeds.Link{Href: sanrioNewsReleaseURL},
+		Link:  &feeds.Link{Href: baseURL + endpoint},
 		Items: items,
 	}
 	return feed, nil

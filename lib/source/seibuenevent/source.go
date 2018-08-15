@@ -7,22 +7,31 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	seibuenEventURL = "http://www.seibu-leisure.co.jp/event/index.html?category=e1"
+	baseURL  = "http://www.seibu-leisure.co.jp"
+	endpoint = "/event/index.html?category=e1"
 )
 
-type SeibuenEventSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string // for testing
 }
 
-func NewSource() *SeibuenEventSource {
-	return &SeibuenEventSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(seibuenEventURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -32,10 +41,10 @@ func (s *SeibuenEventSource) Scrape() (*feeds.Feed, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.ScrapeFromDocument(doc)
+	return s.scrapeFromDocument(doc)
 }
 
-func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	var items []*feeds.Item
 	var (
 		title string
@@ -61,7 +70,7 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Description: description,
-				Link:        &feeds.Link{Href: seibuenEventURL},
+				Link:        &feeds.Link{Href: baseURL + endpoint},
 				Id:          fmt.Sprintf("%x", sha.Sum(nil)),
 			})
 		}
@@ -69,7 +78,7 @@ func (s *SeibuenEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.F
 
 	feed := &feeds.Feed{
 		Title: "西武園ゆうえんち メルヘンタウン",
-		Link:  &feeds.Link{Href: seibuenEventURL},
+		Link:  &feeds.Link{Href: baseURL + endpoint},
 		Items: items,
 	}
 

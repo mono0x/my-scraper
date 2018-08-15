@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"html"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
 )
@@ -19,29 +22,33 @@ const (
 	prefix = `https://calendar.google.com/calendar/embed?src=`
 )
 
-type GoogleCalendarSource struct {
-	calendarId string
+type source struct {
+	httpClient *http.Client
+	calendarID string
 }
+
+var _ scraper.Source = (*source)(nil)
 
 var (
 	descriptionReplacer = strings.NewReplacer("\n", "<br />")
 )
 
-func NewSource(calendarId string) *GoogleCalendarSource {
-	return &GoogleCalendarSource{
-		calendarId: calendarId,
+func NewSource(c *http.Client, calendarID string) *source {
+	return &source{
+		httpClient: c,
+		calendarID: calendarID,
 	}
 }
 
-func (s *GoogleCalendarSource) Scrape() (*feeds.Feed, error) {
-	events, err := s.Fetch()
+func (s *source) Scrape() (*feeds.Feed, error) {
+	events, err := s.fetch()
 	if err != nil {
 		return nil, err
 	}
-	return s.Render(events)
+	return s.render(events)
 }
 
-func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
+func (s *source) fetch() (*calendar.Events, error) {
 	json, err := ioutil.ReadFile("google_client_credentials.json")
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -52,7 +59,10 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 		return nil, errors.WithStack(err)
 	}
 
-	client := config.Client(context.Background())
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, s.httpClient)
+
+	client := config.Client(ctx)
 
 	service, err := calendar.New(client)
 	if err != nil {
@@ -61,14 +71,14 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
-	events, err := service.Events.List(s.calendarId).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
+	events, err := service.Events.List(s.calendarID).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
 	items := events.Items
 	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
-		events, err := service.Events.List(s.calendarId).PageToken(pageToken).Do()
+		events, err := service.Events.List(s.calendarID).PageToken(pageToken).Do()
 		if err != nil {
 			return nil, errors.WithStack(err)
 		}
@@ -79,7 +89,7 @@ func (s *GoogleCalendarSource) Fetch() (*calendar.Events, error) {
 	return events, nil
 }
 
-func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, error) {
+func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation(events.TimeZone)
 	if err != nil {
 		return nil, err
@@ -210,7 +220,7 @@ func (s *GoogleCalendarSource) Render(events *calendar.Events) (*feeds.Feed, err
 	feed := &feeds.Feed{
 		Title:       events.Summary,
 		Description: events.Description,
-		Link:        &feeds.Link{Href: prefix + s.calendarId},
+		Link:        &feeds.Link{Href: prefix + s.calendarID},
 		Updated:     updated,
 		Items:       items,
 	}

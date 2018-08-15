@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"os"
 	"reflect"
 	"strconv"
 
@@ -57,15 +58,15 @@ func NewServeMux() *http.ServeMux {
 		Path   string
 		Source scraper.Source
 	}{
-		{"/fukoku-life", fukokulifeevent.NewSource()},
-		{"/harmonyland-info", harmonylandinfo.NewSource()},
-		{"/kittychan-info", kittychaninfo.NewSource()},
-		{"/prtimes-sanrio", prtimes.NewSource()},
-		{"/puroland-info", purolandinfo.NewSource()},
-		{"/sanrio-news-release", sanrionewsrelease.NewSource()},
-		{"/seibuen-event", seibuenevent.NewSource()},
-		{"/value-press-sanrio", valuepress.NewSource()},
-		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource()},
+		{"/fukoku-life", fukokulifeevent.NewSource(http.DefaultClient)},
+		{"/harmonyland-info", harmonylandinfo.NewSource(http.DefaultClient)},
+		{"/kittychan-info", kittychaninfo.NewSource(http.DefaultClient)},
+		{"/prtimes-sanrio", prtimes.NewSource(http.DefaultClient)},
+		{"/puroland-info", purolandinfo.NewSource(http.DefaultClient)},
+		{"/sanrio-news-release", sanrionewsrelease.NewSource(http.DefaultClient)},
+		{"/seibuen-event", seibuenevent.NewSource(http.DefaultClient)},
+		{"/value-press-sanrio", valuepress.NewSource(http.DefaultClient)},
+		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(http.DefaultClient)},
 	}
 	for _, entry := range entries {
 		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
@@ -78,7 +79,7 @@ func NewServeMux() *http.ServeMux {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := facebook.NewSource(id)
+		source := facebook.NewSource(http.DefaultClient, os.Getenv("FACEBOOK_ACCESS_TOKEN"), id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -89,7 +90,7 @@ func NewServeMux() *http.ServeMux {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := googlecalendar.NewSource(id)
+		source := googlecalendar.NewSource(http.DefaultClient, id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -100,7 +101,7 @@ func NewServeMux() *http.ServeMux {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := instagram.NewSource(id)
+		source := instagram.NewSource(http.DefaultClient, id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -116,7 +117,7 @@ func NewServeMux() *http.ServeMux {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := twitter.NewSource(id)
+		source := twitter.NewSource(http.DefaultClient, id)
 		sourceRenderer(source)(w, r)
 	})
 

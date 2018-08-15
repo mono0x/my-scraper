@@ -1,25 +1,33 @@
 package sanrionewsrelease
 
 import (
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
-var _ scraper.Source = (*SanrioNewsReleaseSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient)
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, baseURL, source.baseURL)
+}
 
-func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/www.sanrio.co.jp/corporate/release/index.html")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
+func TestScrape(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/corporate/release/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "testdata/www.sanrio.co.jp/corporate/release/index.html")
+	})
 
-	doc, err := goquery.NewDocumentFromReader(f)
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	source := NewSource(server.Client())
+	source.baseURL = server.URL
+
+	feed, err := source.Scrape()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,11 +37,6 @@ func TestSource(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewSource()
-	feed, err := source.ScrapeFromDocument(doc)
-	if err != nil {
-		t.Fatal(err)
-	}
 	assert.Equal(t, 51, len(feed.Items))
 	assert.Equal(t, "ぐでぐでやる気のない「ぐでたま」のイベント九州初上陸！ 夏休み企画 「ぐでたま in ふくおか」 7月21日(木)〜 福岡パルコ & sanrio vivitix 天神地下街店にて開催 (PDF)", feed.Items[0].Title)
 	assert.Equal(t, "http://www.sanrio.co.jp/wp-content/uploads/2015/05/20160708-1.pdf", feed.Items[0].Link.Href)

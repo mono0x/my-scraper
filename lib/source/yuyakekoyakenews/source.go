@@ -9,22 +9,31 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	yuyakekoyakeNewsURL = "http://yuyakekoyake.jp/news/index.php"
+	baseURL  = "http://yuyakekoyake.jp"
+	endpoint = "/news/index.php"
 )
 
-type YuyakekoyakeNewsSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string // for testing
 }
 
-func NewSource() *YuyakekoyakeNewsSource {
-	return &YuyakekoyakeNewsSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *YuyakekoyakeNewsSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(yuyakekoyakeNewsURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -39,13 +48,13 @@ func (s *YuyakekoyakeNewsSource) Scrape() (*feeds.Feed, error) {
 
 var yuyakekoyakeNewsItemRe = regexp.MustCompile(`\A(\d+)年(\d+)月(\d+)日[\s　]+(.+)\z`)
 
-func (s *YuyakekoyakeNewsSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
-	baseURL, _ := url.Parse(yuyakekoyakeNewsURL)
+	absBaseURL, _ := url.Parse(baseURL + endpoint)
 
 	var items []*feeds.Item
 	doc.Find(".news_detail_index li").Each(func(_ int, s *goquery.Selection) {
@@ -83,7 +92,7 @@ func (s *YuyakekoyakeNewsSource) ScrapeFromDocument(doc *goquery.Document) (*fee
 			return
 		}
 
-		absURL := baseURL.ResolveReference(refURL)
+		absURL := absBaseURL.ResolveReference(refURL)
 
 		items = append(items, &feeds.Item{
 			Title:   title,
@@ -94,7 +103,7 @@ func (s *YuyakekoyakeNewsSource) ScrapeFromDocument(doc *goquery.Document) (*fee
 
 	return &feeds.Feed{
 		Title: "お知らせ一覧 | 夕やけ小やけふれあいの里",
-		Link:  &feeds.Link{Href: yuyakekoyakeNewsURL},
+		Link:  &feeds.Link{Href: baseURL + endpoint},
 		Items: items,
 	}, nil
 }

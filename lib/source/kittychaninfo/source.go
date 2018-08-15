@@ -12,31 +12,41 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	kittychanInfoURL         = "http://www.kittychan.info/information.html"
-	kittychanInfoTitlePrefix = `★`
+	baseURL  = "http://www.kittychan.info"
+	endpoint = "/information.html"
+
+	titlePrefix = `★`
 )
 
 var (
 	headerRe = regexp.MustCompile(
-		`\A(?:` + regexp.QuoteMeta(kittychanInfoTitlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
+		`\A(?:` + regexp.QuoteMeta(titlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 
 	descriptionReplacer = strings.NewReplacer("\n", "<br />")
 )
 
-type KittychanInfoSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string // for testing
 }
 
-func NewSource() *KittychanInfoSource {
-	return &KittychanInfoSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *KittychanInfoSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(kittychanInfoURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -45,7 +55,7 @@ func (s *KittychanInfoSource) Scrape() (*feeds.Feed, error) {
 	return s.ScrapeFromReader(res.Body)
 }
 
-func (s *KittychanInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
+func (s *source) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
@@ -54,13 +64,13 @@ func (s *KittychanInfoSource) ScrapeFromReader(reader io.Reader) (*feeds.Feed, e
 	return s.ScrapeFromDocument(doc)
 }
 
-func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	headerRe := headerRe.Copy()
 	dateRe := dateRe.Copy()
 
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
-		Link:  &feeds.Link{Href: kittychanInfoURL},
+		Link:  &feeds.Link{Href: s.baseURL + endpoint},
 	}
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
@@ -93,7 +103,7 @@ func (s *KittychanInfoSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.
 			return true
 		})
 
-		if !strings.HasPrefix(p, kittychanInfoTitlePrefix) {
+		if !strings.HasPrefix(p, titlePrefix) {
 			section += p
 			if link == "" {
 				link = extractedLink

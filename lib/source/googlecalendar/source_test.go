@@ -2,17 +2,21 @@ package googlecalendar
 
 import (
 	"encoding/json"
+	"net/http"
 	"os"
 	"testing"
 
-	"github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/api/calendar/v3"
 )
 
-var _ scraper.Source = (*GoogleCalendarSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient, "calendar")
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, "calendar", source.calendarID)
+}
 
-func TestSource(t *testing.T) {
+func TestRender(t *testing.T) {
 	file, err := os.Open("testdata/sanrio_events_calendar.json")
 	if err != nil {
 		t.Fatal(err)
@@ -24,8 +28,8 @@ func TestSource(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewSource("qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
-	feed, err := source.Render(&events)
+	source := NewSource(http.DefaultClient, "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
+	feed, err := source.render(&events)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,30 +1,34 @@
 package instagram
 
 import (
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
-	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/stretchr/testify/assert"
 )
 
-var _ scraper.Source = (*InstagramSource)(nil)
+func TestNewSource(t *testing.T) {
+	source := NewSource(http.DefaultClient, "fukkachan628")
+	assert.Equal(t, http.DefaultClient, source.httpClient)
+	assert.Equal(t, "fukkachan628", source.userID)
+	assert.Equal(t, baseURL, source.baseURL)
+}
 
-func TestSource(t *testing.T) {
-	f, err := os.Open("testdata/www.instagram.com/fukkachan628/index.html")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
+func TestScrape(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/fukkachan628/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "testdata/www.instagram.com/fukkachan628/index.html")
+	})
 
-	source := NewSource("fukkachan628")
-	feed, err := source.ScrapeFromReader(f)
-	if err != nil {
-		t.Fatal(err)
-	}
+	server := httptest.NewServer(mux)
+	defer server.Close()
 
-	loc, err := time.LoadLocation("UTC")
+	source := NewSource(server.Client(), "fukkachan628")
+	source.baseURL = server.URL
+
+	feed, err := source.Scrape()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,6 +37,6 @@ func TestSource(t *testing.T) {
 	assert.Equal(t, "https://www.instagram.com/fukkachan628/", feed.Link.Href)
 	assert.Equal(t, 12, len(feed.Items))
 	assert.Equal(t, "今年の漢字は「金」！Y(o≧ω≦o)Y", feed.Items[0].Title)
-	assert.Equal(t, "http://www.instagram.com/p/BN59EPyhA09/", feed.Items[0].Link.Href)
-	assert.WithinDuration(t, time.Date(2016, 12, 12, 5, 34, 41, 0, loc), feed.Items[0].Created, 0)
+	assert.Equal(t, "https://www.instagram.com/p/BN59EPyhA09/", feed.Items[0].Link.Href)
+	assert.WithinDuration(t, time.Date(2016, 12, 12, 5, 34, 41, 0, time.UTC), feed.Items[0].Created, 0)
 }

@@ -6,22 +6,31 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
+	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
 const (
-	fukokuLifeEventURL = "https://act.fukoku-life.co.jp/event/index.php"
+	baseURL  = "https://act.fukoku-life.co.jp"
+	endpoint = "/event/index.php"
 )
 
-type FukokuLifeEventSource struct {
+type source struct {
+	httpClient *http.Client
+	baseURL    string // for testing
 }
 
-func NewSource() *FukokuLifeEventSource {
-	return &FukokuLifeEventSource{}
+var _ scraper.Source = (*source)(nil)
+
+func NewSource(c *http.Client) *source {
+	return &source{
+		httpClient: c,
+		baseURL:    baseURL,
+	}
 }
 
-func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
-	res, err := http.Get(fukokuLifeEventURL)
+func (s *source) Scrape() (*feeds.Feed, error) {
+	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -31,11 +40,11 @@ func (s *FukokuLifeEventSource) Scrape() (*feeds.Feed, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return s.ScrapeFromDocument(doc)
+	return s.scrapeFromDocument(doc)
 }
 
-func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	baseURL, _ := url.Parse(fukokuLifeEventURL)
+func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
+	absBaseURL, _ := url.Parse(baseURL + endpoint)
 	var items []*feeds.Item
 	doc.Find("div#result > table > tbody > tr").Each(func(_ int, s *goquery.Selection) {
 		titleCell := s.Children().First().Next()
@@ -51,7 +60,7 @@ func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 		if err != nil {
 			return
 		}
-		absURL := baseURL.ResolveReference(refURL)
+		absURL := absBaseURL.ResolveReference(refURL)
 		link := absURL.String()
 
 		description := dateCell.Text() + "\n" + locationCell.Text()
@@ -66,7 +75,7 @@ func (s *FukokuLifeEventSource) ScrapeFromDocument(doc *goquery.Document) (*feed
 
 	feed := &feeds.Feed{
 		Title: "フコク赤ちゃんクラブ",
-		Link:  &feeds.Link{Href: fukokuLifeEventURL},
+		Link:  &feeds.Link{Href: baseURL + endpoint},
 		Items: items,
 	}
 
