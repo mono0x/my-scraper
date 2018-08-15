@@ -2,16 +2,12 @@
   "Tools": [
     {
       "Repository": "honnef.co/go/tools/cmd/megacheck",
-      "Commit": "57ee65dc7ff868f8fe21064b05f9e744a73bc9ab"
+      "Commit": "88497007e8588ea5b6baee991f74a1607e809487"
     },
     {
       "Repository": "github.com/mattn/goveralls",
-      "Commit": "1c14a4061c1cb86f0310cc0d4c0b5bc743879bc5"
-    },
-    {
-      "Repository": "golang.org/x/tools/cmd/cover",
-      "Commit": "48418e5732e1b1e2a10207c8007a5f959e422f20"
+      "Commit": "e68c968003c2db2ad7cdf07b3c012c5ab12248a7"
     }
   ],
-  "RetoolVersion": "1.3.6"
+  "RetoolVersion": "1.3.7"
 }
