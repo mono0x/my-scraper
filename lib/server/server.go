@@ -51,7 +51,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 	}
 }
 
-func NewServeMux() *http.ServeMux {
+func NewHandler() http.Handler {
 	mux := http.NewServeMux()
 
 	entries := []struct {

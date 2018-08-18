@@ -32,8 +32,7 @@ func run() error {
 		}
 	}
 
-	mux := server.NewServeMux()
-	server := http.Server{Handler: mux}
+	server := http.Server{Handler: server.NewHandler()}
 
 	go func() {
 		if err := server.Serve(l); err != nil && err != http.ErrServerClosed {
