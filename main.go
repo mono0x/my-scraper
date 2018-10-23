@@ -32,25 +32,21 @@ func run() error {
 		}
 	}
 
-	server := http.Server{Handler: server.NewHandler()}
+	s := http.Server{Handler: server.NewHandler()}
 
 	go func() {
-		if err := server.Serve(l); err != nil && err != http.ErrServerClosed {
+		if err := s.Serve(l); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
 	}()
 
 	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, syscall.SIGTERM)
+	signal.Notify(signalChan, syscall.SIGTERM, os.Interrupt)
+	<-signalChan
 
-	for {
-		s := <-signalChan
-		if s == syscall.SIGTERM {
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			defer cancel()
-			return server.Shutdown(ctx)
-		}
-	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	return s.Shutdown(ctx)
 }
 
 func main() {
