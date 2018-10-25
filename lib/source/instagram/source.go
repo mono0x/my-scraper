@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/lib"
 	"github.com/pkg/errors"
 )
 
@@ -51,27 +51,37 @@ var sharedDataRe = regexp.MustCompile(`window\._sharedData\s*=\s*({.+})[\s\n]*[;
 type instagramData struct {
 	EntryData struct {
 		ProfilePage []struct {
-			User struct {
-				UserName  string `json:"username"`
-				Id        string `json:"id"`
-				Biography string `json:"biography"`
-				FullName  string `json:"full_name"`
-				Media     struct {
-					Nodes []struct {
-						Code        string `json:"code"`
-						Date        int64  `json:"date"`
-						Deimensions struct {
-							Width  int `json:"width"`
-							Height int `json:"height"`
-						} `json:"dimensions"`
-						Caption      string `json:"caption"`
-						ThumbnailSrc string `json:"thumbnail_src"`
-						IsVideo      bool   `json:"is_video"`
-						Id           string `json:"id"`
-						DisplaySrc   string `json:"display_src"`
-					} `json:"nodes"`
-				} `json:"media"`
-			} `json:"user"`
+			GraphQL struct {
+				User struct {
+					UserName                 string `json:"username"`
+					Id                       string `json:"id"`
+					Biography                string `json:"biography"`
+					FullName                 string `json:"full_name"`
+					EdgeOwnerToTimelineMedia struct {
+						Nodes []struct {
+							Node struct {
+								ShortCode        string `json:"shortcode"`
+								TakenAtTimestamp int64  `json:"taken_at_timestamp"`
+								Dimensions       struct {
+									Width  int `json:"width"`
+									Height int `json:"height"`
+								} `json:"dimensions"`
+								EdgeMediaToCaption struct {
+									Edges []struct {
+										Node struct {
+											Text string `json:"text"`
+										} `json:"node"`
+									} `json:"edges"`
+								} `json:"edge_media_to_caption"`
+								ThumbnailSrc string `json:"thumbnail_src"`
+								IsVideo      bool   `json:"is_video"`
+								Id           string `json:"id"`
+								DisplaySrc   string `json:"display_url"`
+							} `json:"node"`
+						} `json:"edges"`
+					} `json:"edge_owner_to_timeline_media"`
+				} `json:"user"`
+			} `json:"graphql"`
 		}
 	} `json:"entry_data"`
 }
@@ -99,11 +109,12 @@ func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 		return nil, errors.New("ProfilePage item not found")
 	}
 
-	user := data.EntryData.ProfilePage[0].User
+	user := data.EntryData.ProfilePage[0].GraphQL.User
 
-	items := make([]*feeds.Item, 0, len(user.Media.Nodes))
-	for _, node := range user.Media.Nodes {
-		caption := emojiRe.ReplaceAllString(node.Caption, "")
+	items := make([]*feeds.Item, 0, len(user.EdgeOwnerToTimelineMedia.Nodes))
+	for _, item := range user.EdgeOwnerToTimelineMedia.Nodes {
+		node := item.Node
+		caption := emojiRe.ReplaceAllString(node.EdgeMediaToCaption.Edges[0].Node.Text, "")
 		lines := strings.Split(caption, "\n")
 		if len(lines) == 0 {
 			continue
@@ -117,8 +128,8 @@ func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 		}
 		items = append(items, &feeds.Item{
 			Title:       title,
-			Created:     time.Unix(node.Date, 0).In(time.UTC),
-			Link:        &feeds.Link{Href: fmt.Sprintf("%s/p/%s/", baseURL, node.Code)},
+			Created:     time.Unix(node.TakenAtTimestamp, 0).In(time.UTC),
+			Link:        &feeds.Link{Href: fmt.Sprintf("%s/p/%s/", baseURL, node.ShortCode)},
 			Description: fmt.Sprintf("%s<br /><img src=\"%s\" />", strings.Join(escapedLines, "<br />"), node.DisplaySrc),
 		})
 	}

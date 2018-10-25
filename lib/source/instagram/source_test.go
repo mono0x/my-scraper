@@ -36,7 +36,7 @@ func TestScrape(t *testing.T) {
 	assert.Equal(t, "ふっかちゃん【公式】", feed.Title)
 	assert.Equal(t, "https://www.instagram.com/fukkachan628/", feed.Link.Href)
 	assert.Equal(t, 12, len(feed.Items))
-	assert.Equal(t, "今年の漢字は「金」！Y(o≧ω≦o)Y", feed.Items[0].Title)
-	assert.Equal(t, "https://www.instagram.com/p/BN59EPyhA09/", feed.Items[0].Link.Href)
-	assert.WithinDuration(t, time.Date(2016, 12, 12, 5, 34, 41, 0, time.UTC), feed.Items[0].Created, 0)
+	assert.Equal(t, "メル助（@menicon_melsuke）とサニーちゃんとティックトックY(o≧ω≦o)Yたのしす〜♪また遊ぼうねぇY(o0ω★o)Y", feed.Items[0].Title)
+	assert.Equal(t, "https://www.instagram.com/p/BpWQzt0FYM1/", feed.Items[0].Link.Href)
+	assert.WithinDuration(t, time.Date(2018, 10, 25, 7, 34, 19, 0, time.UTC), feed.Items[0].Created, 0)
 }
