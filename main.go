@@ -14,6 +14,7 @@ import (
 	"github.com/lestrrat-go/server-starter/listener"
 	"github.com/mono0x/my-scraper/lib/server"
 	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 )
 
 func run() error {
@@ -34,19 +35,23 @@ func run() error {
 
 	s := http.Server{Handler: server.NewHandler()}
 
-	go func() {
+	eg := errgroup.Group{}
+	eg.Go(func() error {
 		if err := s.Serve(l); err != nil && err != http.ErrServerClosed {
-			log.Fatal(err)
+			return err
 		}
-	}()
+		return nil
+	})
+	eg.Go(func() error {
+		signalChan := make(chan os.Signal, 1)
+		signal.Notify(signalChan, syscall.SIGTERM, os.Interrupt)
+		<-signalChan
 
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, syscall.SIGTERM, os.Interrupt)
-	<-signalChan
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	return s.Shutdown(ctx)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		return s.Shutdown(ctx)
+	})
+	return eg.Wait()
 }
 
 func main() {

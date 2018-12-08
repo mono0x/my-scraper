@@ -166,6 +166,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:88ecca26e54f601a8733c9a31d9f0883b915216a177673f0467f6b864fd0d90f"
+  name = "golang.org/x/sync"
+  packages = ["errgroup"]
+  pruneopts = ""
+  revision = "42b317875d0fa942474b76e1b46a6060d720ae6e"
+
+[[projects]]
+  branch = "master"
   digest = "1:9ce6eb33df9a0e0c4d2e20df3c952a4c044b5e2288416da09be219ca657bbb74"
   name = "golang.org/x/text"
   packages = [
@@ -225,6 +233,7 @@
     "github.com/stretchr/testify/assert",
     "golang.org/x/oauth2",
     "golang.org/x/oauth2/google",
+    "golang.org/x/sync/errgroup",
     "golang.org/x/text/encoding/japanese",
     "golang.org/x/text/transform",
     "google.golang.org/api/calendar/v3",
