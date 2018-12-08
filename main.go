@@ -38,7 +38,7 @@ func run() error {
 	eg := errgroup.Group{}
 	eg.Go(func() error {
 		if err := s.Serve(l); err != nil && err != http.ErrServerClosed {
-			return err
+			return errors.WithStack(err)
 		}
 		return nil
 	})
@@ -49,7 +49,10 @@ func run() error {
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		return s.Shutdown(ctx)
+		if err := s.Shutdown(ctx); err != nil {
+			return errors.WithStack(err)
+		}
+		return nil
 	})
 	return eg.Wait()
 }
