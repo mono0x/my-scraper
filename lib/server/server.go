@@ -22,6 +22,7 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/twitter"
 	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
+	"github.com/pressly/chi"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
@@ -52,7 +53,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 }
 
 func NewHandler() http.Handler {
-	mux := http.NewServeMux()
+	r := chi.NewRouter()
 
 	entries := []struct {
 		Path   string
@@ -69,10 +70,10 @@ func NewHandler() http.Handler {
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(http.DefaultClient)},
 	}
 	for _, entry := range entries {
-		mux.HandleFunc(entry.Path, sourceRenderer(entry.Source))
+		r.Get(entry.Path, sourceRenderer(entry.Source))
 	}
 
-	mux.HandleFunc("/facebook", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/facebook", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		id := query.Get("id")
 		if id == "" {
@@ -83,7 +84,7 @@ func NewHandler() http.Handler {
 		sourceRenderer(source)(w, r)
 	})
 
-	mux.HandleFunc("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		id := query.Get("id")
 		if id == "" {
@@ -94,7 +95,7 @@ func NewHandler() http.Handler {
 		sourceRenderer(source)(w, r)
 	})
 
-	mux.HandleFunc("/instagram", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/instagram", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		id := query.Get("id")
 		if id == "" {
@@ -105,7 +106,7 @@ func NewHandler() http.Handler {
 		sourceRenderer(source)(w, r)
 	})
 
-	mux.HandleFunc("/twitter", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/twitter", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		idStr := query.Get("id")
 		if idStr == "" {
@@ -121,5 +122,5 @@ func NewHandler() http.Handler {
 		sourceRenderer(source)(w, r)
 	})
 
-	return mux
+	return r
 }

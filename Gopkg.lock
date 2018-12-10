@@ -130,6 +130,14 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:3cc6cc81e607288ff63cc34b8b8f5f57a0f47e5bc554b86e31bf723612121763"
+  name = "github.com/pressly/chi"
+  packages = ["."]
+  pruneopts = ""
+  revision = "b5294d10673813fac8558e7f47242bc9e61b4c25"
+  version = "v3.3.3"
+
+[[projects]]
   branch = "master"
   digest = "1:2a0cd5a83b9a064d9464bc1825aaff600bb9e5eb1aaba3155d62f345f81d0192"
   name = "github.com/stretchr/testify"
@@ -230,6 +238,7 @@
     "github.com/joho/godotenv",
     "github.com/lestrrat-go/server-starter/listener",
     "github.com/pkg/errors",
+    "github.com/pressly/chi",
     "github.com/stretchr/testify/assert",
     "golang.org/x/oauth2",
     "golang.org/x/oauth2/google",
