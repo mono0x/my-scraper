@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/mono0x/my-scraper/lib/source/facebook"
@@ -22,7 +23,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/twitter"
 	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
-	"github.com/pressly/chi"
 )
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
