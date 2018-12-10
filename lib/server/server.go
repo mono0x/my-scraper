@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
 	"github.com/mono0x/my-scraper/lib/source/facebook"
@@ -54,6 +55,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 
 func NewHandler() http.Handler {
 	r := chi.NewRouter()
+	r.Use(middleware.Recoverer)
 
 	entries := []struct {
 		Path   string
