@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:2f9bad74bf4197615def62c64b29bfc5aeec01a1f3852805070963fc4d69b0b6"
+  digest = "1:a639b30711f62030ade1432a6bcf135c23c38607d1478d3ce53829ea2a664197"
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
   pruneopts = ""
-  revision = "debcad1964693daf8ef4bc06292d7e828e075130"
-  version = "v0.31.0"
+  revision = "0ebda48a7f143b1cce9eb37a8c1106ac762a3430"
+  version = "v0.34.0"
 
 [[projects]]
   branch = "master"
@@ -27,11 +27,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2be3473b9e65b5931312a5bab50ae7bfd3662d3060d1bf9d8a3131bddb97fba1"
+  digest = "1:439bfb51db599cd80766736b93b3d10e9314361197ada0b1209a51627a00ccd5"
   name = "github.com/PuerkitoBio/goquery"
   packages = ["."]
   pruneopts = ""
-  revision = "2af3d16e2bb8c46efba31b0af1d7ca2eac7fcc23"
+  revision = "2d2796f41742ece03e8086188fa4db16a3a0b458"
 
 [[projects]]
   digest = "1:e3726ad6f38f710e84c8dcd0e830014de6eaeea81f28d91ae898afecc078479a"
@@ -84,7 +84,10 @@
 [[projects]]
   digest = "1:3cc6cc81e607288ff63cc34b8b8f5f57a0f47e5bc554b86e31bf723612121763"
   name = "github.com/go-chi/chi"
-  packages = ["."]
+  packages = [
+    ".",
+    "middleware",
+  ]
   pruneopts = ""
   revision = "b5294d10673813fac8558e7f47242bc9e61b4c25"
   version = "v3.3.3"
@@ -99,27 +102,27 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f4a8247a6849541dc0db7e2425f571aff28869e83d4c634932d47bc71b0f9291"
+  digest = "1:c477dd845d809c356da4248d2449c095a00e1b5604f0c8e59cdc47c95e1db0ea"
   name = "github.com/gorilla/feeds"
   packages = ["."]
   pruneopts = ""
-  revision = "762f7414cb4b615000daa195dfaf09b5aa503590"
+  revision = "8df78d284e1df527ed0337598cdd3ecb02d3887f"
 
 [[projects]]
   branch = "master"
-  digest = "1:105b4d194d56e57bc71e07f693c2d529694e45d4ca3612d5f2225dee05bbd56f"
+  digest = "1:ee60a24f043b2c8c3c5d313b6970f896cad4482e472b30432a565d36242e06b2"
   name = "github.com/joho/godotenv"
   packages = ["."]
   pruneopts = ""
-  revision = "c0b86d615e06d6fa5f869364d68f774ba49a86e3"
+  revision = "69ed1d913aa885da390dd6de9febf063d101b097"
 
 [[projects]]
   branch = "master"
-  digest = "1:636aaa0cec12b3f2fb58652e812c7508b3bb3f8d61f5461c68a515f116d11ced"
+  digest = "1:5a74d5b53212134db2d58927d64fa333f77bee384f922d5eb79d6a9d87620192"
   name = "github.com/lestrrat-go/server-starter"
   packages = ["listener"]
   pruneopts = ""
-  revision = "e24b30b99ae6ed143a7166ab4bd62b570af55822"
+  revision = "8564cc80d990ee80619b86b17946ceac65a4977d"
 
 [[projects]]
   branch = "master"
@@ -139,15 +142,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2a0cd5a83b9a064d9464bc1825aaff600bb9e5eb1aaba3155d62f345f81d0192"
+  digest = "1:71299c0c883c5b12979d110d80058e2e4f8b7ee55436a6cdabe090934b56417a"
   name = "github.com/stretchr/testify"
   packages = ["assert"]
   pruneopts = ""
-  revision = "04af85275a5c7ac09d16bb3b9b2e751ed45154e5"
+  revision = "5b93e2dc01fd8fbf32aa74a198b0ebe78f6f6b6f"
 
 [[projects]]
   branch = "master"
-  digest = "1:b001b57f383ecbebb54c3916ca6b8be129a6486d3dbf2dfc722cbb0a0b2a8679"
+  digest = "1:3b4532388bb9dfcc98530527160974cf5ec03120002887777516a98092725ba0"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -156,11 +159,11 @@
     "html/atom",
   ]
   pruneopts = ""
-  revision = "9b4f9f5ad5197c79fd623a3638e70d8b26cef344"
+  revision = "e147a9138326bc0e9d4e179541ffd8af41cff8a9"
 
 [[projects]]
   branch = "master"
-  digest = "1:77478892c6d9d841c7997858d6287884c65b760000f29a25d7b1a6b6ada5f308"
+  digest = "1:ea010cdb976f9de0c763728a76278f9109fca3299abd0dc3e8f2ccb9ff347268"
   name = "golang.org/x/oauth2"
   packages = [
     ".",
@@ -170,7 +173,7 @@
     "jwt",
   ]
   pruneopts = ""
-  revision = "9dcd33a902f40452422c2367fefcb95b54f9f8f8"
+  revision = "d668ce993890a79bda886613ee587a69dd5da7a6"
 
 [[projects]]
   branch = "master"
@@ -182,7 +185,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9ce6eb33df9a0e0c4d2e20df3c952a4c044b5e2288416da09be219ca657bbb74"
+  digest = "1:bb58f87ed7e11db0b346ae54e0120befcc5223a519e90985bddc24476922c3ff"
   name = "golang.org/x/text"
   packages = [
     "encoding",
@@ -194,11 +197,11 @@
     "unicode/cldr",
   ]
   pruneopts = ""
-  revision = "4d1c5fb19474adfe9562c9847ba425e7da817e81"
+  revision = "17bcc049122f272a32787ba38073ee47433023e9"
 
 [[projects]]
   branch = "master"
-  digest = "1:c27a89d60659ad150321f92be36e91b711e24f088f16c33abe465d5e5c470860"
+  digest = "1:f47a3661a2c904da389093d55faf12914d0f0610e0bd0627c64787952ac5b29e"
   name = "google.golang.org/api"
   packages = [
     "calendar/v3",
@@ -207,10 +210,10 @@
     "googleapi/internal/uritemplates",
   ]
   pruneopts = ""
-  revision = "39567f0042a03aeb2691599961ed4454e43d5063"
+  revision = "41dc4b66e69d5dbf20efe4ba67e19d214d147ae3"
 
 [[projects]]
-  digest = "1:8c432632a230496c35a15cfdf441436f04c90e724ad99c8463ef0c82bbe93edb"
+  digest = "1:77d3cff3a451d50be4b52db9c7766c0d8570ba47593f0c9dc72173adb208e788"
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -225,8 +228,8 @@
     "urlfetch",
   ]
   pruneopts = ""
-  revision = "ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06"
-  version = "v1.2.0"
+  revision = "4a4468ece617fc8205e99368fa2200e9d1fad421"
+  version = "v1.3.0"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -235,6 +238,7 @@
     "github.com/ChimeraCoder/anaconda",
     "github.com/PuerkitoBio/goquery",
     "github.com/go-chi/chi",
+    "github.com/go-chi/chi/middleware",
     "github.com/gorilla/feeds",
     "github.com/joho/godotenv",
     "github.com/lestrrat-go/server-starter/listener",
