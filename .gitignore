@@ -2,4 +2,6 @@
 /_tools/
 /google_client_credentials.json
 /my-scraper
+/my-scraper.linux
+/result.coverprofile
 /vendor/
