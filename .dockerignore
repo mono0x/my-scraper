@@ -1,5 +1,6 @@
 .env
-_tools/
+bin
 google_client_credentials.json
 my-scraper
-vendor/
+my-scraper.linux
+result.coverprofile
