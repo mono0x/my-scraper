@@ -6,12 +6,11 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
-	go get -u github.com/golang/dep/cmd/dep
 	go get -u github.com/twitchtv/retool
 
 deps:
-	dep ensure
 	retool sync
+	retool do dep ensure
 
 test:
 	retool do megacheck ./...

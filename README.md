@@ -5,19 +5,13 @@
 
 `my-scraper` is an atom feed generator for my favorite websites.
 
-Either [Server::Starter](https://metacpan.org/pod/Server::Starter) or [go-server-starter](https://github.com/lestrrat/go-server-starter) is required to run this application.
-
 ```sh
-# Install dep
-go get github.com/golang/dep/cmd/dep
-# Install go-server-starter
-go get github.com/lestrrat/go-server-starter/cmd/start_server
-# Install dependencies
-dep ensure
-# Build the application
-go build
-# Start the application
-start_server --port=13000 -- ./my-scraper
+# Install retool
+make setup
+# Test & build the app
+make
+# Start the app
+retool do start_server --port=8080 -- ./my-scraper
 ```
 
 ## Supported Websites
