@@ -6,12 +6,12 @@
 `my-scraper` is an atom feed generator for my favorite websites.
 
 ```sh
-# Install retool
+# Install tools
 make setup
 # Test & build the app
 make
 # Start the app
-retool do start_server --port=8080 -- ./my-scraper
+bin/start_server --port=8080 -- ./my-scraper
 ```
 
 ## Supported Websites

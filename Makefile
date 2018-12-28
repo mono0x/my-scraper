@@ -1,4 +1,5 @@
 GO=go
+GOBIN=$(PWD)/bin
 TESTOPTS=-coverprofile=result.coverprofile -v -race ./...
 BUILDOPTS=-tags netgo -installsuffix netgo -ldflags "-w -s -extldflags -static"
 BINARY=my-scraper
@@ -6,19 +7,23 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
-	go get -u github.com/twitchtv/retool
+	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat/go-server-starter/cmd/start_server
+	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/mattn/goveralls
+	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/megacheck
 
 deps:
-	retool sync
-	retool do dep ensure
+	GO111MODULE=on go mod download
 
 test:
-	retool do megacheck ./...
-	$(GO) vet ./...
-	$(GO) test $(TESTOPTS)
+	GO111MODULE=on $(GO) vet ./...
+	GO111MODULE=on $(GO) test $(TESTOPTS)
+	#$(GOBIN)/megacheck ./...
 
 build:
-	$(GO) build -o $(BINARY) $(BUILDOPTS)
+	GO111MODULE=on $(GO) build -o $(BINARY) $(BUILDOPTS)
+
+goveralls:
+	$(GOBIN)/goveralls -service=travis-ci -coverprofile=result.coverprofile
 
 build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux $(BUILDOPTS)
+	GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux $(BUILDOPTS)
