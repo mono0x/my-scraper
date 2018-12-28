@@ -142,15 +142,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:71299c0c883c5b12979d110d80058e2e4f8b7ee55436a6cdabe090934b56417a"
+  digest = "1:849ac32ee3946abf702e980d75a64ee3e25c0b53d09521d01b2badc59e99bf60"
   name = "github.com/stretchr/testify"
   packages = ["assert"]
   pruneopts = ""
-  revision = "5b93e2dc01fd8fbf32aa74a198b0ebe78f6f6b6f"
+  revision = "660f15d67dbb878de0d9d79894f728d691c91b91"
 
 [[projects]]
   branch = "master"
-  digest = "1:3b4532388bb9dfcc98530527160974cf5ec03120002887777516a98092725ba0"
+  digest = "1:4ab2fc83e3222b69759dfd717e01d0cf38b133aabfacc29a86057021a2f1abd9"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -159,7 +159,7 @@
     "html/atom",
   ]
   pruneopts = ""
-  revision = "e147a9138326bc0e9d4e179541ffd8af41cff8a9"
+  revision = "927f97764cc334a6575f4b7a1584a147864d5723"
 
 [[projects]]
   branch = "master"
@@ -177,15 +177,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:88ecca26e54f601a8733c9a31d9f0883b915216a177673f0467f6b864fd0d90f"
+  digest = "1:814474ab808c5e04b9334d046f8a0060fc1724c2c02acfd00a7cc0008d675455"
   name = "golang.org/x/sync"
   packages = ["errgroup"]
   pruneopts = ""
-  revision = "42b317875d0fa942474b76e1b46a6060d720ae6e"
+  revision = "37e7f081c4d4c64e13b10787722085407fe5d15f"
 
 [[projects]]
   branch = "master"
-  digest = "1:bb58f87ed7e11db0b346ae54e0120befcc5223a519e90985bddc24476922c3ff"
+  digest = "1:75e67ff69d0a449e66f5d5cdfec681ff46fc8882d008c844618bdfdefe08b6e6"
   name = "golang.org/x/text"
   packages = [
     "encoding",
@@ -197,11 +197,11 @@
     "unicode/cldr",
   ]
   pruneopts = ""
-  revision = "17bcc049122f272a32787ba38073ee47433023e9"
+  revision = "e6919f6577db79269a6443b9dc46d18f2238fb5d"
 
 [[projects]]
   branch = "master"
-  digest = "1:f47a3661a2c904da389093d55faf12914d0f0610e0bd0627c64787952ac5b29e"
+  digest = "1:7873bd40db14885e3c790a4134341e998abf3d83d0872a93613f765025903026"
   name = "google.golang.org/api"
   packages = [
     "calendar/v3",
@@ -210,10 +210,10 @@
     "googleapi/internal/uritemplates",
   ]
   pruneopts = ""
-  revision = "41dc4b66e69d5dbf20efe4ba67e19d214d147ae3"
+  revision = "65a46cafb132eff435c7d1e0f439cc73c8eebb85"
 
 [[projects]]
-  digest = "1:77d3cff3a451d50be4b52db9c7766c0d8570ba47593f0c9dc72173adb208e788"
+  digest = "1:bc09e719c4e2a15d17163f5272d9a3131c45d77542b7fdc53ff518815bc19ab3"
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -228,8 +228,8 @@
     "urlfetch",
   ]
   pruneopts = ""
-  revision = "4a4468ece617fc8205e99368fa2200e9d1fad421"
-  version = "v1.3.0"
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
 
 [solve-meta]
   analyzer-name = "dep"
