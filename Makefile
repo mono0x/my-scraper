@@ -12,9 +12,10 @@ setup:
 	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/megacheck
 
 deps:
-	GO111MODULE=on go mod download
+	GO111MODULE=on go mod tidy
 
 test:
+	GO111MODULE=on $(GO) mod verify
 	GO111MODULE=on $(GO) vet ./...
 	GO111MODULE=on $(GO) test $(TESTOPTS)
 	#$(GOBIN)/megacheck ./...
