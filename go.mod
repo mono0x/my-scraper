@@ -17,7 +17,6 @@ require (
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lestrrat-go/server-starter v0.0.0-20181210024821-8564cc80d990
-	github.com/lestrrat/go-server-starter v0.0.0-20180220115249-6ac0b358431b
 	github.com/mattn/goveralls v0.0.2
 	github.com/pborman/uuid v1.2.0 // indirect
 	github.com/pkg/errors v0.0.0-20181023235946-059132a15dd0

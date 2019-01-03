@@ -7,7 +7,7 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
-	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat/go-server-starter/cmd/start_server
+	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat-go/server-starter/cmd/start_server
 	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/mattn/goveralls
 	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/megacheck
 
