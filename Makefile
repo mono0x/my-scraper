@@ -8,7 +8,6 @@ all: deps test build
 
 setup:
 	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat-go/server-starter/cmd/start_server
-	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/mattn/goveralls
 	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/megacheck
 
 deps:
@@ -22,9 +21,6 @@ test:
 
 build:
 	GO111MODULE=on $(GO) build -o $(BINARY) $(BUILDOPTS)
-
-goveralls:
-	$(GOBIN)/goveralls -service=travis-ci -coverprofile=result.coverprofile
 
 build-linux:
 	GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux $(BUILDOPTS)
