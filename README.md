@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mono0x/my-scraper.svg)](https://travis-ci.org/mono0x/my-scraper)
 [![Coverage Status](https://coveralls.io/repos/github/mono0x/my-scraper/badge.svg?branch=master)](https://coveralls.io/github/mono0x/my-scraper?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/32fb1cf994b61869178f/maintainability)](https://codeclimate.com/github/mono0x/my-scraper/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/32fb1cf994b61869178f/test_coverage)](https://codeclimate.com/github/mono0x/my-scraper/test_coverage)
 
 `my-scraper` is an atom feed generator for my favorite websites.
 
