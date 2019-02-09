@@ -8,7 +8,7 @@ all: deps test build
 
 setup:
 	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat-go/server-starter/cmd/start_server
-	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/megacheck
+	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/staticcheck
 
 deps:
 	GO111MODULE=on go mod tidy
@@ -17,7 +17,7 @@ test:
 	GO111MODULE=on $(GO) mod verify
 	GO111MODULE=on $(GO) vet ./...
 	GO111MODULE=on $(GO) test $(TESTOPTS)
-	#$(GOBIN)/megacheck ./...
+	GO111MODULE=on $(GOBIN)/staticcheck ./...
 
 build:
 	GO111MODULE=on $(GO) build -o $(BINARY) $(BUILDOPTS)

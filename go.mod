@@ -2,6 +2,7 @@ module github.com/mono0x/my-scraper
 
 require (
 	cloud.google.com/go v0.34.0 // indirect
+	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/ChimeraCoder/anaconda v0.0.0-20181014153429-fba449f7b405
 	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
 	github.com/PuerkitoBio/goquery v1.5.0
@@ -14,7 +15,6 @@ require (
 	github.com/gorilla/feeds v0.0.0-20181208211232-8df78d284e1d
 	github.com/jessevdk/go-flags v1.4.0 // indirect
 	github.com/joho/godotenv v0.0.0-20181120194748-69ed1d913aa8
-	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lestrrat-go/server-starter v0.0.0-20181210024821-8564cc80d990
 	github.com/pkg/errors v0.0.0-20181023235946-059132a15dd0
@@ -27,5 +27,5 @@ require (
 	golang.org/x/tools v0.0.0-20181221235234-d00ac6d27372 // indirect
 	google.golang.org/api v0.0.0-20181221000618-65a46cafb132
 	google.golang.org/appengine v1.4.0 // indirect
-	honnef.co/go/tools v0.0.0-20180920025451-e3ad64cb4ed3
+	honnef.co/go/tools v0.0.0-20190128043916-71123fcbb8fe
 )
