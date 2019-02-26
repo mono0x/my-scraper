@@ -65,9 +65,6 @@ func (s *source) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 }
 
 func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	headerRe := headerRe.Copy()
-	dateRe := dateRe.Copy()
-
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
 		Link:  &feeds.Link{Href: s.baseURL + endpoint},

@@ -108,7 +108,6 @@ func (s *source) render(posts *posts) (*feeds.Feed, error) {
 		}
 
 		var link string
-		photosURLRe := photosURLRe.Copy()
 		if photosURLRe.MatchString(post.Link) {
 			if parts := strings.SplitN(post.Id, "_", 2); len(parts) == 2 {
 				link = serviceURL + s.userID + "/posts/" + parts[1] + "/"

@@ -94,7 +94,6 @@ func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 		return nil, errors.WithStack(err)
 	}
 
-	sharedDataRe := sharedDataRe.Copy()
 	submatches := sharedDataRe.FindSubmatch(src)
 	if len(submatches) == 0 {
 		return nil, errors.New("data not found")
