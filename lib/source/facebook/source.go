@@ -20,7 +20,7 @@ const (
 )
 
 type posts struct {
-	// https://developers.facebook.com/docs/graph-api/reference/v2.6/post
+	// https://developers.facebook.com/docs/graph-api/reference/v3.2/post
 	Data []struct {
 		Id          string `json:"id"`
 		CreatedTime string `json:"created_time"`
@@ -70,7 +70,7 @@ func (s *source) fetch() (*posts, error) {
 	values.Set("access_token", s.accessToken)
 	values.Set("fields", "created_time,from,link,message,picture")
 
-	resp, err := s.httpClient.Get(s.baseURL + "/v2.6/" + s.userID + "/posts?" + values.Encode())
+	resp, err := s.httpClient.Get(s.baseURL + "/v3.2/" + s.userID + "/posts?" + values.Encode())
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
