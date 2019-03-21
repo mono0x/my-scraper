@@ -18,11 +18,11 @@ func TestNewSource(t *testing.T) {
 
 func TestScrape(t *testing.T) {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/v2.6/mucchan.musao/posts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v3.2/mucchan.musao/posts", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		assert.Equal(t, "ACCESS_TOKEN", query.Get("access_token"))
 		assert.Equal(t, "created_time,from,link,message,picture", query.Get("fields"))
-		http.ServeFile(w, r, "testdata/graph.facebook.com/v2.6/mucchan.musao/posts")
+		http.ServeFile(w, r, "testdata/graph.facebook.com/v3.2/mucchan.musao/posts")
 	})
 
 	server := httptest.NewServer(mux)
