@@ -1,4 +1,5 @@
 .env
+.git
 bin
 google_client_credentials.json
 my-scraper

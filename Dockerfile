@@ -1,8 +1,11 @@
-FROM golang:1.11 AS builder
+FROM golang:1.12 AS builder
 
 WORKDIR /go/src/github.com/mono0x/my-scraper
 
-ADD . .
+ADD go.mod go.sum Makefile ./
+RUN make download
+
+ADD . ./
 RUN make build-linux
 
 FROM alpine:latest
