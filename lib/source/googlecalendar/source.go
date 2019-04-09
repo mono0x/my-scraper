@@ -16,6 +16,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
+	"google.golang.org/api/option"
 )
 
 const (
@@ -64,7 +65,7 @@ func (s *source) fetch() (*calendar.Events, error) {
 
 	client := config.Client(ctx)
 
-	service, err := calendar.New(client)
+	service, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
