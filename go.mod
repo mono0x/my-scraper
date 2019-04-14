@@ -17,6 +17,7 @@ require (
 	github.com/lestrrat-go/server-starter v0.0.0-20181210024821-8564cc80d990
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.2.2
+	github.com/victorspringer/http-cache v0.0.0-20190321213225-4ab97b70695c
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
 	golang.org/x/text v0.3.0

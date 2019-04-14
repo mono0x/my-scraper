@@ -33,7 +33,11 @@ func run() error {
 		}
 	}
 
-	s := http.Server{Handler: server.NewHandler()}
+	handler, err := server.NewHandler()
+	if err != nil {
+		return err
+	}
+	s := http.Server{Handler: handler}
 
 	eg := errgroup.Group{}
 	eg.Go(func() error {

@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -24,11 +25,16 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/twitter"
 	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
+	"github.com/pkg/errors"
+	"github.com/victorspringer/http-cache"
+	"github.com/victorspringer/http-cache/adapter/memory"
 )
+
+const cacheSeconds = 3600
 
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
-	w.Header().Set("Cache-Control", "public, max-age=3600")
+	w.Header().Set("Cache-Control", "public, max-age="+string(cacheSeconds))
 	if err := feed.WriteAtom(w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -53,7 +59,7 @@ func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Reque
 	}
 }
 
-func NewHandler() http.Handler {
+func NewHandler() (http.Handler, error) {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 
@@ -124,5 +130,21 @@ func NewHandler() http.Handler {
 		sourceRenderer(source)(w, r)
 	})
 
-	return r
+	memcached, err := memory.NewAdapter(
+		memory.AdapterWithAlgorithm(memory.LRU),
+		memory.AdapterWithCapacity(1024),
+	)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	cacheClient, err := cache.NewClient(
+		cache.ClientWithAdapter(memcached),
+		cache.ClientWithTTL(cacheSeconds*time.Second),
+	)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return cacheClient.Middleware(r), nil
 }
