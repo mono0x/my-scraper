@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"html"
-	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 
@@ -50,12 +50,7 @@ func (s *source) Scrape() (*feeds.Feed, error) {
 }
 
 func (s *source) fetch() (*calendar.Events, error) {
-	json, err := ioutil.ReadFile("google_client_credentials.json")
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	config, err := google.JWTConfigFromJSON(json, calendar.CalendarReadonlyScope)
+	config, err := google.JWTConfigFromJSON(([]byte)(os.Getenv("GOOGLE_CLIENT_CREDENTIALS")), calendar.CalendarReadonlyScope)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

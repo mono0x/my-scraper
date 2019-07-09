@@ -1,6 +1,5 @@
 /.env
 /bin/
-/google_client_credentials.json
 /my-scraper
 /my-scraper.linux
 /result.coverprofile
