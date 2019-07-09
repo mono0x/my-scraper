@@ -27,7 +27,11 @@ func run() error {
 	if len(listeners) > 0 {
 		l = listeners[0]
 	} else {
-		l, err = net.Listen("tcp", ":8080")
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+		l, err = net.Listen("tcp", ":"+port)
 		if err != nil {
 			return errors.WithStack(err)
 		}
