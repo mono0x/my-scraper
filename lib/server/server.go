@@ -63,19 +63,23 @@ func NewHandler() (http.Handler, error) {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
+
 	entries := []struct {
 		Path   string
 		Source scraper.Source
 	}{
-		{"/fukoku-life", fukokulifeevent.NewSource(http.DefaultClient)},
-		{"/harmonyland-info", harmonylandinfo.NewSource(http.DefaultClient)},
-		{"/kittychan-info", kittychaninfo.NewSource(http.DefaultClient)},
-		{"/prtimes-sanrio", prtimes.NewSource(http.DefaultClient)},
-		{"/puroland-info", purolandinfo.NewSource(http.DefaultClient)},
-		{"/sanrio-news-release", sanrionewsrelease.NewSource(http.DefaultClient)},
-		{"/seibuen-event", seibuenevent.NewSource(http.DefaultClient)},
-		{"/value-press-sanrio", valuepress.NewSource(http.DefaultClient)},
-		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(http.DefaultClient)},
+		{"/fukoku-life", fukokulifeevent.NewSource(client)},
+		{"/harmonyland-info", harmonylandinfo.NewSource(client)},
+		{"/kittychan-info", kittychaninfo.NewSource(client)},
+		{"/prtimes-sanrio", prtimes.NewSource(client)},
+		{"/puroland-info", purolandinfo.NewSource(client)},
+		{"/sanrio-news-release", sanrionewsrelease.NewSource(client)},
+		{"/seibuen-event", seibuenevent.NewSource(client)},
+		{"/value-press-sanrio", valuepress.NewSource(client)},
+		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
 	}
 	for _, entry := range entries {
 		r.Get(entry.Path, sourceRenderer(entry.Source))
@@ -88,7 +92,7 @@ func NewHandler() (http.Handler, error) {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := facebook.NewSource(http.DefaultClient, os.Getenv("FACEBOOK_ACCESS_TOKEN"), id)
+		source := facebook.NewSource(client, os.Getenv("FACEBOOK_ACCESS_TOKEN"), id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -99,7 +103,7 @@ func NewHandler() (http.Handler, error) {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := googlecalendar.NewSource(http.DefaultClient, id)
+		source := googlecalendar.NewSource(client, id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -110,7 +114,7 @@ func NewHandler() (http.Handler, error) {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := instagram.NewSource(http.DefaultClient, id)
+		source := instagram.NewSource(client, id)
 		sourceRenderer(source)(w, r)
 	})
 
@@ -126,7 +130,7 @@ func NewHandler() (http.Handler, error) {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-		source := twitter.NewSource(http.DefaultClient, id)
+		source := twitter.NewSource(client, id)
 		sourceRenderer(source)(w, r)
 	})
 
