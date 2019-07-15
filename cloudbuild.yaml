@@ -1,12 +1,6 @@
 steps:
 - name: gcr.io/cloud-builders/docker
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    docker pull gcr.io/${PROJECT_ID}/my-scraper || exit 0
-- name: gcr.io/cloud-builders/docker
-  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}', '--cache-from', 'gcr.io/${PROJECT_ID}/my-scraper', '.']
+  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}', '.']
 - name: gcr.io/cloud-builders/docker
   args: ['push', 'gcr.io/${PROJECT_ID}/my-scraper']
 
