@@ -12,7 +12,7 @@ make setup
 # Test & build the app
 make
 # Start the app
-bin/start_server --port=8080 -- ./my-scraper
+./my-scraper
 ```
 
 ## Supported Websites
