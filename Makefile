@@ -7,14 +7,14 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
-	GOBIN=$(GOBIN) GO111MODULE=on go install github.com/lestrrat-go/server-starter/cmd/start_server
-	GOBIN=$(GOBIN) GO111MODULE=on go install honnef.co/go/tools/cmd/staticcheck
+	GOBIN=$(GOBIN) GO111MODULE=on $(GO) install github.com/lestrrat-go/server-starter/cmd/start_server
+	GOBIN=$(GOBIN) GO111MODULE=on $(GO) install honnef.co/go/tools/cmd/staticcheck
 
 download:
-	GO111MODULE=on go mod download
+	GO111MODULE=on $(GO) mod download
 
 deps:
-	GO111MODULE=on go mod tidy
+	GO111MODULE=on $(GO) mod tidy
 
 test:
 	GO111MODULE=on $(GO) mod verify
