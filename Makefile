@@ -16,6 +16,10 @@ download:
 deps:
 	GO111MODULE=on $(GO) mod tidy
 
+upgrade-deps:
+	GO111MODULE=on $(GO) get -u
+	GO111MODULE=on $(GO) mod tidy
+
 test:
 	GO111MODULE=on $(GO) mod verify
 	GO111MODULE=on $(GO) vet ./...
