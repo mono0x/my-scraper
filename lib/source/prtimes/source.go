@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	baseURL  = "http://prtimes.jp"
+	baseURL  = "https://prtimes.jp"
 	endpoint = `/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1`
 )
 

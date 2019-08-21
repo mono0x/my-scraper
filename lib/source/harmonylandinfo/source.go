@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	baseURL  = "http://www.harmonyland.jp"
+	baseURL  = "https://www.harmonyland.jp"
 	endpoint = "/welcome.html"
 )
 

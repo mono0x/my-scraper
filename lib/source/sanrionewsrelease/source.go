@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	baseURL  = "http://www.sanrio.co.jp"
+	baseURL  = "https://www.sanrio.co.jp"
 	endpoint = "/corporate/release/"
 )
 
