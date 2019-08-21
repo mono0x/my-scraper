@@ -83,7 +83,6 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 			Title:   title,
 			Link:    &feeds.Link{Href: link},
 			Author:  &feeds.Author{Name: author},
-			Id:      link,
 			Created: t,
 		})
 	})

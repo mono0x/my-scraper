@@ -72,7 +72,6 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 		items = append(items, &feeds.Item{
 			Title:   title,
 			Link:    &feeds.Link{Href: baseURL + href},
-			Id:      href,
 			Created: date,
 		})
 	})

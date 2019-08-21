@@ -1,8 +1,6 @@
 package harmonylandinfo
 
 import (
-	"crypto/sha256"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -80,13 +78,9 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 
 			title := titleReplacer.Replace(strings.TrimSpace(s.Text()))
 
-			sha := sha256.New()
-			fmt.Fprint(sha, title, resolvedHref)
-
 			items = append(items, &feeds.Item{
 				Title: title,
 				Link:  &feeds.Link{Href: resolvedHref},
-				Id:    fmt.Sprintf("%x", sha.Sum(nil)),
 			})
 		})
 	})

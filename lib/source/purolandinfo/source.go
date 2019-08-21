@@ -71,7 +71,6 @@ func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 		items = append(items, &feeds.Item{
 			Title:       html.UnescapeString(infoItem.Title),
 			Link:        &feeds.Link{Href: infoItem.URL},
-			Id:          infoItem.URL,
 			Description: description,
 		})
 	}
