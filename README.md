@@ -20,7 +20,6 @@ make
 - Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Google Calendar
 - Harmonyland <http://www.harmonyland.jp/welcome.html>
-- Instagram
 - Kittychan Info <http://www.kittychan.info/information.html>
 - PR TIMES (Sanrio) <http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1>
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>

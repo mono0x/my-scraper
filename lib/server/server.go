@@ -14,7 +14,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/fukokulifeevent"
 	"github.com/mono0x/my-scraper/lib/source/googlecalendar"
 	"github.com/mono0x/my-scraper/lib/source/harmonylandinfo"
-	"github.com/mono0x/my-scraper/lib/source/instagram"
 	"github.com/mono0x/my-scraper/lib/source/kittychaninfo"
 	"github.com/mono0x/my-scraper/lib/source/prtimes"
 	"github.com/mono0x/my-scraper/lib/source/purolandinfo"
@@ -91,17 +90,6 @@ func NewHandler() (http.Handler, error) {
 			return
 		}
 		source := googlecalendar.NewSource(client, id)
-		sourceRenderer(source)(w, r)
-	})
-
-	r.Get("/instagram", func(w http.ResponseWriter, r *http.Request) {
-		query := r.URL.Query()
-		id := query.Get("id")
-		if id == "" {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		source := instagram.NewSource(client, id)
 		sourceRenderer(source)(w, r)
 	})
 
