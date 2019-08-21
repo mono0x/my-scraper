@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"reflect"
-	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -19,7 +18,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/purolandinfo"
 	"github.com/mono0x/my-scraper/lib/source/sanrionewsrelease"
 	"github.com/mono0x/my-scraper/lib/source/seibuenevent"
-	"github.com/mono0x/my-scraper/lib/source/twitter"
 	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
 	"github.com/pkg/errors"
@@ -90,22 +88,6 @@ func NewHandler() (http.Handler, error) {
 			return
 		}
 		source := googlecalendar.NewSource(client, id)
-		sourceRenderer(source)(w, r)
-	})
-
-	r.Get("/twitter", func(w http.ResponseWriter, r *http.Request) {
-		query := r.URL.Query()
-		idStr := query.Get("id")
-		if idStr == "" {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		id, err := strconv.ParseInt(idStr, 10, 64)
-		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		source := twitter.NewSource(client, id)
 		sourceRenderer(source)(w, r)
 	})
 
