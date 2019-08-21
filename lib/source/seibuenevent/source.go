@@ -1,8 +1,6 @@
 package seibuenevent
 
 import (
-	"crypto/sha256"
-	"fmt"
 	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
@@ -12,8 +10,8 @@ import (
 )
 
 const (
-	baseURL  = "http://www.seibu-leisure.co.jp"
-	endpoint = "/event/index.html?category=e1"
+	baseURL  = "https://www.seibu-leisure.co.jp"
+	endpoint = "/event/12410/index.html"
 )
 
 type source struct {
@@ -54,24 +52,18 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 		case s.HasClass("elem-heading-lv3"):
 			title = s.Find("h3").Text()
 		case s.HasClass("elem-pic-block"):
-			paragraph := s.Find(".elem-paragraph p")
-			if paragraph.Length() == 0 {
+			anchor := s.Find("ul.txt-list li p a")
+			if anchor.Length() == 0 {
 				return
 			}
-
-			description, err := paragraph.Html()
-			if err != nil {
+			href, ok := anchor.First().Attr("href")
+			if !ok {
 				return
 			}
-
-			sha := sha256.New()
-			fmt.Fprint(sha, title)
 
 			items = append(items, &feeds.Item{
-				Title:       title,
-				Description: description,
-				Link:        &feeds.Link{Href: baseURL + endpoint},
-				Id:          fmt.Sprintf("%x", sha.Sum(nil)),
+				Title: title,
+				Link:  &feeds.Link{Href: baseURL + href},
 			})
 		}
 	})
