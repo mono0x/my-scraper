@@ -25,5 +25,4 @@ make
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>
 - Sanrio Puroland <http://www.puroland.jp/>
 - Seibuen Event <https://www.seibu-leisure.co.jp/event/12410/index.html>
-- ValuePress! (Sanrio) <https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA>
 - Yuyakekoyake News <http://yuyakekoyake.jp/news/index.php>

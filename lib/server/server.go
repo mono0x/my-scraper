@@ -18,7 +18,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/purolandinfo"
 	"github.com/mono0x/my-scraper/lib/source/sanrionewsrelease"
 	"github.com/mono0x/my-scraper/lib/source/seibuenevent"
-	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
 	"github.com/pkg/errors"
 	cache "github.com/victorspringer/http-cache"
@@ -73,7 +72,6 @@ func NewHandler() (http.Handler, error) {
 		{"/puroland-info", purolandinfo.NewSource(client)},
 		{"/sanrio-news-release", sanrionewsrelease.NewSource(client)},
 		{"/seibuen-event", seibuenevent.NewSource(client)},
-		{"/value-press-sanrio", valuepress.NewSource(client)},
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
 	}
 	for _, entry := range entries {
