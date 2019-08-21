@@ -17,7 +17,6 @@ make
 
 ## Supported Websites
 
-- Facebook
 - Fukoku Life <https://act.fukoku-life.co.jp/event/index.php>
 - Google Calendar
 - Harmonyland <http://www.harmonyland.jp/welcome.html>

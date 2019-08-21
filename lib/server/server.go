@@ -3,7 +3,6 @@ package server
 import (
 	"log"
 	"net/http"
-	"os"
 	"reflect"
 	"strconv"
 	"time"
@@ -12,7 +11,6 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/mono0x/my-scraper/lib/source/facebook"
 	"github.com/mono0x/my-scraper/lib/source/fukokulifeevent"
 	"github.com/mono0x/my-scraper/lib/source/googlecalendar"
 	"github.com/mono0x/my-scraper/lib/source/harmonylandinfo"
@@ -26,7 +24,7 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/valuepress"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
 	"github.com/pkg/errors"
-	"github.com/victorspringer/http-cache"
+	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
 )
 
@@ -84,17 +82,6 @@ func NewHandler() (http.Handler, error) {
 	for _, entry := range entries {
 		r.Get(entry.Path, sourceRenderer(entry.Source))
 	}
-
-	r.Get("/facebook", func(w http.ResponseWriter, r *http.Request) {
-		query := r.URL.Query()
-		id := query.Get("id")
-		if id == "" {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		source := facebook.NewSource(client, os.Getenv("FACEBOOK_ACCESS_TOKEN"), id)
-		sourceRenderer(source)(w, r)
-	})
 
 	r.Get("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
