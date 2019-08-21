@@ -24,6 +24,6 @@ make
 - PR TIMES (Sanrio) <http://prtimes.jp/main/action.php?run=html&page=searchkey&search_word=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA&search_pattern=1>
 - Sanrio News Release <http://www.sanrio.co.jp/corporate/release/>
 - Sanrio Puroland <http://www.puroland.jp/>
-- Seibuen Event <http://www.seibu-leisure.co.jp/event/index.html?category=e1>
+- Seibuen Event <https://www.seibu-leisure.co.jp/event/12410/index.html>
 - ValuePress! (Sanrio) <https://www.value-press.com/search?q=%E3%82%B5%E3%83%B3%E3%83%AA%E3%82%AA>
 - Yuyakekoyake News <http://yuyakekoyake.jp/news/index.php>
