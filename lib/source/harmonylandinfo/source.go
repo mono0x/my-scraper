@@ -93,7 +93,7 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 
 	feed := &feeds.Feed{
 		Title: "ハーモニーランド",
-		Link:  &feeds.Link{Href: endpoint},
+		Link:  &feeds.Link{Href: s.baseURL + endpoint},
 		Items: items,
 	}
 	return feed, nil
