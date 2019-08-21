@@ -154,7 +154,6 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 				Created:     created,
 				Description: description,
 				Link:        &feeds.Link{Href: link},
-				Id:          link,
 			})
 			if len(items) >= 100 {
 				return false
