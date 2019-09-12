@@ -16,15 +16,15 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/victorspringer/http-cache v0.0.0-20190721184638-fe78e97af707
 	go.opencensus.io v0.22.1 // indirect
-	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
+	golang.org/x/net v0.0.0-20190909003024-a7b16738d86b // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/sys v0.0.0-20190904154756-749cb33beabd // indirect
+	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sys v0.0.0-20190912141932-bc967efca4b8 // indirect
 	golang.org/x/text v0.3.2
-	golang.org/x/tools v0.0.0-20190906115428-bc9f4f258ada // indirect
+	golang.org/x/tools v0.0.0-20190912132005-44811c017489 // indirect
 	google.golang.org/api v0.10.0
 	google.golang.org/appengine v1.6.2 // indirect
-	google.golang.org/genproto v0.0.0-20190905072037-92dd089d5514 // indirect
-	google.golang.org/grpc v1.23.0 // indirect
+	google.golang.org/genproto v0.0.0-20190911173649-1774047e7e51 // indirect
+	google.golang.org/grpc v1.23.1 // indirect
 	honnef.co/go/tools v0.0.1-2019.2.3
 )
