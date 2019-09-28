@@ -2,6 +2,7 @@ package googlecalendar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"html"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
@@ -52,7 +52,7 @@ func (s *source) Scrape() (*feeds.Feed, error) {
 func (s *source) fetch() (*calendar.Events, error) {
 	config, err := google.JWTConfigFromJSON(([]byte)(os.Getenv("GOOGLE_CLIENT_CREDENTIALS")), calendar.CalendarReadonlyScope)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	ctx := context.Background()
@@ -62,21 +62,21 @@ func (s *source) fetch() (*calendar.Events, error) {
 
 	service, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
 	events, err := service.Events.List(s.calendarID).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	items := events.Items
 	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
 		events, err := service.Events.List(s.calendarID).PageToken(pageToken).Do()
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, fmt.Errorf("%w", err)
 		}
 		items = append(items, events.Items...)
 		pageToken = events.NextPageToken
@@ -102,11 +102,11 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 
 		created, err := time.Parse(time.RFC3339, event.Created)
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, fmt.Errorf("%w", err)
 		}
 		updated, err := time.Parse(time.RFC3339, event.Updated)
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, fmt.Errorf("%w", err)
 		}
 
 		var timeZone string
@@ -120,7 +120,7 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 		if timeZone != "" {
 			u, err := url.Parse(link)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 			query := u.Query()
 			query.Set("ctz", timeZone)
@@ -133,7 +133,7 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 			var err error
 			startLoc, err = time.LoadLocation(event.Start.TimeZone)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 		} else {
 			startLoc = loc
@@ -144,7 +144,7 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 			var err error
 			endLoc, err = time.LoadLocation(event.End.TimeZone)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 		} else {
 			endLoc = loc
@@ -156,11 +156,11 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 		case event.Start.Date != "" && event.End.Date != "":
 			start, err := time.ParseInLocation("2006-01-02", event.Start.Date, startLoc)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 			end, err := time.ParseInLocation("2006-01-02", event.End.Date, endLoc)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 			end = end.AddDate(0, 0, -1)
 
@@ -173,11 +173,11 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 		case event.Start.DateTime != "" && event.End.DateTime != "":
 			start, err := time.ParseInLocation(time.RFC3339, event.Start.DateTime, startLoc)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 			end, err := time.ParseInLocation(time.RFC3339, event.End.DateTime, endLoc)
 			if err != nil {
-				return nil, errors.WithStack(err)
+				return nil, fmt.Errorf("%w", err)
 			}
 
 			if start.Format("2006-01-02") == end.Format("2006-01-02") {
@@ -210,7 +210,7 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 
 	updated, err := time.Parse(time.RFC3339, events.Updated)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	feed := &feeds.Feed{

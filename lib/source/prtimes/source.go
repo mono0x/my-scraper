@@ -1,6 +1,7 @@
 package prtimes
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -10,7 +11,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -35,7 +35,7 @@ func NewSource(c *http.Client) *source {
 func (s *source) Scrape() (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
 
@@ -45,7 +45,7 @@ func (s *source) Scrape() (*feeds.Feed, error) {
 func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return s.scrapeFromDocument(doc)
 }

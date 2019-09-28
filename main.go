@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -13,14 +14,13 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lestrrat-go/server-starter/listener"
 	"github.com/mono0x/my-scraper/lib/server"
-	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 )
 
 func run() error {
 	listeners, err := listener.ListenAll()
 	if err != nil && err != listener.ErrNoListeningTarget {
-		return errors.WithStack(err)
+		return fmt.Errorf("%w", err)
 	}
 
 	var l net.Listener
@@ -33,7 +33,7 @@ func run() error {
 		}
 		l, err = net.Listen("tcp", ":"+port)
 		if err != nil {
-			return errors.WithStack(err)
+			return fmt.Errorf("%w", err)
 		}
 	}
 
@@ -46,7 +46,7 @@ func run() error {
 	eg := errgroup.Group{}
 	eg.Go(func() error {
 		if err := s.Serve(l); err != nil && err != http.ErrServerClosed {
-			return errors.WithStack(err)
+			return fmt.Errorf("%w", err)
 		}
 		return nil
 	})
@@ -58,7 +58,7 @@ func run() error {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		if err := s.Shutdown(ctx); err != nil {
-			return errors.WithStack(err)
+			return fmt.Errorf("%w", err)
 		}
 		return nil
 	})
@@ -71,6 +71,6 @@ func main() {
 	_ = godotenv.Load()
 
 	if err := run(); err != nil {
-		log.Fatalf("%+v\n", err)
+		log.Fatalf("%v\n", err)
 	}
 }

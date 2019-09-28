@@ -1,6 +1,7 @@
 package sanrionewsrelease
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -8,7 +9,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -33,13 +33,13 @@ func NewSource(c *http.Client) *source {
 func (s *source) Scrape() (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return s.scrapeFromDocument(doc)
 }
@@ -49,7 +49,7 @@ func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	doc.Find(".news_release_list dl").Each(func(_ int, s *goquery.Selection) {

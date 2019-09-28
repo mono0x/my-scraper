@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"reflect"
@@ -19,7 +20,6 @@ import (
 	"github.com/mono0x/my-scraper/lib/source/sanrionewsrelease"
 	"github.com/mono0x/my-scraper/lib/source/seibuenevent"
 	"github.com/mono0x/my-scraper/lib/source/yuyakekoyakenews"
-	"github.com/pkg/errors"
 	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
 )
@@ -94,7 +94,7 @@ func NewHandler() (http.Handler, error) {
 		memory.AdapterWithCapacity(1024),
 	)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	cacheClient, err := cache.NewClient(
@@ -102,7 +102,7 @@ func NewHandler() (http.Handler, error) {
 		cache.ClientWithTTL(cacheSeconds*time.Second),
 	)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	return cacheClient.Middleware(r), nil

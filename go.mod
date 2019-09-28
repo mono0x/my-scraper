@@ -12,7 +12,6 @@ require (
 	github.com/jessevdk/go-flags v1.4.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/lestrrat-go/server-starter v0.0.0-20181210024821-8564cc80d990
-	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
 	github.com/victorspringer/http-cache v0.0.0-20190721184638-fe78e97af707
 	go.opencensus.io v0.22.1 // indirect

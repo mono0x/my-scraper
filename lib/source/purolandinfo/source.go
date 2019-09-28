@@ -9,7 +9,6 @@ import (
 
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -34,7 +33,7 @@ func NewSource(c *http.Client) *source {
 func (s *source) Scrape() (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + purolandInfoAPIEndpoint)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
 
@@ -57,7 +56,7 @@ func (s *source) scrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	}
 
 	if err := json.NewDecoder(reader).Decode(&info); err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	items := make([]*feeds.Item, 0, info.Count)

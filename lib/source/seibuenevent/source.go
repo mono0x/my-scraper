@@ -1,12 +1,12 @@
 package seibuenevent
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -31,13 +31,13 @@ func NewSource(c *http.Client) *source {
 func (s *source) Scrape() (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return s.scrapeFromDocument(doc)
 }

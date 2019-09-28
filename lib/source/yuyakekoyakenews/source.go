@@ -1,6 +1,7 @@
 package yuyakekoyakenews
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -10,7 +11,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
 	scraper "github.com/mono0x/my-scraper/lib"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -35,13 +35,13 @@ func NewSource(c *http.Client) *source {
 func (s *source) Scrape() (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -51,7 +51,7 @@ var yuyakekoyakeNewsItemRe = regexp.MustCompile(`\A(\d+)年(\d+)月(\d+)日[\s�
 func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	absBaseURL, _ := url.Parse(baseURL + endpoint)
