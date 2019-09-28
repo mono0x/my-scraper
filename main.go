@@ -13,7 +13,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/lestrrat-go/server-starter/listener"
-	"github.com/mono0x/my-scraper/lib/server"
+	"github.com/mono0x/my-scraper/server"
 	"golang.org/x/sync/errgroup"
 )
 

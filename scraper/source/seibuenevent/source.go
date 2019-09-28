@@ -1,19 +1,17 @@
-package sanrionewsrelease
+package seibuenevent
 
 import (
 	"fmt"
 	"net/http"
-	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/scraper"
 )
 
 const (
-	baseURL  = "https://www.sanrio.co.jp"
-	endpoint = "/corporate/release/"
+	baseURL  = "https://www.seibu-leisure.co.jp"
+	endpoint = "/event/12410/index.html"
 )
 
 type source struct {
@@ -46,40 +44,35 @@ func (s *source) Scrape() (*feeds.Feed, error) {
 
 func (s *source) scrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	var items []*feeds.Item
+	var (
+		title string
+	)
+	doc.Find(".elem-section > div > div > div > div > div").Each(func(_ int, s *goquery.Selection) {
+		switch {
+		case s.HasClass("elem-heading-lv3"):
+			title = s.Find("h3").Text()
+		case s.HasClass("elem-pic-block"):
+			anchor := s.Find("ul.txt-list li p a")
+			if anchor.Length() == 0 {
+				return
+			}
+			href, ok := anchor.First().Attr("href")
+			if !ok {
+				return
+			}
 
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
-	doc.Find(".news_release_list dl").Each(func(_ int, s *goquery.Selection) {
-		date, err := time.ParseInLocation("2006/1/2", s.Find("dt").First().Text(), loc)
-		if err != nil {
-			return
+			items = append(items, &feeds.Item{
+				Title: title,
+				Link:  &feeds.Link{Href: baseURL + href},
+			})
 		}
-
-		a := s.Find("dd a").First()
-		title := strings.TrimSpace(a.Text())
-		href, ok := a.Attr("href")
-		if !ok {
-			return
-		}
-
-		if pdf := a.Find("img[alt=PDF]").Length() > 0; pdf {
-			title = title + " (PDF)"
-		}
-
-		items = append(items, &feeds.Item{
-			Title:   title,
-			Link:    &feeds.Link{Href: baseURL + href},
-			Created: date,
-		})
 	})
 
 	feed := &feeds.Feed{
-		Title: "ニュースリリース | 会社情報 | サンリオ",
+		Title: "西武園ゆうえんち メルヘンタウン",
 		Link:  &feeds.Link{Href: baseURL + endpoint},
 		Items: items,
 	}
+
 	return feed, nil
 }

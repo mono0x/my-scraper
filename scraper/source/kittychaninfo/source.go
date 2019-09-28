@@ -13,7 +13,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/feeds"
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/scraper"
 )
 
 const (

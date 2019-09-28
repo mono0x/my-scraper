@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/feeds"
-	scraper "github.com/mono0x/my-scraper/lib"
+	"github.com/mono0x/my-scraper/scraper"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
