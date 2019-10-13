@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -30,9 +31,8 @@ type source struct {
 
 var _ scraper.Source = (*source)(nil)
 
-var (
-	descriptionReplacer = strings.NewReplacer("\n", "<br />")
-)
+var descriptionReplacer = strings.NewReplacer("\n", "<br />")
+var htmlRe = regexp.MustCompile(`<\w+`)
 
 func NewSource(c *http.Client, calendarID string) *source {
 	return &source{
@@ -195,7 +195,11 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 			description += fmt.Sprintf("Location: %s<br />", html.EscapeString(event.Location))
 		}
 		description += fmt.Sprintf("Duration: %s<br /><br />", html.EscapeString(duration))
-		description += descriptionReplacer.Replace(html.EscapeString(event.Description))
+		if htmlRe.MatchString(event.Description) {
+			description += event.Description
+		} else {
+			description += descriptionReplacer.Replace(html.EscapeString(event.Description))
+		}
 
 		items = append(items, &feeds.Item{
 			Id:          event.Id,
