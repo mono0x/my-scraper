@@ -1,6 +1,6 @@
 module github.com/mono0x/my-scraper
 
-go 1.13
+go 1.14
 
 require (
 	cloud.google.com/go v0.53.0 // indirect
