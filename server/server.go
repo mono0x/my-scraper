@@ -18,7 +18,6 @@ import (
 	"github.com/mono0x/my-scraper/scraper/source/prtimes"
 	"github.com/mono0x/my-scraper/scraper/source/purolandinfo"
 	"github.com/mono0x/my-scraper/scraper/source/sanrionewsrelease"
-	"github.com/mono0x/my-scraper/scraper/source/seibuenevent"
 	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
 	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
@@ -71,7 +70,6 @@ func NewHandler() (http.Handler, error) {
 		{"/prtimes-sanrio", prtimes.NewSource(client)},
 		{"/puroland-info", purolandinfo.NewSource(client)},
 		{"/sanrio-news-release", sanrionewsrelease.NewSource(client)},
-		{"/seibuen-event", seibuenevent.NewSource(client)},
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
 	}
 	for _, entry := range entries {
