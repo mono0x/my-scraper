@@ -1,8 +1,20 @@
 steps:
-- name: 'gcr.io/kaniko-project/executor:latest'
-  args:
-  - '--destination=gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}'
-  - --cache=true
+  - name: gcr.io/kaniko-project/executor:latest
+    args:
+      - "--destination=gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}"
+      - --cache=true
 
-- name: gcr.io/cloud-builders/gcloud
-  args: ['beta', 'run', 'deploy', 'my-scraper', '--platform', 'managed', '--image', 'gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}', '--region', 'us-central1', '--allow-unauthenticated']
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    args:
+      - gcloud
+      - beta
+      - run
+      - deploy
+      - my-scraper
+      - --platform
+      - managed
+      - --image
+      - "gcr.io/${PROJECT_ID}/my-scraper:${SHORT_SHA}"
+      - --region
+      - us-central1
+      - --allow-unauthenticated
