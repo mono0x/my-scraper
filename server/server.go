@@ -25,9 +25,11 @@ import (
 
 const cacheSeconds = 3600
 
+var cacheControl = fmt.Sprintf("public, max-age=%d", cacheSeconds)
+
 func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	w.Header().Set("Content-Type", "application/atom+xml")
-	w.Header().Set("Cache-Control", "public, max-age="+string(cacheSeconds))
+	w.Header().Set("Cache-Control", cacheControl)
 	if err := feed.WriteAtom(w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
