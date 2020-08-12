@@ -1,7 +1,7 @@
 GO=go
 GOBIN=$(PWD)/bin
 TESTOPTS=-coverprofile=result.coverprofile -v -race ./...
-BUILDOPTS=-tags netgo -installsuffix netgo -ldflags "-w -s -extldflags -static"
+BUILDOPTS=-tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"
 BINARY=my-scraper
 
 all: deps test build
