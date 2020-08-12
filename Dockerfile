@@ -8,8 +8,8 @@ RUN make download
 ADD . ./
 RUN make build-linux
 
-FROM alpine:latest
-RUN apk add --no-cache ca-certificates
+FROM scratch
+COPY --from=golang:1.15 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=builder /go/src/github.com/mono0x/my-scraper/my-scraper.linux /app
 CMD ["/app"]
