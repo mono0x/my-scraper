@@ -1,0 +1,27 @@
+name: test
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        go:
+          - 1.15.x
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: make setup
+      - run: make deps
+      - run: make test
