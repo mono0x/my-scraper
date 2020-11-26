@@ -11,7 +11,6 @@ jobs:
         os:
           - macos-latest
           - ubuntu-latest
-          - windows-latest
         go:
           - 1.15.x
     runs-on: ${{ matrix.os }}
