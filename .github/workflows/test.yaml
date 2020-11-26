@@ -36,4 +36,5 @@ jobs:
         with:
           coverageLocations: |
             ${{ github.workspace }}/result.coverprofile:gcov
+          debug: true
         if: "matrix.os == 'ubuntu-latest'"
