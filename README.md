@@ -1,8 +1,6 @@
 # my-scraper
 
 ![test](https://github.com/mono0x/my-scraper/workflows/test/badge.svg?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/32fb1cf994b61869178f/maintainability)](https://codeclimate.com/github/mono0x/my-scraper/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/32fb1cf994b61869178f/test_coverage)](https://codeclimate.com/github/mono0x/my-scraper/test_coverage)
 
 `my-scraper` is an atom feed generator for my favorite websites.
 
