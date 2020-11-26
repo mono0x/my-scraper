@@ -1,5 +1,5 @@
 /.env
 /bin/
+/c.out
 /my-scraper
 /my-scraper.linux
-/result.coverprofile

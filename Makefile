@@ -1,6 +1,6 @@
 GO=go
 GOBIN=$(PWD)/bin
-TESTOPTS=-coverprofile=result.coverprofile -v -race ./...
+TESTOPTS=-coverprofile=c.out -v -race ./...
 BUILDOPTS=-tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"
 BINARY=my-scraper
 
