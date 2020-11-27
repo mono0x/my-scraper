@@ -12,29 +12,18 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/lestrrat-go/server-starter/listener"
 	"github.com/mono0x/my-scraper/server"
 	"golang.org/x/sync/errgroup"
 )
 
 func run() error {
-	listeners, err := listener.ListenAll()
-	if err != nil && err != listener.ErrNoListeningTarget {
-		return fmt.Errorf("%w", err)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
-
-	var l net.Listener
-	if len(listeners) > 0 {
-		l = listeners[0]
-	} else {
-		port := os.Getenv("PORT")
-		if port == "" {
-			port = "8080"
-		}
-		l, err = net.Listen("tcp", ":"+port)
-		if err != nil {
-			return fmt.Errorf("%w", err)
-		}
+	l, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		return fmt.Errorf("%w", err)
 	}
 
 	handler, err := server.NewHandler()

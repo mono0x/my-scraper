@@ -7,7 +7,6 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
-	GOBIN=$(GOBIN) $(GO) install github.com/lestrrat-go/server-starter/cmd/start_server
 	GOBIN=$(GOBIN) $(GO) install honnef.co/go/tools/cmd/staticcheck
 
 download:
