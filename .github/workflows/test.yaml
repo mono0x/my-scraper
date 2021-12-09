@@ -30,4 +30,7 @@ jobs:
       - run: make setup
       - run: make deps
       - run: make test
+
+  lint:
+    steps:
       - uses: brpaz/hadolint-action@master
