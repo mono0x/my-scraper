@@ -33,4 +33,7 @@ jobs:
 
   lint:
     steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - uses: brpaz/hadolint-action@master
