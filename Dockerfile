@@ -1,4 +1,4 @@
-FROM golang:1.18-buster AS builder
+FROM golang:1.18.4-buster AS builder
 
 WORKDIR /go/src/github.com/mono0x/my-scraper
 
