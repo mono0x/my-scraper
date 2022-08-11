@@ -11,13 +11,9 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/feeds"
 	"github.com/mono0x/my-scraper/scraper"
-	"github.com/mono0x/my-scraper/scraper/source/fukokulifeevent"
 	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
-	"github.com/mono0x/my-scraper/scraper/source/harmonylandinfo"
 	"github.com/mono0x/my-scraper/scraper/source/kittychaninfo"
-	"github.com/mono0x/my-scraper/scraper/source/prtimes"
 	"github.com/mono0x/my-scraper/scraper/source/purolandinfo"
-	"github.com/mono0x/my-scraper/scraper/source/sanrionewsrelease"
 	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
 	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
@@ -66,12 +62,8 @@ func NewHandler() (http.Handler, error) {
 		Path   string
 		Source scraper.Source
 	}{
-		{"/fukoku-life", fukokulifeevent.NewSource(client)},
-		{"/harmonyland-info", harmonylandinfo.NewSource(client)},
 		{"/kittychan-info", kittychaninfo.NewSource(client)},
-		{"/prtimes-sanrio", prtimes.NewSource(client)},
 		{"/puroland-info", purolandinfo.NewSource(client)},
-		{"/sanrio-news-release", sanrionewsrelease.NewSource(client)},
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
 	}
 	for _, entry := range entries {
