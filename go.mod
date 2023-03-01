@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/gorilla/feeds v1.1.1
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.1
 	github.com/victorspringer/http-cache v0.0.0-20220131145941-ef3624e6666f
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
