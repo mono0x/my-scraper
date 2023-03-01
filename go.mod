@@ -3,7 +3,7 @@ module github.com/mono0x/my-scraper
 go 1.19
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/gorilla/feeds v1.1.1
 	github.com/joho/godotenv v1.4.0
