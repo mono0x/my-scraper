@@ -1,6 +1,13 @@
+.codeclimate.yml
+.editorconfig
 .env
+.env.example
 .git
+.gitiattributes
+.gitignore
+README.md
 bin
+fly.toml
 my-scraper
 my-scraper.linux
 result.coverprofile
