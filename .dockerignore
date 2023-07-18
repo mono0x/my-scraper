@@ -6,6 +6,7 @@
 .github/
 .gitiattributes
 .gitignore
+.tool-versions
 .vscode
 LICENSE
 README.md
