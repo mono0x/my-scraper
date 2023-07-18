@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/gorilla/feeds v1.1.1
 	github.com/joho/godotenv v1.5.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.4
 	github.com/victorspringer/http-cache v0.0.0-20221205073845-df6d061f29cb
 	golang.org/x/oauth2 v0.10.0
 	golang.org/x/sync v0.3.0
