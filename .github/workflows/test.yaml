@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v4
         with:
-          go-version-file: go.mod
+          go-version-file: '${{ github.action_path }}/go.mod'
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
