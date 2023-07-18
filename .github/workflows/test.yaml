@@ -15,9 +15,9 @@ jobs:
           - 1.20.x
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go }}
+          go-version-file: .go-version
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
