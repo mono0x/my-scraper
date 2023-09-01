@@ -13,7 +13,7 @@ require (
 	golang.org/x/sync v0.3.0
 	golang.org/x/text v0.11.0
 	google.golang.org/api v0.134.0
-	honnef.co/go/tools v0.4.3
+	honnef.co/go/tools v0.4.5
 )
 
 require (
