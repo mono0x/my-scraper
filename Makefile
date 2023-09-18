@@ -7,6 +7,7 @@ BINARY=my-scraper
 all: deps test build
 
 setup:
+	GOBIN=$(GOBIN) $(GO) install github.com/cosmtrek/air
 	GOBIN=$(GOBIN) $(GO) install honnef.co/go/tools/cmd/staticcheck
 
 download:
@@ -30,3 +31,6 @@ build:
 
 build-linux:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux $(BUILDOPTS)
+
+watch:
+	$(GOBIN)/air
