@@ -32,6 +32,9 @@ func run() error {
 	}
 	s := http.Server{Handler: handler}
 
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt)
+	defer stop()
+
 	eg := errgroup.Group{}
 	eg.Go(func() error {
 		if err := s.Serve(l); err != nil && err != http.ErrServerClosed {
@@ -40,9 +43,7 @@ func run() error {
 		return nil
 	})
 	eg.Go(func() error {
-		signalChan := make(chan os.Signal, 1)
-		signal.Notify(signalChan, syscall.SIGTERM, os.Interrupt)
-		<-signalChan
+		<-ctx.Done()
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
