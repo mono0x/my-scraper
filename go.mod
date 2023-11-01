@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
-	github.com/cosmtrek/air v1.45.0
+	github.com/cosmtrek/air v1.49.0
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/gorilla/feeds v1.1.1
 	github.com/joho/godotenv v1.5.1
