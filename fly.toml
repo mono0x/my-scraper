@@ -16,3 +16,8 @@ primary_region = "nrt"
 [services.concurrency]
   hard_limit = 1
   soft_limit = 1
+
+[[services.ports]]
+  handlers = ["http"]
+  port = 80
+  force_https = true
