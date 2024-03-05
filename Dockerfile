@@ -9,7 +9,7 @@ COPY . ./
 RUN make build-linux
 
 # hadolint ignore=DL3006
-FROM gcr.io/distroless/static-debian11
+FROM gcr.io/distroless/static-debian12
 
 COPY --from=builder /go/src/github.com/mono0x/my-scraper/my-scraper.linux /app
 CMD ["/app"]
