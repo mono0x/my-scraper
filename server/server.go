@@ -50,8 +50,10 @@ func NewHandler() (http.Handler, error) {
 	}
 
 	r.Get("/{name}", func(w http.ResponseWriter, r *http.Request) {
-		source, ok := sources[chi.URLParam(r, "name")]
+		name := chi.URLParam(r, "name")
+		source, ok := sources[name]
 		if !ok {
+			log.Printf("%v: not found\n", name)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
