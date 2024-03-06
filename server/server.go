@@ -35,7 +35,7 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 
 func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		feed, err := source.Scrape()
+		feed, err := source.Scrape(r.URL.Query())
 		if err != nil {
 			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -62,6 +62,7 @@ func NewHandler() (http.Handler, error) {
 		Path   string
 		Source scraper.Source
 	}{
+		{"/google-calendar", googlecalendar.NewSource(client)},
 		{"/kittychan-info", kittychaninfo.NewSource(client)},
 		{"/puroland-info", purolandinfo.NewSource(client)},
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
@@ -69,17 +70,6 @@ func NewHandler() (http.Handler, error) {
 	for _, entry := range entries {
 		r.Get(entry.Path, sourceRenderer(entry.Source))
 	}
-
-	r.Get("/google-calendar", func(w http.ResponseWriter, r *http.Request) {
-		query := r.URL.Query()
-		id := query.Get("id")
-		if id == "" {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		source := googlecalendar.NewSource(client, id)
-		sourceRenderer(source)(w, r)
-	})
 
 	memcached, err := memory.NewAdapter(
 		memory.AdapterWithAlgorithm(memory.LRU),

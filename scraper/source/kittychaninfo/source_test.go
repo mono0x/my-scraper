@@ -3,6 +3,7 @@ package kittychaninfo
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -32,7 +33,7 @@ func TestScrape(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	feed, err := source.Scrape()
+	feed, err := source.Scrape(url.Values{})
 	if err != nil {
 		t.Fatal(err)
 	}

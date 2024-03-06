@@ -3,6 +3,7 @@ package yuyakekoyakenews
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -27,7 +28,7 @@ func TestScrape(t *testing.T) {
 	source := NewSource(server.Client())
 	source.baseURL = server.URL
 
-	feed, err := source.Scrape()
+	feed, err := source.Scrape(url.Values{})
 	if err != nil {
 		t.Fatal(err)
 	}

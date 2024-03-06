@@ -1,7 +1,11 @@
 package scraper
 
-import "github.com/gorilla/feeds"
+import (
+	"net/url"
+
+	"github.com/gorilla/feeds"
+)
 
 type Source interface {
-	Scrape() (*feeds.Feed, error)
+	Scrape(query url.Values) (*feeds.Feed, error)
 }

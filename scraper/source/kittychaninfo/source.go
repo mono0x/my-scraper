@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
@@ -45,7 +46,7 @@ func NewSource(c *http.Client) *source {
 	}
 }
 
-func (s *source) Scrape() (*feeds.Feed, error) {
+func (s *source) Scrape(url.Values) (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)

@@ -11,9 +11,8 @@ import (
 )
 
 func TestNewSource(t *testing.T) {
-	source := NewSource(http.DefaultClient, "calendar")
+	source := NewSource(http.DefaultClient)
 	assert.Equal(t, http.DefaultClient, source.httpClient)
-	assert.Equal(t, "calendar", source.calendarID)
 }
 
 func TestRender(t *testing.T) {
@@ -28,8 +27,8 @@ func TestRender(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	source := NewSource(http.DefaultClient, "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
-	feed, err := source.render(&events)
+	source := NewSource(http.DefaultClient)
+	feed, err := source.render(&events, "qsqrk2emvnnvu45debac9dugr8@group.calendar.google.com")
 	if err != nil {
 		t.Fatal(err)
 	}

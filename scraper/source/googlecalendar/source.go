@@ -26,7 +26,6 @@ const (
 
 type source struct {
 	httpClient *http.Client
-	calendarID string
 }
 
 var _ scraper.Source = (*source)(nil)
@@ -34,22 +33,25 @@ var _ scraper.Source = (*source)(nil)
 var descriptionReplacer = strings.NewReplacer("\n", "<br />")
 var htmlRe = regexp.MustCompile(`<\w+`)
 
-func NewSource(c *http.Client, calendarID string) *source {
+func NewSource(c *http.Client) *source {
 	return &source{
 		httpClient: c,
-		calendarID: calendarID,
 	}
 }
 
-func (s *source) Scrape() (*feeds.Feed, error) {
-	events, err := s.fetch()
+func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
+	calendarID := query.Get("id")
+	if calendarID == "" {
+		return &feeds.Feed{}, nil
+	}
+	events, err := s.fetch(calendarID)
 	if err != nil {
 		return nil, err
 	}
-	return s.render(events)
+	return s.render(events, calendarID)
 }
 
-func (s *source) fetch() (*calendar.Events, error) {
+func (s *source) fetch(calendarID string) (*calendar.Events, error) {
 	config, err := google.JWTConfigFromJSON(([]byte)(os.Getenv("GOOGLE_CLIENT_CREDENTIALS")), calendar.CalendarReadonlyScope)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
@@ -67,14 +69,14 @@ func (s *source) fetch() (*calendar.Events, error) {
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
-	events, err := service.Events.List(s.calendarID).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
+	events, err := service.Events.List(calendarID).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
 	items := events.Items
 	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
-		events, err := service.Events.List(s.calendarID).PageToken(pageToken).Do()
+		events, err := service.Events.List(calendarID).PageToken(pageToken).Do()
 		if err != nil {
 			return nil, fmt.Errorf("%w", err)
 		}
@@ -85,7 +87,7 @@ func (s *source) fetch() (*calendar.Events, error) {
 	return events, nil
 }
 
-func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
+func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed, error) {
 	loc, err := time.LoadLocation(events.TimeZone)
 	if err != nil {
 		return nil, err
@@ -220,7 +222,7 @@ func (s *source) render(events *calendar.Events) (*feeds.Feed, error) {
 	feed := &feeds.Feed{
 		Title:       events.Summary,
 		Description: events.Description,
-		Link:        &feeds.Link{Href: prefix + s.calendarID},
+		Link:        &feeds.Link{Href: prefix + calendarID},
 		Updated:     updated,
 		Items:       items,
 	}

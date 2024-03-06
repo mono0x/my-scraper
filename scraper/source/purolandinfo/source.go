@@ -6,6 +6,7 @@ import (
 	"html"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/feeds"
 	"github.com/mono0x/my-scraper/scraper"
@@ -30,7 +31,7 @@ func NewSource(c *http.Client) *source {
 	}
 }
 
-func (s *source) Scrape() (*feeds.Feed, error) {
+func (s *source) Scrape(url.Values) (*feeds.Feed, error) {
 	res, err := s.httpClient.Get(s.baseURL + purolandInfoAPIEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)

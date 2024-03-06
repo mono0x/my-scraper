@@ -3,6 +3,7 @@ package purolandinfo
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -26,7 +27,7 @@ func TestScrape(t *testing.T) {
 	source := NewSource(server.Client())
 	source.baseURL = server.URL
 
-	feed, err := source.Scrape()
+	feed, err := source.Scrape(url.Values{})
 	if err != nil {
 		t.Fatal(err)
 	}
