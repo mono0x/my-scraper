@@ -12,6 +12,10 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/mono0x/my-scraper/scraper"
+	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
+	"github.com/mono0x/my-scraper/scraper/source/kittychaninfo"
+	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
 	"github.com/mono0x/my-scraper/server"
 	"golang.org/x/sync/errgroup"
 )
@@ -26,7 +30,17 @@ func run() error {
 		return fmt.Errorf("%w", err)
 	}
 
-	handler, err := server.NewHandler()
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
+
+	sources := []scraper.Source{
+		googlecalendar.NewSource(client),
+		kittychaninfo.NewSource(client),
+		yuyakekoyakenews.NewSource(client),
+	}
+
+	handler, err := server.NewHandler(sources)
 	if err != nil {
 		return err
 	}

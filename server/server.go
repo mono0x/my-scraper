@@ -11,9 +11,6 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/feeds"
 	"github.com/mono0x/my-scraper/scraper"
-	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
-	"github.com/mono0x/my-scraper/scraper/source/kittychaninfo"
-	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
 	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
 )
@@ -32,26 +29,18 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	}
 }
 
-func NewHandler() (http.Handler, error) {
+func NewHandler(sources []scraper.Source) (http.Handler, error) {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-	}
-
-	sources := make(map[string]scraper.Source)
-	for _, source := range []scraper.Source{
-		googlecalendar.NewSource(client),
-		kittychaninfo.NewSource(client),
-		yuyakekoyakenews.NewSource(client),
-	} {
-		sources[source.Name()] = source
+	sourcesByName := make(map[string]scraper.Source)
+	for _, source := range sources {
+		sourcesByName[source.Name()] = source
 	}
 
 	r.Get("/{name}", func(w http.ResponseWriter, r *http.Request) {
 		name := chi.URLParam(r, "name")
-		source, ok := sources[name]
+		source, ok := sourcesByName[name]
 		if !ok {
 			log.Printf("%v: not found\n", name)
 			w.WriteHeader(http.StatusNotFound)
