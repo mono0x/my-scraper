@@ -17,5 +17,4 @@ make
 
 - Google Calendar
 - Kittychan Info <http://www.kittychan.info/information.html>
-- Sanrio Puroland <http://www.puroland.jp/>
 - Yuyakekoyake News <http://yuyakekoyake.jp/news/index.php>

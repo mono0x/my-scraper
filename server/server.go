@@ -13,7 +13,6 @@ import (
 	"github.com/mono0x/my-scraper/scraper"
 	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
 	"github.com/mono0x/my-scraper/scraper/source/kittychaninfo"
-	"github.com/mono0x/my-scraper/scraper/source/purolandinfo"
 	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
 	cache "github.com/victorspringer/http-cache"
 	"github.com/victorspringer/http-cache/adapter/memory"
@@ -64,7 +63,6 @@ func NewHandler() (http.Handler, error) {
 	}{
 		{"/google-calendar", googlecalendar.NewSource(client)},
 		{"/kittychan-info", kittychaninfo.NewSource(client)},
-		{"/puroland-info", purolandinfo.NewSource(client)},
 		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
 	}
 	for _, entry := range entries {
