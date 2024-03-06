@@ -32,23 +32,6 @@ func renderFeed(w http.ResponseWriter, feed *feeds.Feed) {
 	}
 }
 
-func sourceRenderer(source scraper.Source) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		feed, err := source.Scrape(r.URL.Query())
-		if err != nil {
-			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
-		}
-		if len(feed.Items) == 0 {
-			log.Printf("%v: not found\n", reflect.TypeOf(source))
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		renderFeed(w, feed)
-	}
-}
-
 func NewHandler() (http.Handler, error) {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -57,17 +40,37 @@ func NewHandler() (http.Handler, error) {
 		Timeout: 30 * time.Second,
 	}
 
-	entries := []struct {
-		Path   string
-		Source scraper.Source
-	}{
-		{"/google-calendar", googlecalendar.NewSource(client)},
-		{"/kittychan-info", kittychaninfo.NewSource(client)},
-		{"/yuyakekoyake-news", yuyakekoyakenews.NewSource(client)},
+	sources := make(map[string]scraper.Source)
+	for _, source := range []scraper.Source{
+		googlecalendar.NewSource(client),
+		kittychaninfo.NewSource(client),
+		yuyakekoyakenews.NewSource(client),
+	} {
+		sources[source.Name()] = source
 	}
-	for _, entry := range entries {
-		r.Get(entry.Path, sourceRenderer(entry.Source))
-	}
+
+	r.Get("/{name}", func(w http.ResponseWriter, r *http.Request) {
+		source, ok := sources[chi.URLParam(r, "name")]
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		feed, err := source.Scrape(r.URL.Query())
+		if err != nil {
+			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+
+		if len(feed.Items) == 0 {
+			log.Printf("%v: not found\n", reflect.TypeOf(source))
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		renderFeed(w, feed)
+	})
 
 	memcached, err := memory.NewAdapter(
 		memory.AdapterWithAlgorithm(memory.LRU),

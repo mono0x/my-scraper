@@ -39,6 +39,10 @@ func NewSource(c *http.Client) *source {
 	}
 }
 
+func (s *source) Name() string {
+	return "google-calendar"
+}
+
 func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
 	calendarID := query.Get("id")
 	if calendarID == "" {

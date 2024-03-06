@@ -7,5 +7,6 @@ import (
 )
 
 type Source interface {
+	Name() string
 	Scrape(query url.Values) (*feeds.Feed, error)
 }
