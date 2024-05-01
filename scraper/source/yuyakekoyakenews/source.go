@@ -42,6 +42,12 @@ func (s *source) Scrape(url.Values) (*feeds.Feed, error) {
 		return nil, fmt.Errorf("%w", err)
 	}
 	defer res.Body.Close()
+	if res.StatusCode != http.StatusOK {
+		if res.StatusCode == http.StatusNotFound {
+			return &feeds.Feed{}, nil
+		}
+		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {

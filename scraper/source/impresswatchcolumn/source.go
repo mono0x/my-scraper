@@ -57,13 +57,13 @@ func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
+	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
 		if res.StatusCode == http.StatusNotFound {
 			return &feeds.Feed{}, nil
 		}
 		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
 	}
-	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
