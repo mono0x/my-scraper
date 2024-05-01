@@ -18,7 +18,10 @@ const (
 	endpoint = "/docs/column/{column}/"
 )
 
-var siteRe = regexp.MustCompile(`\A[a-z0-9-]+\z`)
+var (
+	siteRe        = regexp.MustCompile(`\A[a-z0-9-]+\z`)
+	titleSuffixRe = regexp.MustCompile(`\s+\d+年\s+記事一覧\z`)
+)
 
 type source struct {
 	httpClient *http.Client
@@ -98,7 +101,7 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document, siteURL string) (*fee
 	})
 
 	feed := &feeds.Feed{
-		Title: doc.Find("#main .list .list-02 .item .label-after").First().Text(),
+		Title: titleSuffixRe.ReplaceAllString(doc.Find("#main article[role=main] > .title").Text(), ""),
 		Link:  &feeds.Link{Href: siteURL},
 		Items: items,
 	}
