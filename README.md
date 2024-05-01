@@ -16,6 +16,7 @@ make
 ## Supported Websites
 
 - Google Calendar
+- Impress Watch Column <https://www.watch.impress.co.jp/>
 - Kittychan Info <http://www.kittychan.info/information.html>
 - Lalapi Room Event <http://www.lifecorp.jp/topics/lalapiroom/>
 - Yuyakekoyake News <http://yuyakekoyake.jp/news/index.php>

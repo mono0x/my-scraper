@@ -14,6 +14,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mono0x/my-scraper/scraper"
 	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
+	"github.com/mono0x/my-scraper/scraper/source/impresswatchcolumn"
 	"github.com/mono0x/my-scraper/scraper/source/kittychaninfo"
 	"github.com/mono0x/my-scraper/scraper/source/lalapiroomevent"
 	"github.com/mono0x/my-scraper/scraper/source/yuyakekoyakenews"
@@ -37,6 +38,7 @@ func run() error {
 
 	sources := []scraper.Source{
 		googlecalendar.NewSource(client),
+		impresswatchcolumn.NewSource(client),
 		kittychaninfo.NewSource(client),
 		lalapiroomevent.NewSource(client),
 		yuyakekoyakenews.NewSource(client),
