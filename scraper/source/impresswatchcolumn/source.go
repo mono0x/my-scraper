@@ -2,6 +2,7 @@ package impresswatchcolumn
 
 import (
 	"fmt"
+	"html"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -93,10 +94,22 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document, siteURL string) (*fee
 			return
 		}
 
+		description := ""
+		src, exists := s.Find(".image img").Attr("src")
+		if exists {
+			description += `<img src="` + html.EscapeString(src) + `" width="360" height="270" /><br />`
+		}
+
+		outline := s.Find(".outline").Text()
+		if outline != "" {
+			description += `<p>` + html.EscapeString(outline) + `</p>`
+		}
+
 		items = append(items, &feeds.Item{
-			Title:   title,
-			Created: t,
-			Link:    &feeds.Link{Href: href},
+			Title:       title,
+			Description: description,
+			Created:     t,
+			Link:        &feeds.Link{Href: href},
 		})
 	})
 
