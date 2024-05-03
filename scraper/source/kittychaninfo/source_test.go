@@ -39,11 +39,11 @@ func TestScrape(t *testing.T) {
 	}
 
 	assert.Equal(t, 100, len(feed.Items))
-	assert.Equal(t, "多摩センターイルミネーション\u3000今年も開催～キティちゃんのイルミネーション＆オープニングセレモニーでキティちゃんのショー開催＆キティちゃん達のパレードも～", feed.Items[0].Title)
-	assert.Equal(t, "http://www.tamacenter-cm.com/illumi/", feed.Items[0].Link.Href)
-	assert.WithinDuration(t, time.Date(2016, 11, 6, 0, 0, 0, 0, loc), feed.Items[0].Created, 0)
+	assert.Equal(t, "DAISO池袋東武店「ハローキティ」グリーティングイベント（ワンショット撮影会）開催（2024年5月1日）", feed.Items[0].Title)
+	assert.Equal(t, "https://www.daiso-sangyo.co.jp/info/news/29560", feed.Items[0].Link.Href)
+	assert.WithinDuration(t, time.Date(2024, time.May, 1, 0, 0, 0, 0, loc), feed.Items[0].Created, 0)
 
-	assert.Equal(t, "「Hello Kitty Japanダイバーシティ東京店」　リニューアルオープン", feed.Items[99].Title)
-	assert.Equal(t, "http://www.sanrio.co.jp/news/kt-gu-hkj-odaiba-renewal-20160921/", feed.Items[99].Link.Href)
-	assert.WithinDuration(t, time.Date(2016, 9, 21, 0, 0, 0, 0, loc), feed.Items[99].Created, 0)
+	assert.Equal(t, "DAISO心斎橋店　ハローキティ　グリーティングイベント（ワンショット撮影会）開催（2024年4月19日）", feed.Items[99].Title)
+	assert.Equal(t, "https://www.daiso-sangyo.co.jp/info/news/29407", feed.Items[99].Link.Href)
+	assert.WithinDuration(t, time.Date(2024, time.April, 19, 0, 0, 0, 0, loc), feed.Items[99].Created, 0)
 }

@@ -25,8 +25,6 @@ const (
 )
 
 var (
-	headerRe = regexp.MustCompile(
-		`\A(?:` + regexp.QuoteMeta(titlePrefix) + `)?(.+?)\s*(?:（(\d{4}年\d{1,2}月\d{1,2}日.*）))?\z`)
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 
 	descriptionReplacer = strings.NewReplacer("\n", "<br />")
@@ -89,9 +87,8 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 	var items []*feeds.Item
 
 	skippedHrCount := 0
-	section := ""
-	link := ""
 	doc.Find("hr, p").EachWithBreak(func(_ int, s *goquery.Selection) bool {
+		// skip heading of the page
 		if s.Is("hr") {
 			skippedHrCount += 1
 			return true
@@ -100,56 +97,32 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 			return true
 		}
 
-		p := strings.TrimSpace(s.Text())
+		titleBlock := s.Find(`font[color="#0000ff"]`)
+		title := strings.TrimPrefix(titleBlock.Text(), titlePrefix)
+		createdStr := titleBlock.Find(`font[color="#ff0000"]`).Text()
+		descriptionStr := s.Find(`font[color="#000000"]`).Text()
 
-		var extractedLink string
+		var link string
 		s.Find("a").EachWithBreak(func(_ int, s *goquery.Selection) bool {
 			if href, ok := s.Attr("href"); ok {
-				extractedLink = href
+				link = href
 				return false
 			}
 			return true
 		})
 
-		if !strings.HasPrefix(p, titlePrefix) {
-			section += p
-			if link == "" {
-				link = extractedLink
-			}
-			return true
-		}
-
-		defer func() {
-			section = p
-			link = extractedLink
-		}()
-
-		parts := strings.SplitN(section, "\n", 2)
-		if len(parts) < 2 {
-			return true
-		}
-
-		header := parts[0]
-		description := descriptionReplacer.Replace(parts[1])
-
-		var title, extraInfo string
-		{
-			matches := headerRe.FindStringSubmatch(header)
-			if len(matches) == 3 {
-				title = matches[1]
-				extraInfo = matches[2]
-			} else if len(matches) == 2 {
-				title = matches[1]
-				extraInfo = ""
-			} else {
-				title = ""
-				extraInfo = ""
-			}
-		}
-
 		var created time.Time
-		if extraInfo != "" {
-			matches := dateRe.FindStringSubmatch(extraInfo)
+		{
+			var matches []string
+			if createdStr != "" {
+				matches = dateRe.FindStringSubmatch(createdStr)
+			} else {
+				// fallback to title or description
+				matches = dateRe.FindStringSubmatch(title)
+				if len(matches) == 0 {
+					matches = dateRe.FindStringSubmatch(descriptionStr)
+				}
+			}
 			if len(matches) > 0 {
 				c, err := time.ParseInLocation("2006年1月2日", matches[0], loc)
 				if err != nil {
@@ -159,7 +132,8 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 			}
 		}
 
-		if title != "" && description != "" && link != "" {
+		if title != "" && descriptionStr != "" && link != "" {
+			description := descriptionReplacer.Replace(descriptionStr)
 			items = append(items, &feeds.Item{
 				Title:       title,
 				Created:     created,
@@ -167,7 +141,7 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 				Link:        &feeds.Link{Href: link},
 			})
 			if len(items) >= 100 {
-				return false
+				return false // break
 			}
 
 		}
