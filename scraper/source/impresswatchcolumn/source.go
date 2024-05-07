@@ -95,7 +95,7 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document, siteURL string) (*fee
 		}
 
 		description := ""
-		src, exists := s.Find(".image img").Attr("src")
+		src, exists := s.Find(".image img").Attr("ajax") // src is not available in HTML due to lazy loading
 		if exists {
 			description += `<img src="` + html.EscapeString(src) + `" width="360" height="270" /><br />`
 		}
