@@ -8,7 +8,6 @@ RUN make download
 COPY . ./
 RUN make build-linux
 
-# hadolint ignore=DL3006
 FROM gcr.io/distroless/static-debian12:nonroot
 
 COPY --from=builder --chown=nonroot:nonroot /go/src/github.com/mono0x/my-scraper/my-scraper.linux /app
