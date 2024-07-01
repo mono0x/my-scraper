@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/cosmtrek/air v1.52.0
 	github.com/go-chi/chi v4.1.2+incompatible
-	github.com/gorilla/feeds v1.1.2
+	github.com/gorilla/feeds v1.2.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
