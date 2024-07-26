@@ -8,7 +8,7 @@ RUN --mount=type=bind,source=go.mod,target=go.mod \
     --mount=type=cache,target=/go/pkg/mod,sharing=locked \
     make download
 
-RUN --mount=type=bind,source=. \
+RUN --mount=type=bind,source=.,target=. \
     --mount=type=cache,target=/go/pkg/mod \
     make build-docker
 
