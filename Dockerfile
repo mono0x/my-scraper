@@ -2,13 +2,17 @@ FROM golang:1.22.5-bookworm AS builder
 
 WORKDIR /go/src/github.com/mono0x/my-scraper
 
-COPY go.mod go.sum Makefile ./
-RUN make download
+RUN --mount=type=bind,source=go.mod,target=go.mod \
+    --mount=type=bind,source=go.sum,target=go.sum \
+    --mount=type=bind,source=Makefile,target=Makefile \
+    --mount=type=cache,target=/go/pkg/mod,sharing=locked \
+    make download
 
-COPY . ./
-RUN make build-linux
+RUN --mount=type=bind,source=. \
+    --mount=type=cache,target=/go/pkg/mod \
+    make build-docker
 
 FROM gcr.io/distroless/static-debian12:nonroot
 
-COPY --from=builder --chown=nonroot:nonroot /go/src/github.com/mono0x/my-scraper/my-scraper.linux /app
-CMD ["/app"]
+COPY --from=builder --chown=nonroot:nonroot /bin/my-scraper /bin/my-scraper
+CMD ["/bin/my-scraper"]

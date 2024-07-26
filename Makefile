@@ -29,8 +29,8 @@ test:
 build:
 	$(GO) build -o $(BINARY) $(BUILDOPTS)
 
-build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux $(BUILDOPTS)
+build-docker:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o /bin/$(BINARY) $(BUILDOPTS)
 
 watch:
 	$(GOBIN)/air
