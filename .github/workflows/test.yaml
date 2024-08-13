@@ -17,9 +17,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - run: make setup
-      - run: make deps
-      - run: make test
+      - run: go run github.com/go-task/task/v3/cmd/task test
 
   lint:
     runs-on: ubuntu-latest
