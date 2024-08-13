@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/mono0x/my-scraper/scraper"
 	"github.com/mono0x/my-scraper/scraper/source/googlecalendar"
 	"github.com/mono0x/my-scraper/scraper/source/impresswatchcolumn"
@@ -75,8 +74,6 @@ func run() error {
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-
-	_ = godotenv.Load()
 
 	if err := run(); err != nil {
 		log.Fatalf("%v\n", err)

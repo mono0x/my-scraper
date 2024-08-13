@@ -1,5 +1,7 @@
 version: "3"
 
+dotenv: [".env"]
+
 vars:
   TESTOPTS: -v -race ./...
   BUILDOPTS: -tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"
@@ -10,6 +12,10 @@ tasks:
       - go build {{.BUILDOPTS}} {{.CLI_ARGS}}
     env:
       CGO_ENABLED: 0
+
+  run:
+    cmds:
+      - go run .
 
   test:
     cmds:

@@ -10,7 +10,6 @@ require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-task/task/v3 v3.38.0
 	github.com/gorilla/feeds v1.2.0
-	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
 	golang.org/x/oauth2 v0.22.0
@@ -52,6 +51,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.13.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
