@@ -10,8 +10,6 @@
 .vscode
 LICENSE
 README.md
-bin/
 fly.toml
 my-scraper
-my-scraper.linux
 result.coverprofile

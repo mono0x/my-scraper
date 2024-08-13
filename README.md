@@ -5,12 +5,7 @@
 `my-scraper` is an atom feed generator for my favorite websites.
 
 ```sh
-# Install tools
-make setup
-# Test & build the app
-make
-# Start the app
-./my-scraper
+go run github.com/go-task/task/v3/cmd/task build
 ```
 
 ## Supported Websites

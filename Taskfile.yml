@@ -1,0 +1,28 @@
+version: "3"
+
+vars:
+  TESTOPTS: -v -race ./...
+  BUILDOPTS: -tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"
+
+tasks:
+  build:
+    cmds:
+      - go build {{.BUILDOPTS}} {{.CLI_ARGS}}
+    env:
+      CGO_ENABLED: 0
+
+  test:
+    cmds:
+      - go mod verify
+      - go vet ./...
+      - go test {{.TESTOPTS}}
+      - go run honnef.co/go/tools/cmd/staticcheck ./...
+
+  watch:
+    cmds:
+      - go run github.com/air-verse/air
+
+  upgrade:
+    cmds:
+      - go get -u
+      - go mod tidy
