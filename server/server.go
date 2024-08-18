@@ -47,7 +47,7 @@ func NewHandler(sources []scraper.Source) (http.Handler, error) {
 			return
 		}
 
-		feed, err := source.Scrape(r.URL.Query())
+		feed, err := source.Scrape(r.Context(), r.URL.Query())
 		if err != nil {
 			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
 			w.WriteHeader(http.StatusServiceUnavailable)

@@ -1,6 +1,7 @@
 package scraper
 
 import (
+	"context"
 	"net/url"
 
 	"github.com/gorilla/feeds"
@@ -8,5 +9,5 @@ import (
 
 type Source interface {
 	Name() string
-	Scrape(query url.Values) (*feeds.Feed, error)
+	Scrape(ctx context.Context, query url.Values) (*feeds.Feed, error)
 }

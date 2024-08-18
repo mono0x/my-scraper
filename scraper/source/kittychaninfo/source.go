@@ -1,6 +1,7 @@
 package kittychaninfo
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -48,8 +49,12 @@ func (s *source) Name() string {
 	return "kittychan-info"
 }
 
-func (s *source) Scrape(url.Values) (*feeds.Feed, error) {
-	res, err := s.httpClient.Get(s.baseURL + endpoint)
+func (s *source) Scrape(ctx context.Context, _ url.Values) (*feeds.Feed, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", s.baseURL+endpoint, nil)
+	if err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+	res, err := s.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}

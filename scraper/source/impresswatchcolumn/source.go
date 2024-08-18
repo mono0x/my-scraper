@@ -1,6 +1,7 @@
 package impresswatchcolumn
 
 import (
+	"context"
 	"fmt"
 	"html"
 	"net/http"
@@ -42,7 +43,7 @@ func (*source) Name() string {
 	return "impress-watch-column"
 }
 
-func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
+func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, error) {
 	site := query.Get("site")
 	column := query.Get("column")
 	if site == "" || column == "" {
@@ -54,7 +55,11 @@ func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
 
 	r := strings.NewReplacer("{site}", site, "{column}", column)
 
-	res, err := s.httpClient.Get(r.Replace(s.baseURL + endpoint))
+	req, err := http.NewRequestWithContext(ctx, "GET", r.Replace(s.baseURL+endpoint), nil)
+	if err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+	res, err := s.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}

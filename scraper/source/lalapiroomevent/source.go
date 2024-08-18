@@ -1,6 +1,7 @@
 package lalapiroomevent
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -38,8 +39,12 @@ func (*source) Name() string {
 	return "lalapi-room-event"
 }
 
-func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
-	res, err := s.httpClient.Get(s.baseURL + endpoint)
+func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", s.baseURL+endpoint, nil)
+	if err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+	res, err := s.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}

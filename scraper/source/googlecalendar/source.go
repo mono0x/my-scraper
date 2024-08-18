@@ -43,25 +43,24 @@ func (s *source) Name() string {
 	return "google-calendar"
 }
 
-func (s *source) Scrape(query url.Values) (*feeds.Feed, error) {
+func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, error) {
 	calendarID := query.Get("id")
 	if calendarID == "" {
 		return &feeds.Feed{}, nil
 	}
-	events, err := s.fetch(calendarID)
+	events, err := s.fetch(ctx, calendarID)
 	if err != nil {
 		return nil, err
 	}
 	return s.render(events, calendarID)
 }
 
-func (s *source) fetch(calendarID string) (*calendar.Events, error) {
+func (s *source) fetch(ctx context.Context, calendarID string) (*calendar.Events, error) {
 	config, err := google.JWTConfigFromJSON(([]byte)(os.Getenv("GOOGLE_CLIENT_CREDENTIALS")), calendar.CalendarReadonlyScope)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	ctx := context.Background()
 	ctx = context.WithValue(ctx, oauth2.HTTPClient, s.httpClient)
 
 	client := config.Client(ctx)
