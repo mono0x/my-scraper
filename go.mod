@@ -14,7 +14,7 @@ require (
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
 	golang.org/x/oauth2 v0.23.0
 	golang.org/x/sync v0.8.0
-	golang.org/x/text v0.18.0
+	golang.org/x/text v0.19.0
 	google.golang.org/api v0.199.0
 	honnef.co/go/tools v0.5.1
 )
