@@ -6,7 +6,7 @@ toolchain go1.23.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.0
-	github.com/air-verse/air v1.60.0
+	github.com/air-verse/air v1.61.1
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-task/task/v3 v3.39.2
 	github.com/gorilla/feeds v1.2.0
