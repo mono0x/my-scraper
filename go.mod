@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.9.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
-	golang.org/x/oauth2 v0.23.0
+	golang.org/x/oauth2 v0.24.0
 	golang.org/x/sync v0.8.0
 	golang.org/x/text v0.19.0
 	google.golang.org/api v0.204.0
