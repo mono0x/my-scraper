@@ -1,7 +1,6 @@
 module github.com/mono0x/my-scraper
 
 go 1.23
-
 toolchain go1.23.4
 
 require (
@@ -12,7 +11,7 @@ require (
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.10.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
-	golang.org/x/oauth2 v0.25.0
+	golang.org/x/oauth2 v0.27.0
 	golang.org/x/sync v0.10.0
 	golang.org/x/text v0.21.0
 	google.golang.org/api v0.219.0
