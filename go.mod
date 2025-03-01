@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
 	golang.org/x/oauth2 v0.25.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.11.0
 	golang.org/x/text v0.21.0
 	google.golang.org/api v0.219.0
 	honnef.co/go/tools v0.5.1
