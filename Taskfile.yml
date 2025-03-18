@@ -13,6 +13,14 @@ tasks:
     env:
       CGO_ENABLED: 0
 
+  get:
+    cmds:
+      - go get
+
+  pinact:
+    cmds:
+      - go run github.com/suzuki-shunsuke/pinact/cmd/pinact {{.CLI_ARGS}}
+
   run:
     cmds:
       - go run .
@@ -23,10 +31,11 @@ tasks:
       - go vet ./...
       - go test {{.TESTOPTS}}
       - go run honnef.co/go/tools/cmd/staticcheck ./...
+      - go run github.com/suzuki-shunsuke/pinact/cmd/pinact run --verify
 
   watch:
     cmds:
-      - go run github.com/air-verse/air
+      - go run github.com/air-verse/air {{.CLI_ARGS}}
 
   upgrade:
     cmds:
