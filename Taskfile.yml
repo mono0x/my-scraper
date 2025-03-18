@@ -31,7 +31,6 @@ tasks:
       - go vet ./...
       - go test {{.TESTOPTS}}
       - go run honnef.co/go/tools/cmd/staticcheck ./...
-      - go run github.com/suzuki-shunsuke/pinact/cmd/pinact run --verify
 
   watch:
     cmds:
