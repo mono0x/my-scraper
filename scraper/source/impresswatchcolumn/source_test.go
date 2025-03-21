@@ -1,7 +1,6 @@
 package impresswatchcolumn
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -32,7 +31,7 @@ func TestScrape(t *testing.T) {
 	v := url.Values{}
 	v.Set("site", "k-tai")
 	v.Set("column", "stapa")
-	feed, err := source.Scrape(context.Background(), v)
+	feed, err := source.Scrape(t.Context(), v)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,7 +1,6 @@
 package lalapiroomevent
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -29,7 +28,7 @@ func TestScrape(t *testing.T) {
 	source := NewSource(server.Client())
 	source.baseURL = server.URL
 
-	feed, err := source.Scrape(context.Background(), url.Values{})
+	feed, err := source.Scrape(t.Context(), url.Values{})
 	if err != nil {
 		t.Fatal(err)
 	}
