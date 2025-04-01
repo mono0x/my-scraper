@@ -2,8 +2,6 @@ module github.com/mono0x/my-scraper
 
 go 1.24
 
-toolchain go1.24.0
-
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/air-verse/air v1.61.7
@@ -11,7 +9,7 @@ require (
 	github.com/go-task/task/v3 v3.41.0
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.10.0
-	github.com/suzuki-shunsuke/pinact v1.4.0
+	github.com/suzuki-shunsuke/pinact v1.6.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
 	golang.org/x/oauth2 v0.28.0
 	golang.org/x/sync v0.12.0
