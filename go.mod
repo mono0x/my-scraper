@@ -2,8 +2,6 @@ module github.com/mono0x/my-scraper
 
 go 1.24
 
-toolchain go1.24.0
-
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/air-verse/air v1.61.7
@@ -17,7 +15,7 @@ require (
 	golang.org/x/sync v0.12.0
 	golang.org/x/text v0.23.0
 	google.golang.org/api v0.223.0
-	honnef.co/go/tools v0.6.0
+	honnef.co/go/tools v0.6.1
 )
 
 require (
