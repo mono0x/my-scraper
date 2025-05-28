@@ -25,7 +25,7 @@ tasks:
     cmds:
       - go mod verify
       - go vet ./...
-      - go test {{.TESTOPTS}}
+      - go run gotest.tools/gotestsum -- {{.TESTOPTS}}
       - go run honnef.co/go/tools/cmd/staticcheck ./...
 
   watch:
