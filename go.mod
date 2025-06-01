@@ -6,7 +6,7 @@ toolchain go1.24.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
-	github.com/air-verse/air v1.61.7
+	github.com/air-verse/air v1.62.0
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-task/task/v3 v3.43.3
 	github.com/gorilla/feeds v1.2.0
@@ -24,7 +24,7 @@ require (
 	cloud.google.com/go/auth v0.16.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.7.0 // indirect
-	dario.cat/mergo v1.0.1 // indirect
+	dario.cat/mergo v1.0.2 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/Ladicle/tabwriter v1.0.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
@@ -56,7 +56,7 @@ require (
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/go-task/template v0.1.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/gohugoio/hugo v0.147.0 // indirect
+	github.com/gohugoio/hugo v0.147.6 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
@@ -79,10 +79,10 @@ require (
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
-	github.com/spf13/cast v1.7.1 // indirect
+	github.com/spf13/cast v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
-	github.com/tdewolff/parse/v2 v2.7.23 // indirect
+	github.com/tdewolff/parse/v2 v2.8.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
@@ -96,7 +96,7 @@ require (
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
-	golang.org/x/tools v0.32.0 // indirect
+	golang.org/x/tools v0.33.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250512202823-5a2f75b736a9 // indirect
 	google.golang.org/grpc v1.72.1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
