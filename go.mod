@@ -7,7 +7,7 @@ toolchain go1.24.0
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
 	github.com/air-verse/air v1.62.0
-	github.com/go-chi/chi/v5 v5.2.1
+	github.com/go-chi/chi/v5 v5.2.2
 	github.com/go-task/task/v3 v3.44.0
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.10.0
