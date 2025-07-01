@@ -16,7 +16,7 @@ require (
 	golang.org/x/sync v0.15.0
 	golang.org/x/text v0.26.0
 	google.golang.org/api v0.239.0
-	gotest.tools/gotestsum v1.12.2
+	gotest.tools/gotestsum v1.12.3
 	honnef.co/go/tools v0.6.1
 )
 
