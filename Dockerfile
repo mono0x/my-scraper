@@ -9,7 +9,7 @@ RUN --mount=type=bind,source=go.mod,target=go.mod \
 
 RUN --mount=type=bind,source=.,target=. \
     --mount=type=cache,target=/go/pkg/mod \
-    go run github.com/go-task/task/v3/cmd/task build -- -o /bin/my-scraper
+    go tool task build -- -o /bin/my-scraper
 
 FROM gcr.io/distroless/static-debian12:nonroot
 

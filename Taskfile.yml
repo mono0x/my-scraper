@@ -13,6 +13,10 @@ tasks:
     env:
       CGO_ENABLED: 0
 
+  dev:
+    cmds:
+      - go tool air {{.CLI_ARGS}}
+
   get:
     cmds:
       - go get
@@ -25,12 +29,8 @@ tasks:
     cmds:
       - go mod verify
       - go vet ./...
-      - go run gotest.tools/gotestsum -- {{.TESTOPTS}}
-      - go run honnef.co/go/tools/cmd/staticcheck ./...
-
-  watch:
-    cmds:
-      - go run github.com/air-verse/air {{.CLI_ARGS}}
+      - go tool gotestsum -- {{.TESTOPTS}}
+      - go tool staticcheck ./...
 
   upgrade:
     cmds:
