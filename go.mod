@@ -6,7 +6,7 @@ toolchain go1.25.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
-	github.com/go-chi/chi/v5 v5.2.2
+	github.com/go-chi/chi/v5 v5.2.3
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.10.0
 	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
