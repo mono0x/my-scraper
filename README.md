@@ -1,7 +1,5 @@
 # my-scraper
 
-![test](https://github.com/mono0x/my-scraper/workflows/test/badge.svg?branch=master)
-
 `my-scraper` is an atom feed generator for my favorite websites.
 
 ```sh
