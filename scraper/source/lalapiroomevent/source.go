@@ -95,8 +95,8 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 		}
 
 		var suffix string
-		if i := strings.IndexByte(location, '\n'); i >= 0 {
-			suffix = location[:i]
+		if before, _, ok := strings.Cut(location, "\n"); ok {
+			suffix = before
 		} else {
 			suffix = location
 		}
