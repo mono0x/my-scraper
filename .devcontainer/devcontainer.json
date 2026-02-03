@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+  "name": "Ubuntu",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "image": "mcr.microsoft.com/devcontainers/base:noble",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/mise:1": {}
+  },
+  // https://github.com/typst-jp/docs/blob/03e95052adb314daa239402ed53b0d17b2212d2e/.devcontainer/devcontainer.json#L7
+  "onCreateCommand": "echo 'eval \"$(mise activate bash)\"' >> ~/.bashrc && mise trust && mise install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "golang.go",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  }
+}
