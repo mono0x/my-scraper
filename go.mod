@@ -1,8 +1,6 @@
 module github.com/mono0x/my-scraper
 
-go 1.25
-
-toolchain go1.25.0
+go 1.26
 
 require (
 	github.com/PuerkitoBio/goquery v1.11.0
