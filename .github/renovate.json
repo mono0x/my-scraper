@@ -33,14 +33,15 @@
       ]
     },
     {
-      "matchManagers": [
-        "mise"
+      "matchDatasources": [
+        "docker",
+        "golang-version"
       ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
+      "matchPackageNames": [
+        "golang",
+        "go"
       ],
-      "groupName": "mise",
+      "groupName": "go",
       "schedule": [
         "before 9am on the first day of the month"
       ]
