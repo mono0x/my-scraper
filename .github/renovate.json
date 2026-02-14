@@ -3,29 +3,46 @@
   "extends": [
     "config:recommended"
   ],
-  "schedule": [
-    "before 3am on the first day of the month"
-  ],
+  "timezone": "Asia/Tokyo",
   "minimumReleaseAge": "3 days",
   "packageRules": [
     {
       "matchManagers": [
         "gomod"
       ],
-      "groupName": "dependencies",
       "matchUpdateTypes": [
         "minor",
         "patch"
+      ],
+      "groupName": "dependencies",
+      "schedule": [
+        "before 9am on the first day of the month"
       ]
     },
     {
       "matchManagers": [
         "github-actions"
       ],
-      "groupName": "actions",
       "matchUpdateTypes": [
         "minor",
         "patch"
+      ],
+      "groupName": "actions",
+      "schedule": [
+        "before 9am on the first day of the month"
+      ]
+    },
+    {
+      "matchManagers": [
+        "mise"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "mise",
+      "schedule": [
+        "before 9am on the first day of the month"
       ]
     }
   ]
