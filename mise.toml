@@ -3,3 +3,6 @@
 
 [settings]
   install_before = "3d"
+
+[shell_alias]
+  task = "go tool task"
