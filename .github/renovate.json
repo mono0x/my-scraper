@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "ignorePaths": [
+    "**/testdata/**/*.html"
+  ],
   "timezone": "Asia/Tokyo",
   "minimumReleaseAge": "1 days",
   "osvVulnerabilityAlerts": true,
