@@ -1,4 +1,4 @@
-FROM golang:1.26.0-bookworm AS builder
+FROM golang:1.26.1-bookworm AS builder
 
 WORKDIR /go/src/github.com/mono0x/my-scraper
 
