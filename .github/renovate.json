@@ -7,9 +7,11 @@
     "**/testdata/**/*.html"
   ],
   "timezone": "Asia/Tokyo",
-  "minimumReleaseAge": "1 days",
+  "minimumReleaseAge": "2 days",
   "osvVulnerabilityAlerts": true,
-  "postUpdateOptions": ["gomodTidy"],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
   "packageRules": [
     {
       "matchManagers": [
