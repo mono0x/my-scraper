@@ -15,6 +15,15 @@
   "packageRules": [
     {
       "matchManagers": [
+        "dockerfile"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/jdx/mise"
+      ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [
         "gomod"
       ],
       "matchUpdateTypes": [
@@ -35,20 +44,6 @@
         "patch"
       ],
       "groupName": "actions",
-      "schedule": [
-        "on the first day of the month"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "docker",
-        "golang-version"
-      ],
-      "matchPackageNames": [
-        "golang",
-        "go"
-      ],
-      "groupName": "go",
       "schedule": [
         "on the first day of the month"
       ]
