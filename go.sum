@@ -398,8 +398,8 @@ github.com/u-root/uio v0.0.0-20240224005618-d2acac8f3701 h1:pyC9PaHYZFgEKFdlp3G8
 github.com/u-root/uio v0.0.0-20240224005618-d2acac8f3701/go.mod h1:P3a5rG4X7tI17Nn3aOIAYr5HbIMukwXG0urG0WuL8OA=
 github.com/ulikunitz/xz v0.5.15 h1:9DNdB5s+SgV3bQ2ApL10xRc35ck0DuIX/isZvIk+ubY=
 github.com/ulikunitz/xz v0.5.15/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
-github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91 h1:b5+IzGwYrH3TnHjjUdMdM/4BCefs1pn4JWO4n/zYmMk=
-github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91/go.mod h1:D1AD6nlXv7HkIfTVd8ZWK1KQEiXYNy/LbLkx8H9tIQw=
+github.com/victorspringer/http-cache v0.0.0-20260522121926-bfc21b538fdd h1:QI5lzIrg8sKtHqBGHReKVqK15MTfkpp1+if3sArHBJE=
+github.com/victorspringer/http-cache v0.0.0-20260522121926-bfc21b538fdd/go.mod h1:HUTeRNVL5tMwNG0HP6+Ybx/brgQ2ZEPIrfC+orPHE4U=
 github.com/woodsbury/decimal128 v1.3.0 h1:8pffMNWIlC0O5vbyHWFZAt5yWvWcrHA+3ovIIjVWss0=
 github.com/woodsbury/decimal128 v1.3.0/go.mod h1:C5UTmyTjW3JftjUFzOVhC20BEQa2a4ZKOB5I6Zjb+ds=
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e h1:JVG44RsyaB9T2KIHavMF/ppJZNG9ZpyihvCd0w101no=

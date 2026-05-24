@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/gorilla/feeds v1.2.0
 	github.com/stretchr/testify v1.11.1
-	github.com/victorspringer/http-cache v0.0.0-20240523143319-7d9f48f8ab91
+	github.com/victorspringer/http-cache v0.0.0-20260522121926-bfc21b538fdd
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.36.0
