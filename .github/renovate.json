@@ -24,6 +24,18 @@
     },
     {
       "matchManagers": [
+        "dockerfile"
+      ],
+      "matchPackageNames": [
+        "gcr.io/distroless/static-debian12"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
+      "matchManagers": [
         "gomod"
       ],
       "matchUpdateTypes": [
