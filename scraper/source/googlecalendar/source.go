@@ -58,7 +58,7 @@ func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, err
 func (s *source) fetch(ctx context.Context, calendarID string) (*calendar.Events, error) {
 	config, err := google.JWTConfigFromJSON(([]byte)(os.Getenv("GOOGLE_CLIENT_CREDENTIALS")), calendar.CalendarReadonlyScope)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	ctx = context.WithValue(ctx, oauth2.HTTPClient, s.httpClient)
@@ -67,26 +67,24 @@ func (s *source) fetch(ctx context.Context, calendarID string) (*calendar.Events
 
 	service, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	timeMin := time.Now().AddDate(0, -3, 0).Format(time.RFC3339)
 
 	events, err := service.Events.List(calendarID).MaxResults(2500).OrderBy("updated").SingleEvents(true).TimeMin(timeMin).Do()
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
-	items := events.Items
-	for pageToken := events.NextPageToken; events.NextPageToken != ""; {
-		events, err := service.Events.List(calendarID).PageToken(pageToken).Do()
+	for pageToken := events.NextPageToken; pageToken != ""; {
+		page, err := service.Events.List(calendarID).PageToken(pageToken).Do()
 		if err != nil {
-			return nil, fmt.Errorf("%w", err)
+			return nil, err
 		}
-		items = append(items, events.Items...)
-		pageToken = events.NextPageToken
+		events.Items = append(events.Items, page.Items...)
+		pageToken = page.NextPageToken
 	}
-	events.Items = items
 	return events, nil
 }
 
@@ -94,6 +92,13 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 	loc, err := time.LoadLocation(events.TimeZone)
 	if err != nil {
 		return nil, err
+	}
+
+	locFor := func(timeZone string) (*time.Location, error) {
+		if timeZone == "" {
+			return loc, nil
+		}
+		return time.LoadLocation(timeZone)
 	}
 
 	items := make([]*feeds.Item, 0, len(events.Items))
@@ -107,11 +112,11 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 
 		created, err := time.Parse(time.RFC3339, event.Created)
 		if err != nil {
-			return nil, fmt.Errorf("%w", err)
+			return nil, err
 		}
 		updated, err := time.Parse(time.RFC3339, event.Updated)
 		if err != nil {
-			return nil, fmt.Errorf("%w", err)
+			return nil, err
 		}
 
 		var timeZone string
@@ -125,7 +130,7 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 		if timeZone != "" {
 			u, err := url.Parse(link)
 			if err != nil {
-				return nil, fmt.Errorf("%w", err)
+				return nil, err
 			}
 			query := u.Query()
 			query.Set("ctz", timeZone)
@@ -133,26 +138,13 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 			link = u.String()
 		}
 
-		var startLoc *time.Location
-		if event.Start.TimeZone != "" {
-			var err error
-			startLoc, err = time.LoadLocation(event.Start.TimeZone)
-			if err != nil {
-				return nil, fmt.Errorf("%w", err)
-			}
-		} else {
-			startLoc = loc
+		startLoc, err := locFor(event.Start.TimeZone)
+		if err != nil {
+			return nil, err
 		}
-
-		var endLoc *time.Location
-		if event.End.TimeZone != "" {
-			var err error
-			endLoc, err = time.LoadLocation(event.End.TimeZone)
-			if err != nil {
-				return nil, fmt.Errorf("%w", err)
-			}
-		} else {
-			endLoc = loc
+		endLoc, err := locFor(event.End.TimeZone)
+		if err != nil {
+			return nil, err
 		}
 
 		var duration string
@@ -161,11 +153,11 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 		case event.Start.Date != "" && event.End.Date != "":
 			start, err := time.ParseInLocation("2006-01-02", event.Start.Date, startLoc)
 			if err != nil {
-				return nil, fmt.Errorf("%w", err)
+				return nil, err
 			}
 			end, err := time.ParseInLocation("2006-01-02", event.End.Date, endLoc)
 			if err != nil {
-				return nil, fmt.Errorf("%w", err)
+				return nil, err
 			}
 			end = end.AddDate(0, 0, -1)
 
@@ -178,11 +170,11 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 		case event.Start.DateTime != "" && event.End.DateTime != "":
 			start, err := time.ParseInLocation(time.RFC3339, event.Start.DateTime, startLoc)
 			if err != nil {
-				return nil, fmt.Errorf("%w", err)
+				return nil, err
 			}
 			end, err := time.ParseInLocation(time.RFC3339, event.End.DateTime, endLoc)
 			if err != nil {
-				return nil, fmt.Errorf("%w", err)
+				return nil, err
 			}
 
 			if start.Format("2006-01-02") == end.Format("2006-01-02") {
@@ -219,7 +211,7 @@ func (s *source) render(events *calendar.Events, calendarID string) (*feeds.Feed
 
 	updated, err := time.Parse(time.RFC3339, events.Updated)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	feed := &feeds.Feed{
