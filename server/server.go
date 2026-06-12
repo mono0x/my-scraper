@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -49,13 +48,13 @@ func NewHandler(sources []scraper.Source) (http.Handler, error) {
 
 		feed, err := source.Scrape(r.Context(), r.URL.Query())
 		if err != nil {
-			log.Printf("%v: %+v\n", reflect.TypeOf(source), err)
+			log.Printf("%v: %+v\n", name, err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
 
 		if len(feed.Items) == 0 {
-			log.Printf("%v: not found\n", reflect.TypeOf(source))
+			log.Printf("%v: not found\n", name)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
@@ -68,7 +67,7 @@ func NewHandler(sources []scraper.Source) (http.Handler, error) {
 		memory.AdapterWithCapacity(1024),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	cacheClient, err := cache.NewClient(
@@ -76,7 +75,7 @@ func NewHandler(sources []scraper.Source) (http.Handler, error) {
 		cache.ClientWithTTL(cacheSeconds*time.Second),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	return cacheClient.Middleware(r), nil
