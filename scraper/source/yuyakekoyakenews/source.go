@@ -2,7 +2,7 @@ package yuyakekoyakenews
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -38,37 +38,28 @@ func (s *source) Name() string {
 }
 
 func (s *source) Scrape(ctx context.Context, _ url.Values) (*feeds.Feed, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", s.baseURL+endpoint, nil)
+	body, err := scraper.Fetch(ctx, s.httpClient, s.baseURL+endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	res, err := s.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		if res.StatusCode == http.StatusNotFound {
+		if errors.Is(err, scraper.ErrNotFound) {
 			return &feeds.Feed{}, nil
 		}
-		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+		return nil, err
 	}
+	defer body.Close()
 
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 	return s.ScrapeFromDocument(doc)
 }
 
-var yuyakekoyakeNewsItemRe = regexp.MustCompile(`\A(\d+)年(\d+)月(\d+)日[\s　]+(.+)\z`)
+var (
+	yuyakekoyakeNewsItemRe = regexp.MustCompile(`\A(\d+)年(\d+)月(\d+)日[\s　]+(.+)\z`)
+	jst                    = time.FixedZone("JST", 9*60*60)
+)
 
 func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
 	absBaseURL, _ := url.Parse(baseURL + endpoint)
 
 	var items []*feeds.Item
@@ -95,7 +86,7 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 
 		title := m[4]
 
-		created := time.Date(year, time.Month(month), day, 0, 0, 0, 0, loc)
+		created := time.Date(year, time.Month(month), day, 0, 0, 0, 0, jst)
 
 		href, ok := s.Find("a").First().Attr("href")
 		if !ok {

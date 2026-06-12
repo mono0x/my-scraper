@@ -2,7 +2,7 @@ package kittychaninfo
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -29,6 +29,8 @@ var (
 	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
 
 	descriptionReplacer = strings.NewReplacer("\n", "<br />")
+
+	jst = time.FixedZone("JST", 9*60*60)
 )
 
 type source struct {
@@ -50,30 +52,23 @@ func (s *source) Name() string {
 }
 
 func (s *source) Scrape(ctx context.Context, _ url.Values) (*feeds.Feed, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", s.baseURL+endpoint, nil)
+	body, err := scraper.Fetch(ctx, s.httpClient, s.baseURL+endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	res, err := s.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		if res.StatusCode == http.StatusNotFound {
+		if errors.Is(err, scraper.ErrNotFound) {
 			return &feeds.Feed{}, nil
 		}
-		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+		return nil, err
 	}
+	defer body.Close()
 
-	return s.ScrapeFromReader(res.Body)
+	return s.ScrapeFromReader(body)
 }
 
 func (s *source) ScrapeFromReader(reader io.Reader) (*feeds.Feed, error) {
 	decodedReader := transform.NewReader(reader, japanese.ShiftJIS.NewDecoder())
 	doc, err := goquery.NewDocumentFromReader(decodedReader)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -82,11 +77,6 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 	feed := &feeds.Feed{
 		Title: "♪キティちゃん情報",
 		Link:  &feeds.Link{Href: s.baseURL + endpoint},
-	}
-
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
 	}
 
 	var items []*feeds.Item
@@ -118,18 +108,18 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 
 		var created time.Time
 		{
-			var matches []string
+			var d string
 			if createdStr != "" {
-				matches = dateRe.FindStringSubmatch(createdStr)
+				d = dateRe.FindString(createdStr)
 			} else {
 				// fallback to title or description
-				matches = dateRe.FindStringSubmatch(title)
-				if len(matches) == 0 {
-					matches = dateRe.FindStringSubmatch(descriptionStr)
+				d = dateRe.FindString(title)
+				if d == "" {
+					d = dateRe.FindString(descriptionStr)
 				}
 			}
-			if len(matches) > 0 {
-				c, err := time.ParseInLocation("2006年1月2日", matches[0], loc)
+			if d != "" {
+				c, err := time.ParseInLocation("2006年1月2日", d, jst)
 				if err != nil {
 					return true
 				}

@@ -2,6 +2,7 @@ package lalapiroomevent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,7 +20,10 @@ const (
 	endpoint = "/topics/lalapiroom/"
 )
 
-var dateRe = regexp.MustCompile(`(\d{4})年(\d{1,2})月(\d{1,2})日`)
+var (
+	dateRe = regexp.MustCompile(`\d{4}年\d{1,2}月\d{1,2}日`)
+	jst    = time.FixedZone("JST", 9*60*60)
+)
 
 type source struct {
 	httpClient *http.Client
@@ -40,25 +44,18 @@ func (*source) Name() string {
 }
 
 func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", s.baseURL+endpoint, nil)
+	body, err := scraper.Fetch(ctx, s.httpClient, s.baseURL+endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	res, err := s.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		if res.StatusCode == http.StatusNotFound {
+		if errors.Is(err, scraper.ErrNotFound) {
 			return &feeds.Feed{}, nil
 		}
-		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+		return nil, err
 	}
+	defer body.Close()
 
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 	return s.ScrapeFromDocument(doc)
 }
@@ -66,12 +63,7 @@ func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, err
 func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) {
 	href, err := url.Parse(baseURL + endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 
 	var items []*feeds.Item
@@ -79,17 +71,12 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document) (*feeds.Feed, error) 
 		dateStr := s.Find("dt").Text()
 		location := s.Find("dd").Text()
 
-		m := dateRe.FindStringSubmatch(dateStr)
-		if len(m) != 4 {
-			return
-		}
-
 		d := dateRe.FindString(dateStr)
 		if d == "" {
 			return
 		}
 
-		t, err := time.ParseInLocation("2006年1月2日", d, loc)
+		t, err := time.ParseInLocation("2006年1月2日", d, jst)
 		if err != nil {
 			return
 		}

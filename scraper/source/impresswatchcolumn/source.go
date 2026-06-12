@@ -2,6 +2,7 @@ package impresswatchcolumn
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"html"
 	"net/http"
@@ -23,6 +24,7 @@ const (
 var (
 	siteRe        = regexp.MustCompile(`\A[a-z0-9-]+\z`)
 	titleSuffixRe = regexp.MustCompile(`\s+\d+年\s+記事一覧\z`)
+	jst           = time.FixedZone("JST", 9*60*60)
 )
 
 type source struct {
@@ -55,35 +57,23 @@ func (s *source) Scrape(ctx context.Context, query url.Values) (*feeds.Feed, err
 
 	r := strings.NewReplacer("{site}", site, "{column}", column)
 
-	req, err := http.NewRequestWithContext(ctx, "GET", r.Replace(s.baseURL+endpoint), nil)
+	body, err := scraper.Fetch(ctx, s.httpClient, r.Replace(s.baseURL+endpoint))
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	res, err := s.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		if res.StatusCode == http.StatusNotFound {
+		if errors.Is(err, scraper.ErrNotFound) {
 			return &feeds.Feed{}, nil
 		}
-		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+		return nil, err
 	}
+	defer body.Close()
 
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 	return s.ScrapeFromDocument(doc, r.Replace(baseURL+endpoint))
 }
 
 func (s *source) ScrapeFromDocument(doc *goquery.Document, siteURL string) (*feeds.Feed, error) {
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
 	var items []*feeds.Item
 	doc.Find("#main .list .list-02 .item").Each(func(_ int, s *goquery.Selection) {
 		titleElement := s.Find(".title a")
@@ -94,7 +84,7 @@ func (s *source) ScrapeFromDocument(doc *goquery.Document, siteURL string) (*fee
 		}
 
 		dateStr := s.Find(".date").Text()
-		t, err := time.ParseInLocation("(2006/1/2)", dateStr, loc)
+		t, err := time.ParseInLocation("(2006/1/2)", dateStr, jst)
 		if err != nil {
 			return
 		}
