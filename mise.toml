@@ -3,3 +3,6 @@
 
 [shell_alias]
   task = "go tool task"
+
+[env]
+  GOPROXY = "https://golang.flatt.tech"
