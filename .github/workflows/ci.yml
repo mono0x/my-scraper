@@ -11,6 +11,9 @@ concurrency:
 
 jobs:
   test:
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       matrix:
         os:
