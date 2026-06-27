@@ -1,4 +1,4 @@
-FROM ghcr.io/jdx/mise:2026.6.1@sha256:b319ba78c02fd28a593d043dd09d62685191420f327bf1534bdaa128f896bc93 AS builder
+FROM ghcr.io/jdx/mise:2026.6.14@sha256:b8f8c20fc3308f8b1d00ccca2bc968e4e208af1c5c1069e1ad9753baa099acff AS builder
 
 ENV GOPATH=/go
 WORKDIR /go/src/github.com/mono0x/my-scraper
