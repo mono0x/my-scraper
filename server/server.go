@@ -53,6 +53,12 @@ func NewHandler(sources []scraper.Source) (http.Handler, error) {
 			return
 		}
 
+		if len(feed.Items) == 0 {
+			log.Printf("%v: not found\n", name)
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
 		renderFeed(w, feed)
 	})
 
