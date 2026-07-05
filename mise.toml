@@ -7,7 +7,7 @@
 
 [vars]
   testopts = "-v -race ./..."
-  buildopts = '-tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"'
+  buildopts = '-tags netgo,timetzdata -installsuffix netgo -ldflags "-s -extldflags -static"'
 
 [tasks.build]
   run = "go build {{vars.buildopts}}"
