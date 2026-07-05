@@ -1,8 +1,37 @@
 [tools]
   go = "1.26.4"
 
-[shell_alias]
-  task = "go tool task"
-
 [env]
+  _.file = ".env"
   GOPROXY = "https://golang.flatt.tech"
+
+[vars]
+  testopts = "-v -race ./..."
+  buildopts = '-tags netgo,timetzdata -installsuffix netgo -ldflags "-w -s -extldflags -static"'
+
+[tasks.build]
+  run = "go build {{vars.buildopts}}"
+  env = { CGO_ENABLED = "0" }
+
+[tasks.dev]
+  run = "go tool air"
+
+[tasks.get]
+  run = "go get"
+
+[tasks.run]
+  run = "go run ."
+
+[tasks.test]
+  run = [
+    "go mod verify",
+    "go vet ./...",
+    "go tool gotestsum -- {{vars.testopts}}",
+    "go tool staticcheck ./...",
+  ]
+
+[tasks.upgrade]
+  run = [
+    "go get -u",
+    "go mod tidy",
+  ]

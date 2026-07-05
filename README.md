@@ -3,7 +3,7 @@
 `my-scraper` is an atom feed generator for my favorite websites.
 
 ```sh
-go tool task build
+mise run build
 ```
 
 ## Supported Websites

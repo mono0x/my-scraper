@@ -17,7 +17,7 @@ RUN --mount=type=bind,source=mise.toml,target=mise.toml \
 
 RUN --mount=type=bind,source=.,target=. \
     --mount=type=cache,target=/go/pkg/mod \
-    mise exec -- go tool task build -- -o /bin/my-scraper
+    mise run build -o /bin/my-scraper
 
 FROM gcr.io/distroless/static-debian12:nonroot@sha256:d093aa3e30dbadd3efe1310db061a14da60299baff8450a17fe0ccc514a16639
 

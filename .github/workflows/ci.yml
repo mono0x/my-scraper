@@ -26,7 +26,7 @@ jobs:
       - uses: flatt-security/setup-takumi-guard-golang@2e3c7c40b538cd68b2ac483def12982ebc8bc02e # v1
         with:
           bot-id: BT01KVR5JDMX8XDPK0WMZT69JF1P # mono0x
-      - run: go tool task test
+      - run: mise run test
 
   lint:
     runs-on: ubuntu-latest
