@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # check=error=true
 
-FROM ghcr.io/jdx/mise:2026.7.0 AS builder
+FROM ghcr.io/jdx/mise:2026.6.14@sha256:b8f8c20fc3308f8b1d00ccca2bc968e4e208af1c5c1069e1ad9753baa099acff AS builder
 
 ENV GOPATH=/go
 WORKDIR /go/src/github.com/mono0x/my-scraper
