@@ -22,15 +22,6 @@
         "dockerfile"
       ],
       "matchPackageNames": [
-        "ghcr.io/jdx/mise"
-      ],
-      "enabled": false
-    },
-    {
-      "matchManagers": [
-        "dockerfile"
-      ],
-      "matchPackageNames": [
         "gcr.io/distroless/static-debian12"
       ],
       "matchUpdateTypes": [
@@ -60,6 +51,16 @@
         "patch"
       ],
       "groupName": "GitHub Actions",
+      "schedule": [
+        "on the first day of the month"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "ghcr.io/jdx/mise",
+        "jdx/mise"
+      ],
+      "groupName": "mise",
       "schedule": [
         "on the first day of the month"
       ]
