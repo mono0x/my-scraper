@@ -21,13 +21,7 @@
       "matchManagers": [
         "dockerfile"
       ],
-      "matchPackageNames": [
-        "gcr.io/distroless/static-debian12"
-      ],
-      "matchUpdateTypes": [
-        "digest"
-      ],
-      "minimumReleaseAge": null
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
     {
       "matchManagers": [
