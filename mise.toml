@@ -22,13 +22,20 @@
 [tasks.run]
   run = "go run ."
 
+[tasks."test:mod"]
+  run = "go mod verify"
+
+[tasks."test:vet"]
+  run = "go vet ./..."
+
+[tasks."test:unit"]
+  run = "go tool gotestsum -- {{vars.testopts}}"
+
+[tasks."test:staticcheck"]
+  run = "go tool staticcheck ./..."
+
 [tasks.test]
-  run = [
-    "go mod verify",
-    "go vet ./...",
-    "go tool gotestsum -- {{vars.testopts}}",
-    "go tool staticcheck ./...",
-  ]
+  depends = ["test:*"]
 
 [tasks.upgrade]
   run = [
