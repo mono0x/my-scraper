@@ -60,11 +60,13 @@
       "groupName": "GitHub Actions"
     },
     {
+      "description": "The docker datasource has no release timestamp, so the age gate would hold back only jdx/mise-action and desync the two pinned versions",
       "matchPackageNames": [
         "ghcr.io/jdx/mise",
         "jdx/mise"
       ],
-      "groupName": "mise"
+      "groupName": "mise",
+      "minimumReleaseAge": null
     }
   ]
 }
