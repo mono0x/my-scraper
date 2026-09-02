@@ -7,6 +7,9 @@
     "**/testdata/**/*.html"
   ],
   "timezone": "Asia/Tokyo",
+  "schedule": [
+    "* * 1 * *"
+  ],
   "minimumReleaseAge": "2 days",
   "osvVulnerabilityAlerts": true,
   "platformAutomerge": false,
@@ -44,10 +47,7 @@
         "minor",
         "patch"
       ],
-      "groupName": "dependencies",
-      "schedule": [
-        "on the first day of the month"
-      ]
+      "groupName": "dependencies"
     },
     {
       "matchManagers": [
@@ -57,20 +57,14 @@
         "minor",
         "patch"
       ],
-      "groupName": "GitHub Actions",
-      "schedule": [
-        "on the first day of the month"
-      ]
+      "groupName": "GitHub Actions"
     },
     {
       "matchPackageNames": [
         "ghcr.io/jdx/mise",
         "jdx/mise"
       ],
-      "groupName": "mise",
-      "schedule": [
-        "on the first day of the month"
-      ]
+      "groupName": "mise"
     }
   ]
 }
