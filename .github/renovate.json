@@ -1,59 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "github>mono0x/renovate-config:maintenance"
   ],
   "ignorePaths": [
     "**/testdata/**/*.html"
   ],
-  "timezone": "Asia/Tokyo",
-  "schedule": [
-    "* * 1 * *"
-  ],
-  "minimumReleaseAge": "2 days",
-  "osvVulnerabilityAlerts": true,
-  "platformAutomerge": false,
-  "automergeStrategy": "squash",
   "postUpdateOptions": [
     "gomodTidy"
   ],
   "packageRules": [
     {
-      "description": "Automerge everything except major updates",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "digest",
-        "pin",
-        "pinDigest"
-      ],
-      "automerge": true
-    },
-    {
       "matchManagers": [
         "dockerfile"
       ],
       "minimumReleaseAgeBehaviour": "timestamp-optional"
-    },
-    {
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "groupName": "dependencies"
-    },
-    {
-      "matchManagers": [
-        "github-actions"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "groupName": "GitHub Actions"
     },
     {
       "description": "The docker datasource has no release timestamp, so the age gate would hold back only jdx/mise-action and desync the two pinned versions",
